@@ -22,7 +22,9 @@ React Native Training Assessment Project
 ## Libraries
 
 1. [Expo SDK](https://docs.expo.dev/versions/latest/) - provides access to device and system functionality such as contacts, camera, gyroscope, GPS location, and so on, in the form of packages
-1.  [React Native Paper](https://callstack.github.io/react-native-paper/docs/components/ActivityIndicator) - Cross-platform Material Design for React Native
+1.  [React Native Paper](https://callstack.github.io/react-native-paper/) - Cross-platform Material Design for React Native
+	* [Guides](https://callstack.github.io/react-native-paper/docs/guides/getting-started) 
+	* [Components](https://callstack.github.io/react-native-paper/docs/components/ActivityIndicator)
 
 ## References
 
