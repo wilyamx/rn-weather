@@ -19,6 +19,10 @@ React Native Training Assessment Project
 	$ npx expo start
 	Starting Metro Bunder
 
+## Snippets
+
+* **rnfc** - Function Component
+
 ## Libraries
 
 1. [Expo SDK](https://docs.expo.dev/versions/latest/) - provides access to device and system functionality such as contacts, camera, gyroscope, GPS location, and so on, in the form of packages
