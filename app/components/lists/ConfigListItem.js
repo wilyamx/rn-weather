@@ -1,26 +1,30 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Switch, Text, } from 'react-native-paper';
+import { Switch, Text, useTheme, } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Screen from '../Screen';
 import colors from '../../config/colors';
 
 function ConfigListItem({ icon, title, getState, setState }) {
-  return (
+    const theme = useTheme();
+
+    return (
     <Screen>
         <View style={styles.container}>
-            <MaterialCommunityIcons
-                name={icon}
-                size={30}
-                color={colors.danger}
-                style={styles.icon}
-            />
-            <Text style={styles.title}>{title}</Text>
+            <View style={styles.subContainer}>
+                <MaterialCommunityIcons
+                    name={icon}
+                    size={25}
+                    style={styles.icon}
+                    backgroundColor={theme.colors.primary}
+                />
+                <Text style={styles.title}>{title}</Text>
+            </View>
             <Switch style={styles.switch} value={getState} onValueChange={setState} />
         </View>
     </Screen>
-  );
+    );
 }
 
 const styles = StyleSheet.create({
@@ -31,18 +35,24 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
     },
     icon: {
+        color: colors.white,
         padding: 15,
-        backgroundColor: colors.dark,
-        borderRadius: 30,
-        overflow: "hidden"
+        borderRadius: 28,
+        overflow: "hidden",
+        width: 55,
+        height: 55,
     },
     title: {
         color: colors.black,
         marginLeft: 15,
-        width: "50%"
     },
     switch: {
-        marginRight: 20,
+        marginRight: 10,
+    },
+    subContainer: {
+        flex: 1,
+        flexDirection: "row",
+        alignItems: "center",
     },
 });
 
