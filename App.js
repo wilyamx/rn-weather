@@ -1,25 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { Switch } from 'react-native-paper';
-import { useState } from 'react';
+import { StyleSheet, useColorScheme } from 'react-native';
+import {
+  MD3DarkTheme,
+  MD3LightTheme,
+  PaperProvider,
+} from 'react-native-paper';
 
-import Screen from './app/components/screen';
+import AppNavigator from './app/navigations/AppNavigator';
 
 export default function App() {
-  const [isSwitchOn, setIsSwitchOn] = useState(false);
-
-  const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
-
+  const colorScheme = useColorScheme();
+  const paperTheme =
+      colorScheme === 'dark'
+        ? { ...MD3DarkTheme }
+        : { ...MD3LightTheme };
 
   return (
-    // <View style={styles.container}>
-    //   <Text>Open up App.js to start working on your app!</Text>
-    //   <StatusBar style="auto" />
-    // </View>
-
-    <Screen>
-      <Switch value={isSwitchOn} onValueChange={onToggleSwitch} />
-    </Screen>
+    <PaperProvider theme={paperTheme}>
+      <AppNavigator />
+    </PaperProvider>
   );
 }
 
