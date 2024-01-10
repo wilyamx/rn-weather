@@ -30,7 +30,7 @@ function SettingsScreen(props) {
     const theme = useTheme();
 
     return (
-        <Screen>
+        <Screen style={styles.container}>
             <Text style={styles.title} variant='titleLarge'>Configurations</Text>
             <FlatList
                 data={configItems}
@@ -50,6 +50,9 @@ function SettingsScreen(props) {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        padding: 20,
+    },
     title: {
         textAlign: "center",
     },

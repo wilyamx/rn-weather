@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: "center",
         flexDirection: "row",
-        paddingHorizontal: 20,
+        paddingHorizontal: 0,
         paddingVertical: 10,
     },
     icon: {

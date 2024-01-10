@@ -5,13 +5,12 @@ import { BottomNavigation, Text } from 'react-native-paper';
 
 import Screen from '../components/Screen';
 import SettingsScreen from '../screens/SettingsScreen';
+import LocationsScreen from '../screens/LocationsScreen';
 
 const HomeScreen = () => <Screen><Text>Home</Text></Screen>;
-const LocationsScreen = () => <Screen><Text>Locations</Text></Screen>;
-// const SettingsScreen = () => <Screen><Text>Settings</Text></Screen>;
 
 function AppNavigator(props) {
-    const [index, setIndex] = useState(2);
+    const [index, setIndex] = useState(1);
     const [routes] = useState([
         { key: "home", title: "Home", focusedIcon: "home", unfocusedIcon: "home-outline"},
         { key: "locations", title: "Locations", focusedIcon: "map-marker", unfocusedIcon: "map-marker-outline"},
@@ -35,7 +34,7 @@ function AppNavigator(props) {
 
 const styles = StyleSheet.create({
     container: {
-        
+
     }
 });
 
