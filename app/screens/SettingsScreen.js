@@ -34,7 +34,7 @@ function SettingsScreen(props) {
             <Text style={styles.title} variant='titleLarge'>Configurations</Text>
             <FlatList
                 data={configItems}
-                keyExtractor={configItems => configItems.title}
+                keyExtractor={item => item.title}
                 renderItem={({ item }) => 
                     <ConfigListItem
                         icon={item.icon}
