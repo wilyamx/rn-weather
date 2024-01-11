@@ -10,20 +10,18 @@ function ConfigListItem({ icon, title, getState, setState }) {
     const theme = useTheme();
 
     return (
-    <Screen>
-        <View style={styles.container}>
-            <View style={styles.subContainer}>
-                <MaterialCommunityIcons
-                    name={icon}
-                    size={25}
-                    style={styles.icon}
-                    backgroundColor={theme.colors.primary}
-                />
-                <Text style={styles.title}>{title}</Text>
-            </View>
-            <Switch style={styles.switch} value={getState} onValueChange={setState} />
+    <View style={styles.container}>
+        <View style={styles.subContainer}>
+            <MaterialCommunityIcons
+                name={icon}
+                size={25}
+                style={styles.icon}
+                backgroundColor={theme.colors.primary}
+            />
+            <Text style={styles.title}>{title}</Text>
         </View>
-    </Screen>
+        <Switch style={styles.switch} value={getState} onValueChange={setState} />
+    </View>
     );
 }
 

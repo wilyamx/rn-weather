@@ -10,7 +10,10 @@ function LocationListItem({ location }) {
     const theme = useTheme();
 
     return (
-    <Screen style={styles.container}>
+    <View style={styles.container}>
+        <View style={styles.currentLocationContainer}>
+            <Text variant='labelMedium' style={styles.currentLocation}>Your Location</Text>
+        </View>
         <Image
             source={require("../../../assets/sun.png")}
             style={styles.weatherImage}
@@ -22,16 +25,16 @@ function LocationListItem({ location }) {
         <View style={styles.leftContainer}>
             <Text variant='displayMedium'>{location.main.temp}°</Text>
             <View style={styles.locationContainer}>
-                <Text variant='titleSmall'>{location.name}</Text>
+            <Text variant='titleSmall'>{location.name}</Text>
                 <MaterialCommunityIcons
                     name="map-marker"
-                    size={30}
+                    size={22}
                     style={styles.marker}
                 />
             </View>
             <Text variant='labelMedium'>Mon, January 1, 2024</Text>
         </View>
-    </Screen>
+    </View>
     );
 }
 
@@ -40,9 +43,19 @@ const styles = StyleSheet.create({
         backgroundColor: colors.light,
         borderRadius: 15,
         marginBottom: 10,
-        marginTop: 30,
+        marginTop: 35,
         padding: 15,
         height: 160,
+    },
+    currentLocation: {
+        color: colors.white,
+        textAlign: "center",
+    },
+    currentLocationContainer: {
+        backgroundColor: colors.danger,
+        padding: 3,
+        width: 110,
+        borderRadius: 20,
     },
     locationContainer: {
         alignItems: "center",
