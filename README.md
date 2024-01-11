@@ -19,6 +19,10 @@ React Native Training Assessment Project
 	$ npx expo start
 	Starting Metro Bunder
 
+## Library Installation
+
+	$ npm i react-native-gesture-handler
+	
 ## Snippets
 
 * **rnfc** - Function Component

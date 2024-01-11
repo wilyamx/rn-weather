@@ -3,9 +3,9 @@ import { useState } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { Searchbar, Text } from 'react-native-paper';
 
-import ListItemSeparator from '../components/lists/ListItemSeparator';
 import LocationListItem from '../components/lists/LocationListItem';
 import Screen from '../components/Screen';
+import ListItemDeleteAction from '../components/lists/ListItemDeleteAction';
 
 const initialLocations = [
     {
@@ -53,7 +53,13 @@ const initialLocations = [
 ];
 
 function LocationsScreen(props) {
+    const [locations, setLocations] = useState(initialLocations);
     const [searchQuery, setSearchQuery] = useState('');
+
+    const handleDelete = (location) => {
+        // delete location from locations
+        setLocations(locations.filter((l) => l.id !== location.id));
+    }
 
     return (
         <Screen style={styles.container}>
@@ -68,12 +74,17 @@ function LocationsScreen(props) {
                 style={styles.searchBar}
             />
             <FlatList
-                data={initialLocations}
-                keyExtractor={item => item.name}
+                data={locations}
+                keyExtractor={item => item.id.toString()}
                 renderItem={({ item }) => 
-                    <LocationListItem location={item}/>
+                    <LocationListItem
+                        location={item}
+                        onPress={() => console.log("Location selected", item)}
+                        renderRightActions={() => 
+                            <ListItemDeleteAction onPress={() => handleDelete(item)}/>
+                        }
+                    />
                 }
-                // ItemSeparatorComponent={ListItemSeparator}
             />
         </Screen>
     );

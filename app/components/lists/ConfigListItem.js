@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import { Switch, Text, useTheme, } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import Screen from '../Screen';
 import colors from '../../config/colors';
 
 function ConfigListItem({ icon, title, getState, setState }) {
