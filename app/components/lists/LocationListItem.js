@@ -6,6 +6,8 @@ import { Swipeable } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import colors from "../../config/colors";
+import TemperatureUnit from "../TemperatureUnit";
+import YourLocation from "../YourLocation";
 
 function LocationListItem({ location, onPress, renderRightActions }) {
     const theme = useTheme();
@@ -15,9 +17,7 @@ function LocationListItem({ location, onPress, renderRightActions }) {
         <Swipeable renderRightActions={renderRightActions}>
             <TouchableWithoutFeedback onPress={onPress}>
                 <View style={styles.container}>
-                    <View style={styles.currentLocationContainer}>
-                        <Text variant='labelMedium' style={styles.currentLocation}>Your Location</Text>
-                    </View>
+                    <YourLocation />
                     <Image
                         source={require("../../../assets/sun.png")}
                         style={styles.weatherImage}
@@ -27,9 +27,9 @@ function LocationListItem({ location, onPress, renderRightActions }) {
                         <Text variant='titleSmall' style={styles.weatherSubtext}>{"Humidity: 32°"}</Text>
                     </View>
                     <View style={styles.leftContainer}>
-                        <Text variant='displayMedium'>{location.main.temp}°</Text>
+                        <TemperatureUnit temperature={location.main.temp} fontSize={50}/>
                         <View style={styles.locationContainer}>
-                        <Text variant='titleSmall'>{location.name}</Text>
+                        <Text variant='titleLarge' style={styles.location}>{location.name}</Text>
                             <MaterialCommunityIcons
                                 name="map-marker"
                                 size={22}
@@ -54,15 +54,8 @@ const styles = StyleSheet.create({
         padding: 15,
         height: 160,
     },
-    currentLocation: {
-        color: colors.white,
-        textAlign: "center",
-    },
-    currentLocationContainer: {
-        backgroundColor: colors.danger,
-        padding: 3,
-        width: 110,
-        borderRadius: 20,
+    location: {
+        fontWeight: "500",
     },
     locationContainer: {
         alignItems: "center",

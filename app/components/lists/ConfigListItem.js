@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Switch, Text, useTheme, } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+import CircularIcon from '../CircularIcon';
 import colors from '../../config/colors';
 
 function ConfigListItem({ icon, title, getState, setState }) {
@@ -11,10 +12,8 @@ function ConfigListItem({ icon, title, getState, setState }) {
     return (
     <View style={styles.container}>
         <View style={styles.subContainer}>
-            <MaterialCommunityIcons
-                name={icon}
-                size={25}
-                style={styles.icon}
+            <CircularIcon
+                image={icon}
                 backgroundColor={theme.colors.primary}
             />
             <Text style={styles.title}>{title}</Text>

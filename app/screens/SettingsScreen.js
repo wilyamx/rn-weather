@@ -14,7 +14,7 @@ function SettingsScreen(props) {
     // https://static.enapter.com/rn/icons/material-community.html
     const configItems = [
         {
-            title: "Temperature\nin Celsius",
+            title: "Temperature Unit\nin Celsius",
             icon: "coolant-temperature",
             getState: isSwitchOn1,
             setState: setIsSwitchOn1

@@ -68,7 +68,7 @@ function LocationsScreen(props) {
                 Find the city that you want to know{'\n'} the detailed weather into at this time.
             </Text>
             <Searchbar
-                placeholder="Search for a city"
+                placeholder="Search for a place"
                 onChangeText={setSearchQuery}
                 value={searchQuery}
                 style={styles.searchBar}
