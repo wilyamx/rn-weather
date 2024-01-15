@@ -27,7 +27,7 @@ function LocationListItem({ location, onPress, renderRightActions }) {
                         <Text variant='titleSmall' style={styles.weatherSubtext}>{"Humidity: 32°"}</Text>
                     </View>
                     <View style={styles.leftContainer}>
-                        <TemperatureUnit temperature={location.main.temp} fontSize={50}/>
+                        <TemperatureUnit temperature={location.main.temp} fontSize={40}/>
                         <View style={styles.locationContainer}>
                         <Text variant='titleLarge' style={styles.location}>{location.name}</Text>
                             <MaterialCommunityIcons

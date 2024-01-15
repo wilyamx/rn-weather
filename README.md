@@ -19,9 +19,11 @@ React Native Training Assessment Project
 	$ npx expo start
 	Starting Metro Bunder
 
-## Library Installation
+## NPM Library Installation
 
+	$ npm list
 	$ npm i react-native-gesture-handler
+	$ npm uninstall --save-dev react-native-gesture-handler
 	
 ## Snippets
 
@@ -33,6 +35,7 @@ React Native Training Assessment Project
 1.  [React Native Paper](https://callstack.github.io/react-native-paper/) - Cross-platform Material Design for React Native
 	* [Guides](https://callstack.github.io/react-native-paper/docs/guides/getting-started) 
 	* [Components](https://callstack.github.io/react-native-paper/docs/components/ActivityIndicator)
+1. [Bottom Sheet](https://www.npmjs.com/package/react-native-raw-bottom-sheet)
 
 ## References
 

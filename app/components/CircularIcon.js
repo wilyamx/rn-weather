@@ -1,33 +1,47 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableHighlight } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import colors from '../config/colors';
+import { GestureHandlerRootView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 function CircularIcon({
-    image,
+    image = "lock-question",
     backgroundColor = colors.black,
     color = colors.white,
-    size = 30
+    size = 30,
+    onPress
 }) {
+    const containerSize = size + 20;
+    const borderRadius = containerSize / 2;
+
     return (
-        <View style={[styles.container, { backgroundColor, color }]}>
-            <MaterialCommunityIcons
-                name={image}
-                size={size}
-                color={color}
-            />
-        </View>
+        <GestureHandlerRootView>
+        <TouchableWithoutFeedback onPress={onPress}>
+            <View style={[
+                styles.container,
+                { 
+                    backgroundColor,
+                    color,
+                    width: containerSize,
+                    height: containerSize,
+                    borderRadius: borderRadius
+                }
+            ]}>
+                <MaterialCommunityIcons
+                    name={image}
+                    size={size}
+                    color={color}
+                />
+            </View>
+        </TouchableWithoutFeedback>
+        </GestureHandlerRootView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         alignItems: "center",
-        borderRadius: 25,
         justifyContent: "center",
-        width: 50,
-        height: 50,
-        backgroundColor: "orange"
     }
 });
 
