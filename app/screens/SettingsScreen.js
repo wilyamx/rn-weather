@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { Button, Text, useTheme } from 'react-native-paper';
+import { Text, useTheme } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import AppContextProvider from '../auth/AppContextProvider';
 
 import {
     switchToDarkMode,
@@ -23,6 +24,8 @@ function SettingsScreen(props) {
     const [isSwitchOn1, setIsSwitchOn1] = useState(temperatureUnit === 'celsius' ? true : false);
     // dark mode appearance
     const [isSwitchOn2, setIsSwitchOn2] = useState(colorScheme === 'dark' ? true : false);
+
+    // const { theme, changeTheme } = useContext(AppContextProvider);
 
     // https://static.enapter.com/rn/icons/material-community.html
     const configItems = [
@@ -78,11 +81,6 @@ function SettingsScreen(props) {
                 }
                 ItemSeparatorComponent={ListItemSeparator}
             />
-            <View>
-                <Text variant='titleLarge'>isLightMode? {colorScheme}</Text>
-                <Button icon="camera" onPress={() => dispatch(switchToDarkMode())}>Dark Mode</Button>
-                <Button icon="camera" onPress={() => dispatch(switchToLightMode())}>Light Mode</Button>
-            </View>
         </Screen>
     );
 }           

@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, useColorScheme } from 'react-native';
 import {
-  MD3DarkTheme,
-  MD3LightTheme,
   PaperProvider,
 } from 'react-native-paper';
 import { Provider } from 'react-redux';
@@ -10,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { Text } from 'react-native-paper';
 import { PersistGate } from 'redux-persist/integration/react'
 
+import AppContextProvider from './app/auth/AppContextProvider';
 import AppNavigator from './app/navigations/AppNavigator';
 import reduxStore from "./app/redux/store";
 import { DarkTheme, LightTheme } from './app/config/Themes';
@@ -28,9 +27,11 @@ export default function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <PaperProvider theme={paperTheme}>
-          <AppNavigator />
-        </PaperProvider>
+        <AppContextProvider>
+          <PaperProvider theme={paperTheme}>
+            <AppNavigator />
+          </PaperProvider>
+        </AppContextProvider>
       </PersistGate>
     </Provider>
   );

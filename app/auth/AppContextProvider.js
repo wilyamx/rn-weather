@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
 
-import AppContext from './context';
 import { LightBlue } from '../config/Themes';
+
+export const AppContext = React.createContext(null);
 
 //https://medium.com/@SeishinBG/dynamic-switching-of-themes-in-react-native-app-the-funky-way-with-hooks-48b57ab62a79
 
