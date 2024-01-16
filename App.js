@@ -8,9 +8,10 @@ import {
 import { Provider } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { Text } from 'react-native-paper';
+import { PersistGate } from 'redux-persist/integration/react'
 
 import AppNavigator from './app/navigations/AppNavigator';
-import store from "./app/redux/store";
+import reduxStore from "./app/redux/store";
 import { DarkTheme, LightTheme } from './app/config/Themes';
 
 export default function App() {
@@ -22,11 +23,15 @@ export default function App() {
   const isDarkMode = colorScheme === 'dark';
   const paperTheme = isDarkMode ? DarkTheme : LightTheme;
 
+  const { store, persistor } = reduxStore();
+
   return (
     <Provider store={store}>
-      <PaperProvider theme={paperTheme}>
-        <AppNavigator />
-      </PaperProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <PaperProvider theme={paperTheme}>
+          <AppNavigator />
+        </PaperProvider>
+      </PersistGate>
     </Provider>
   );
 }

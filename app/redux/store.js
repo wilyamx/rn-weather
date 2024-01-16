@@ -13,7 +13,12 @@ const appReducers = combineReducers({
     theme: persistReducer(persistConfig, themeReducer)
 });
 
-export const store = createStore(appReducers);
-export const persistor = persistStore(store);
+// https://github.com/rt2zz/redux-persist
 
-export default store;
+export default () => {
+    let store = createStore(appReducers);
+    let persistor = persistStore(store);
+    return {
+        store, persistor
+    }
+};
