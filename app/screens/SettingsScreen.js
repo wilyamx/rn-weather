@@ -45,8 +45,6 @@ function SettingsScreen(props) {
 
     // temperature unit
     useEffect(() => {
-        console.log("temperature-unit-effect", isSwitchOn1);
-
         if (isSwitchOn1) {
             dispatch(temperatureInCelsius());
         }

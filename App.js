@@ -27,11 +27,9 @@ export default function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <AppContextProvider>
           <PaperProvider theme={paperTheme}>
             <AppNavigator />
           </PaperProvider>
-        </AppContextProvider>
       </PersistGate>
     </Provider>
   );
