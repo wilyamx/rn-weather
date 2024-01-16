@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Switch, Text, useTheme, } from 'react-native-paper';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import CircularIcon from '../CircularIcon';
 import colors from '../../config/colors';
@@ -10,16 +9,16 @@ function ConfigListItem({ icon, title, getState, setState }) {
     const theme = useTheme();
 
     return (
-    <View style={styles.container}>
-        <View style={styles.subContainer}>
-            <CircularIcon
-                image={icon}
-                backgroundColor={theme.colors.primary}
-            />
-            <Text style={styles.title}>{title}</Text>
+        <View style={styles.container}>
+            <View style={styles.subContainer}>
+                <CircularIcon
+                    image={icon}
+                    backgroundColor={theme.colors.primary}
+                />
+                <Text style={styles.title}>{title}</Text>
+            </View>
+            <Switch style={styles.switch} value={getState} onValueChange={setState} />
         </View>
-        <Switch style={styles.switch} value={getState} onValueChange={setState} />
-    </View>
     );
 }
 

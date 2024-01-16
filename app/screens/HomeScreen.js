@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { Button, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector } from 'react-redux';
 

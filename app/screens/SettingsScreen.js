@@ -1,20 +1,28 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { Button, Text, useTheme } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 
-import AppContextProvider from '../auth/AppContextProvider';
-import { switchToDarkMode, switchToLightMode } from '../redux/theme/themeActions';
+import {
+    switchToDarkMode,
+    switchToLightMode,
+    temperatureInCelsius,
+    temperatureInFahrenheit,
+} from '../redux/theme/themeActions';
 import ConfigListItem from '../components/lists/ConfigListItem';
 import ListItemSeparator from '../components/lists/ListItemSeparator';
 import Screen from '../components/Screen';
 
 function SettingsScreen(props) {
-    const [isSwitchOn1, setIsSwitchOn1] = useState(false);
-    const [isSwitchOn2, setIsSwitchOn2] = useState(false);
-
+    // redux
+    const temperatureUnit = useSelector(state => state.theme.temperatureUnit);
     const colorScheme = useSelector(state => state.theme.colorScheme);
     const dispatch = useDispatch();
+
+    // temperature unit
+    const [isSwitchOn1, setIsSwitchOn1] = useState(temperatureUnit === 'celsius' ? true : false);
+    // dark mode appearance
+    const [isSwitchOn2, setIsSwitchOn2] = useState(colorScheme === 'dark' ? true : false);
 
     // https://static.enapter.com/rn/icons/material-community.html
     const configItems = [
@@ -31,6 +39,28 @@ function SettingsScreen(props) {
             setState: setIsSwitchOn2
         }
     ];
+
+    // temperature unit
+    useEffect(() => {
+        console.log("temperature-unit-effect", isSwitchOn1);
+
+        if (isSwitchOn1) {
+            dispatch(temperatureInCelsius());
+        }
+        else {
+            dispatch(temperatureInFahrenheit())
+        }
+    }, [isSwitchOn1]);
+
+    // dark mode
+    useEffect(() => {
+        if (isSwitchOn2) {
+            dispatch(switchToDarkMode());
+        }
+        else {
+            dispatch(switchToLightMode());
+        }
+    }, [isSwitchOn2]);
 
     return (
         <Screen style={styles.container}>

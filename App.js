@@ -10,8 +10,7 @@ import { useSelector } from 'react-redux';
 import { Text } from 'react-native-paper';
 
 import AppNavigator from './app/navigations/AppNavigator';
-import store from './app/redux/store';
-import Screen from './app/components/Screen';
+import store from "./app/redux/store";
 import { DarkTheme, LightTheme } from './app/config/Themes';
 
 export default function App() {
