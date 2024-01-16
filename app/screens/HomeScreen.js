@@ -3,6 +3,7 @@ import { Button, View, StyleSheet } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import RBSheet from "react-native-raw-bottom-sheet";
+import { useSelector } from 'react-redux';
 
 import CircularIcon from '../components/CircularIcon';
 import colors from '../config/colors';
@@ -16,6 +17,8 @@ function HomeScreen(props) {
     const [forecast, setForecast] = useState(true)
 
     const refRBSheet = useRef();
+
+    const colorScheme = useSelector(state => state.theme.colorScheme);
 
     return (
         <Screen>
@@ -36,6 +39,7 @@ function HomeScreen(props) {
                     <Text style={styles.location}>Lapulapu City</Text>
                     <TemperatureUnit temperature={"32"} fontSize={100}/>
                     <Text style={styles.weatherCondition}>Cloudy</Text>
+                    <Text style={styles.weatherCondition}>colorScheme? {colorScheme}</Text>
                 </View>
 
                 <CircularIcon
