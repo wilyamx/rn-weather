@@ -81,7 +81,7 @@ function WeatherForecast({ onRefresh, onDismiss }) {
     const theme = useTheme();
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: theme.colors.onSecondary }]}>
             <View style={styles.header}>
                 <View>
                     <Text variant='titleLarge'>5 Day Forecasts</Text>
@@ -122,8 +122,6 @@ const styles = StyleSheet.create({
     },
     container: {
         width: "100%",
-        borderRadius: 20,
-        overflow: "hidden",
         padding: 20,
     },
     header: {

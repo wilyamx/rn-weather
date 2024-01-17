@@ -16,12 +16,10 @@ function HomeScreen(props) {
     const [forecast, setForecast] = useState(true)
 
     const refRBSheet = useRef();
-
-    const colorScheme = useSelector(state => state.theme.colorScheme);
-
+    
     return (
         <Screen>
-            <View style={[styles.container, { backgroundColor: theme.colors.primaryContainer }]}>
+            <View style={styles.container}>
                 <View style={styles.headerContainer}>
                     <CircularIcon image={"map-marker"} backgroundColor={theme.colors.primary}/>
                     <View>
@@ -38,7 +36,6 @@ function HomeScreen(props) {
                     <Text style={styles.location}>Lapulapu City</Text>
                     <TemperatureUnit temperature={"32"} fontSize={100}/>
                     <Text style={styles.weatherCondition}>Cloudy</Text>
-                    <Text style={styles.weatherCondition}>colorScheme? {colorScheme}</Text>
                 </View>
 
                 <CircularIcon
@@ -61,7 +58,9 @@ function HomeScreen(props) {
                         backgroundColor: theme.colors.primary
                     },
                     container: {
-                        backgroundColor: colors.light
+                        backgroundColor: "red",
+                        borderRadius: 20,
+                        overflow: "hidden",
                     },
                 }}
                 height={350}

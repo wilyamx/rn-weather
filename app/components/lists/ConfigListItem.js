@@ -14,6 +14,7 @@ function ConfigListItem({ icon, title, getState, setState }) {
                 <CircularIcon
                     image={icon}
                     backgroundColor={theme.colors.primary}
+                    color={theme.colors.white}
                 />
                 <Text style={styles.title}>{title}</Text>
             </View>
@@ -29,16 +30,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 0,
         paddingVertical: 10,
     },
-    icon: {
-        color: colors.white,
-        padding: 15,
-        borderRadius: 28,
-        overflow: "hidden",
-        width: 55,
-        height: 55,
-    },
     title: {
-        color: colors.black,
         marginLeft: 15,
     },
     switch: {

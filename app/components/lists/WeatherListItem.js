@@ -20,7 +20,7 @@ function WeatherListItem({ forecast }) {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 15,
+        padding: 20,
         borderRadius: 10,
         alignItems: "center",
         marginRight: 10,

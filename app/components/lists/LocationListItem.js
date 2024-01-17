@@ -16,7 +16,7 @@ function LocationListItem({ location, onPress, renderRightActions }) {
         <GestureHandlerRootView>
         <Swipeable renderRightActions={renderRightActions}>
             <TouchableWithoutFeedback onPress={onPress}>
-                <View style={styles.container}>
+                <View style={[styles.container, { backgroundColor: theme.colors.tertiaryContainer }]}>
                     <YourLocation />
                     <Image
                         source={require("../../../assets/sun.png")}
@@ -47,7 +47,7 @@ function LocationListItem({ location, onPress, renderRightActions }) {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: colors.light,
+        // backgroundColor: colors.light,
         borderRadius: 15,
         marginBottom: 10,
         marginTop: 35,
