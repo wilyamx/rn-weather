@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { Text, useTheme } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import AppContextProvider from '../auth/AppContextProvider';
+import { AppContext } from '../auth/AppContextProvider';
 
 import {
     switchToDarkMode,
@@ -13,6 +13,7 @@ import {
 import ConfigListItem from '../components/lists/ConfigListItem';
 import ListItemSeparator from '../components/lists/ListItemSeparator';
 import Screen from '../components/Screen';
+import { DarkTheme, LightTheme } from '../config/Themes';
 
 function SettingsScreen(props) {
     // redux
@@ -25,7 +26,8 @@ function SettingsScreen(props) {
     // dark mode appearance
     const [isSwitchOn2, setIsSwitchOn2] = useState(colorScheme === 'dark' ? true : false);
 
-    // const { theme, changeTheme } = useContext(AppContextProvider);
+    // context
+    const { theme, changeTheme } = useContext(AppContext);
 
     // https://static.enapter.com/rn/icons/material-community.html
     const configItems = [
@@ -56,9 +58,11 @@ function SettingsScreen(props) {
     // dark mode
     useEffect(() => {
         if (isSwitchOn2) {
+            changeTheme(DarkTheme);
             dispatch(switchToDarkMode());
         }
         else {
+            changeTheme(LightTheme);
             dispatch(switchToLightMode());
         }
     }, [isSwitchOn2]);
