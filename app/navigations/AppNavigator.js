@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { BottomNavigation, Text } from 'react-native-paper';
+import { NavigationContainer } from '@react-navigation/native';
 
 import SettingsScreen from '../screens/SettingsScreen';
 import LocationsScreen from '../screens/LocationsScreen';
@@ -22,11 +23,13 @@ function AppNavigator(props) {
     });
     
     return (
-        <BottomNavigation
-            navigationState={{ index, routes }}
-            onIndexChange={setIndex}
-            renderScene={renderScene}
-        />
+        <NavigationContainer>
+            <BottomNavigation
+                navigationState={{ index, routes }}
+                onIndexChange={setIndex}
+                renderScene={renderScene}
+            />
+        </NavigationContainer>
     );
 }
 

@@ -6,6 +6,7 @@ import { GestureHandlerRootView, TouchableHighlight } from 'react-native-gesture
 import colors from '../config/colors';
 import CircularIcon from './CircularIcon';
 import WeatherListItem from './lists/WeatherListItem';
+import ListItemSeparator from './lists/ListItemSeparator';
 
 
 const initialForecasts = [
@@ -101,6 +102,8 @@ function WeatherForecast({ onRefresh, onDismiss }) {
                 </View>
             </View>
 
+            <ListItemSeparator />
+
             <View style={styles.forecastContainer} >
                 <FlatList
                     horizontal={true}
@@ -122,14 +125,16 @@ const styles = StyleSheet.create({
     },
     container: {
         width: "100%",
-        padding: 20,
     },
     header: {
         flexDirection: "row",
         justifyContent: "space-between",
+        marginBottom: 10,
+        paddingHorizontal: 20,
+        paddingTop: 20
     },
     forecastContainer: {
-        paddingVertical: 20,
+        padding: 20,
     },
     title: {
         flexDirection: "row",

@@ -58,8 +58,8 @@ function HomeScreen(props) {
                         backgroundColor: theme.colors.primary
                     },
                     container: {
-                        backgroundColor: "red",
-                        borderRadius: 20,
+                        backgroundColor: theme.colors.onSecondary,
+                        borderRadius: 40,
                         overflow: "hidden",
                     },
                 }}

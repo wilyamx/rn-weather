@@ -7,7 +7,7 @@ function Screen({ children, style }) {
   const theme = useTheme();
 
   return (
-    <SafeAreaView style={[styles.screen]}>
+    <SafeAreaView style={[styles.screen, { backgroundColor: theme.colors.primaryContainer }]}>
         <View style={[styles.view, style, { backgroundColor: theme.colors.primaryContainer }]}>
             {children}
         </View>

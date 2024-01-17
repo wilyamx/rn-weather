@@ -24,7 +24,11 @@ function LocationListItem({ location, onPress, renderRightActions }) {
                     />
                     <View style={styles.weatherTextContainer}>
                         <Text variant='titleLarge' style={styles.weatherText}>{location.weather[0].main}</Text>
-                        <Text variant='titleSmall' style={styles.weatherSubtext}>{"Humidity: 32°"}</Text>
+                        <Text
+                            variant='titleSmall'
+                            style={[styles.weatherSubtext, { color: theme.colors.tertiary }]}>
+                                {"Humidity: 32°"}
+                        </Text>
                     </View>
                     <View style={styles.leftContainer}>
                         <TemperatureUnit temperature={location.main.temp} fontSize={40}/>
@@ -36,7 +40,7 @@ function LocationListItem({ location, onPress, renderRightActions }) {
                                 style={styles.marker}
                             />
                         </View>
-                        <Text variant='labelMedium'>Mon, January 1, 2024</Text>
+                        <Text variant='labelMedium' style={{color: theme.colors.secondary}} >Mon, January 1, 2024</Text>
                     </View>
                 </View>
             </TouchableWithoutFeedback>
@@ -47,7 +51,6 @@ function LocationListItem({ location, onPress, renderRightActions }) {
 
 const styles = StyleSheet.create({
     container: {
-        // backgroundColor: colors.light,
         borderRadius: 15,
         marginBottom: 10,
         marginTop: 35,
