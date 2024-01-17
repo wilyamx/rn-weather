@@ -36,6 +36,8 @@ React Native Training Assessment Project
 	* [Guides](https://callstack.github.io/react-native-paper/docs/guides/getting-started) 
 	* [Components](https://callstack.github.io/react-native-paper/docs/components/ActivityIndicator)
 1. [Bottom Sheet](https://www.npmjs.com/package/react-native-raw-bottom-sheet)
+1. Redux + [Redux-Persist](https://github.com/rt2zz/redux-persist)
+1. [Apisauce](https://github.com/infinitered/apisauce)
 
 ## References
 

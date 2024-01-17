@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { Searchbar, Text } from 'react-native-paper';
+
+import useApi from '../hooks/useApi';
+import weatherApi from '../api/weather';
+import forecastApi from '../api/forecast';
 
 import LocationListItem from '../components/lists/LocationListItem';
 import Screen from '../components/Screen';
@@ -55,11 +59,23 @@ const initialLocations = [
 function LocationsScreen(props) {
     const [locations, setLocations] = useState(initialLocations);
     const [searchQuery, setSearchQuery] = useState('');
-
+ 
     const handleDelete = (location) => {
         // delete location from locations
         setLocations(locations.filter((l) => l.id !== location.id));
     }
+
+    // api
+    const {
+        data: weatherDetails,
+        error,
+        loading,
+        request: weatherRequest
+    } = useApi(forecastApi.getForecastByLocationName);
+
+    useEffect(() => {
+        weatherRequest(searchQuery);
+    }, []);
 
     return (
         <Screen style={styles.container}>
