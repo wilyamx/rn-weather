@@ -3,10 +3,9 @@ import client from './client';
 const endpoint = '/forecast'
 
 const getForecastByLocationName = (searchKey) => {
-    console.log("getForecastByLocationName", searchKey)
     const params = {
         appid: "368b07291c6814df232003d0f78f47b9",
-        q: "cebu city",
+        q: searchKey,
         units: "standard",
     }
     return client.get(endpoint, params);

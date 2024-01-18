@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { Alert, FlatList, StyleSheet } from 'react-native';
 import { Searchbar, Text } from 'react-native-paper';
 
 import useApi from '../hooks/useApi';
-import weatherApi from '../api/weather';
 import forecastApi from '../api/forecast';
 
+import AppActivityIndicator from '../components/AppActivityIndicator';
 import LocationListItem from '../components/lists/LocationListItem';
 import Screen from '../components/Screen';
 import ListItemDeleteAction from '../components/lists/ListItemDeleteAction';
+import Retry from '../components/Retry';
 
 const initialLocations = [
     {
@@ -60,24 +61,40 @@ function LocationsScreen(props) {
     const [locations, setLocations] = useState(initialLocations);
     const [searchQuery, setSearchQuery] = useState('');
  
-    const handleDelete = (location) => {
-        // delete location from locations
-        setLocations(locations.filter((l) => l.id !== location.id));
-    }
-
-    // api
-    const {
+     // api
+     const {
         data: weatherDetails,
         error,
         loading,
         request: weatherRequest
     } = useApi(forecastApi.getForecastByLocationName);
 
+    const handleDelete = (location) => {
+        // delete location from locations
+        setLocations(locations.filter((l) => l.id !== location.id));
+    };
+
+    const handleSubmitSearchKey = (key) => {
+        if (key.length == 0) {
+            Alert.alert(
+                "Empty Searchbar",
+                "Please input valid place.",
+                [
+                    { text: "OK" },
+                ]
+            );
+            return;
+        }
+        weatherRequest(key);
+    };
+
     useEffect(() => {
-        weatherRequest(searchQuery);
+        
     }, []);
 
     return (
+        <>
+        <AppActivityIndicator visible={loading} />
         <Screen style={styles.container}>
             <Text style={styles.title} variant='titleLarge'>Pick Locations</Text>
             <Text style={styles.subtitle} variant='titleSmall'>
@@ -85,10 +102,21 @@ function LocationsScreen(props) {
             </Text>
             <Searchbar
                 placeholder="Search for a place"
-                onChangeText={setSearchQuery}
                 value={searchQuery}
                 style={styles.searchBar}
+                onChangeText={setSearchQuery}
+                onSubmitEditing={() => handleSubmitSearchKey(searchQuery)}
             />
+
+            { true &&
+                <>
+                    <Retry
+                        message={"Couldn't retrieve the listings."}
+                        onRetry={() => handleSubmitSearchKey(searchQuery)}
+                    />
+                </>
+            }
+            
             <FlatList
                 data={locations}
                 keyExtractor={item => item.id.toString()}
@@ -103,6 +131,7 @@ function LocationsScreen(props) {
                 }
             />
         </Screen>
+        </>
     );
 }
 

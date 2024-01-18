@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import LOG from '../utility/logger';
+
 export default useApi = (apiFunc) => {
     const [data, setData] = useState([]);
     const [error, setError] = useState(false);
@@ -13,11 +15,14 @@ export default useApi = (apiFunc) => {
         setError(!response.ok);
         setData(response.data);
 
-        if (response.config) {
-            console.log("[useApi]", response.config.url, response.data);
-            console.log("-------------")
+        if (response.ok) {
+            LOG.info("[useApi]", response.config.url, response.status.toString())
+            //console.log("[useApi]", response)
         }
-        
+        else {
+            LOG.error("[useApi]", response.config.url, response.status.toString());
+        }
+
         return response
     };
 
