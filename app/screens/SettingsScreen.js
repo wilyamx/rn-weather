@@ -10,6 +10,7 @@ import {
     temperatureInCelsius,
     temperatureInFahrenheit,
 } from '../redux/theme/themeActions';
+
 import ConfigListItem from '../components/lists/ConfigListItem';
 import ListItemSeparator from '../components/lists/ListItemSeparator';
 import Screen from '../components/Screen';

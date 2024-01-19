@@ -2,15 +2,17 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { Alert, FlatList, StyleSheet } from 'react-native';
 import { Searchbar, Text } from 'react-native-paper';
+import { useDispatch, useSelector } from 'react-redux';
 
-import useApi from '../hooks/useApi';
 import forecastApi from '../api/forecast';
+import useApi from '../hooks/useApi';
+import { addToForecasts } from '../redux/weather/weatherActions';
 
 import AppActivityIndicator from '../components/AppActivityIndicator';
-import LocationListItem from '../components/lists/LocationListItem';
-import Screen from '../components/Screen';
 import ListItemDeleteAction from '../components/lists/ListItemDeleteAction';
+import LocationListItem from '../components/lists/LocationListItem';
 import Retry from '../components/Retry';
+import Screen from '../components/Screen';
 
 const initialLocations = [
     {
@@ -55,9 +57,13 @@ const initialLocations = [
             icon: "10d"
         }]
     }
-];
+]; 
 
 function LocationsScreen(props) {
+    // redux
+    const forecasts = useSelector(state => state.weather.forecasts);
+    const dispatch = useDispatch();
+
     const [locations, setLocations] = useState(initialLocations);
     const [searchQuery, setSearchQuery] = useState('');
  
@@ -89,8 +95,13 @@ function LocationsScreen(props) {
     };
 
     useEffect(() => {
-        
-    }, []);
+        if (weatherDetails.length == 0) return;
+
+        dispatch(addToForecasts({
+            one: 1,
+        }));
+        console.log(forecasts)
+    }, [weatherDetails]);
 
     return (
         <>
@@ -108,7 +119,7 @@ function LocationsScreen(props) {
                 onSubmitEditing={() => handleSubmitSearchKey(searchQuery)}
             />
 
-            { true &&
+            { error &&
                 <>
                     <Retry
                         message={"Couldn't retrieve the listings."}
