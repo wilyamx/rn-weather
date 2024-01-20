@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import LOG from '../utility/logger';
 import { useState } from 'react';
 import { Alert, FlatList, StyleSheet } from 'react-native';
 import { Searchbar, Text } from 'react-native-paper';
@@ -61,7 +62,7 @@ const initialLocations = [
 
 function LocationsScreen(props) {
     // redux
-    const forecasts = useSelector(state => state.weather.forecasts);
+    const savedForecasts = useSelector(state => state.weather.forecasts);
     const dispatch = useDispatch();
 
     const [locations, setLocations] = useState(initialLocations);
@@ -95,6 +96,9 @@ function LocationsScreen(props) {
     };
 
     useEffect(() => {
+        let savedLocations = savedForecasts.map((forecast) => forecast.city.name);
+        LOG.info("[LocationScreen]/Saved-Locations", savedLocations);
+
         if (!weatherDetails) return;
 
         if (!weatherDetails.list) return;
@@ -102,18 +106,20 @@ function LocationsScreen(props) {
 
         if (!weatherDetails.city) return;
 
-        // dispatch(addToForecasts({
-        //     one: 1,
-        // }));
-
         let cityDetails = weatherDetails.city
         let forecasts = weatherDetails.list
 
-        console.log("USE-EFFECT!", forecasts.length);
-        for (let i = 0; i < forecasts.length; i++) {
-            let forecast = forecasts[i];
-            console.info("[LocationScreen]/forecast", forecast.dt_txt);
-            console.info("[LocationScreen]/city", cityDetails.name);
+        if (savedForecasts.length == 0) {
+            dispatch(addToForecasts(weatherDetails))
+        }
+        else {
+            if (!savedLocations.includes(cityDetails.name)) {
+                LOG.info("[LocationScreen]/Added-Location", cityDetails.name);
+                dispatch(addToForecasts(weatherDetails));
+            }
+            else {
+                LOG.info("[LocationScreen]/Existing-Location", cityDetails.name);
+            }
         }
     }, [weatherDetails]);
 
