@@ -9,6 +9,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import colors from "../../config/colors";
 import TemperatureUnit from "../TemperatureUnit";
 import YourLocation from "../YourLocation";
+import { getWeatherImage } from "../../config/WeatherImages";
 
 function LocationListItem({ location, onPress, renderRightActions }) {
     const theme = useTheme();
@@ -18,7 +19,8 @@ function LocationListItem({ location, onPress, renderRightActions }) {
 
     const humidity = "Humidity: " + latestForecast.main.humidity;
     const forecastDate = Moment(latestForecast.dt_txt).format('d MMMM YYYY | h:mm a');
-
+    const weatherImage = getWeatherImage(latestForecast.weather[0].main);
+    
     return (
         <GestureHandlerRootView>
         <Swipeable renderRightActions={renderRightActions}>
@@ -26,8 +28,9 @@ function LocationListItem({ location, onPress, renderRightActions }) {
                 <View style={[styles.container, { backgroundColor: theme.colors.tertiaryContainer }]}>
                     <YourLocation />
                     <Image
-                        source={require("../../../assets/sun.png")}
+                        source={weatherImage}
                         style={styles.weatherImage}
+                        resizeMode="contain"
                     />
                     <View style={styles.weatherTextContainer}>
                         <Text variant='titleLarge' style={styles.weatherText}>{latestForecast.weather[0].main}</Text>

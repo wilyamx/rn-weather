@@ -17,7 +17,6 @@ import AppActivityIndicator from '../components/AppActivityIndicator';
 import AppAlert from '../components/AppAlert';
 import ListItemDeleteAction from '../components/lists/ListItemDeleteAction';
 import LocationListItem from '../components/lists/LocationListItem';
-import Retry from '../components/Retry';
 import Screen from '../components/Screen';
 
 function LocationsScreen(props) {
@@ -38,8 +37,8 @@ function LocationsScreen(props) {
 
     // actions
     const handleDelete = async (location) => {
-        console.log("location-delete", location.city.name)
-        dispatch(removeFromForecasts(location.city.name))
+        console.log("location-delete", location.city.name);
+        dispatch(removeFromForecasts(location.city.name));
     };
 
     const handleSubmitSearchKey = async (key) => {
@@ -67,20 +66,23 @@ function LocationsScreen(props) {
 
         if (!weatherDetails.city) return;
 
-        let cityDetails = weatherDetails.city
-        let forecasts = weatherDetails.list
+        let cityDetails = weatherDetails.city;
+        let forecasts = weatherDetails.list;
 
         if (savedLocations.length == 0) {
-            dispatch(addToForecasts(weatherDetails))
+            dispatch(addToForecasts(weatherDetails));
+            setSearchQuery("");
         }
         else {
             if (!savedLocationNames.includes(cityDetails.name)) {
                 LOG.info("[LocationScreen]/Added-Location", cityDetails.name);
                 dispatch(addToForecasts(weatherDetails));
+                setSearchQuery("");
             }
             else {
                 LOG.info("[LocationScreen]/Existing-Location", cityDetails.name);
                 dispatch(updateFromForecasts(weatherDetails));
+                setSearchQuery("");
             }
         }
     }, [weatherDetails]);
