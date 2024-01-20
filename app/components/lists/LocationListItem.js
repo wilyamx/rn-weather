@@ -1,5 +1,5 @@
 import React from "react";
-import Moment from 'moment';
+import moment from "moment/moment";
 import { Image, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -11,16 +11,28 @@ import TemperatureUnit from "../TemperatureUnit";
 import YourLocation from "../YourLocation";
 import { getWeatherImage } from "../../config/WeatherImages";
 
+const getDateComponents = (dt_txt) => {
+    // 2024-01-20 03:00:0
+    let dateComponents = dt_txt.split(" ");
+    return dateComponents
+};
+
 function LocationListItem({ location, onPress, renderRightActions }) {
     const theme = useTheme();
 
     const locationName = location.city.name;
-    const latestForecast = location.list[location.list.length - 1];
+    const forecastOfTheDay = location.list.filter((forecast) => {
+        let dateComponents = getDateComponents(forecast.dt_txt);
+        let date = dateComponents[0];
+        return date == moment().format("YYYY-MM-DD");
+    })[0];
 
-    const humidity = "Humidity: " + latestForecast.main.humidity;
-    const forecastDate = Moment(latestForecast.dt_txt).format('d MMMM YYYY | h:mm a');
-    const weatherImage = getWeatherImage(latestForecast.weather[0].main);
+    const humidity = "Humidity: " + forecastOfTheDay.main.humidity;
+    const weatherImage = getWeatherImage(forecastOfTheDay.weather[0].main);
     
+    const momentDate = moment(forecastOfTheDay.dt * 1000);
+    const forecastDate = momentDate.format('DD MMMM YYYY | hh:mm a');
+
     return (
         <GestureHandlerRootView>
         <Swipeable renderRightActions={renderRightActions}>
@@ -33,7 +45,7 @@ function LocationListItem({ location, onPress, renderRightActions }) {
                         resizeMode="contain"
                     />
                     <View style={styles.weatherTextContainer}>
-                        <Text variant='titleLarge' style={styles.weatherText}>{latestForecast.weather[0].main}</Text>
+                        <Text variant='titleLarge' style={styles.weatherText}>{forecastOfTheDay.weather[0].main}</Text>
                         <Text
                             variant='titleSmall'
                             style={[styles.weatherSubtext, { color: theme.colors.tertiary }]}>

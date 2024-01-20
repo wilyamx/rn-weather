@@ -32,16 +32,16 @@ const getForecastByLocationName = async (searchKey) => {
             let time = dateComponents[1];
             
             if (dates.includes(date)) {
-                //console.info("[forecast]", date, time);
+                console.info("[forecast]", date, time);
                 continue;
             }
             else {
-                //console.info("[forecast] **", date, time);
+                console.info("[forecast]", date, time, "**");
                 dates.push(date);
             }
         }
 
-        //console.log("dates", dates);
+        console.log("[forecast]/dates", dates);
 
         // get the latest forecast date for each day
         for (let i = 0; i < dates.length; i++) {
@@ -55,7 +55,7 @@ const getForecastByLocationName = async (searchKey) => {
             // let filteredDates = forecastsByDate.map((item) => item.dt_txt);
             // console.log("filteredDates", filteredDates);
 
-            let latestForecast = forecastsByDate[forecastsByDate.length - 1];
+            let latestForecast = forecastsByDate[0];
             filteredForecasts.push(latestForecast)
         }
 
@@ -100,11 +100,11 @@ const getForecastByCoordinate = async (latitude, longitude) => {
             let time = dateComponents[1];
             
             if (dates.includes(date)) {
-                //console.info("[forecast]", date, time);
+                console.info("[forecast]", date, time);
                 continue;
             }
             else {
-                //console.info("[forecast] **", date, time);
+                console.info("[forecast] **", date, time);
                 dates.push(date);
             }
         }
