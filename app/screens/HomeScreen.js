@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
-import RBSheet from "react-native-raw-bottom-sheet";
 import { useDispatch, useSelector } from 'react-redux';
+import RBSheet from "react-native-raw-bottom-sheet";
 
 import constants from '../config/constants';
 import forecastApi from '../api/forecast';
@@ -11,6 +11,7 @@ import {
     addToForecasts,
     updateFromForecasts,
 } from '../redux/weather/weatherActions';
+import { setCurrentLocation } from '../redux/location/locationActions';
 
 import CircularIcon from '../components/CircularIcon';
 import Screen from '../components/Screen';
@@ -103,6 +104,14 @@ function HomeScreen(props) {
                 dispatch(updateFromForecasts(weatherDetails));
                 setYourLocation(true);
             }
+        }
+
+        if (location) {
+            dispatch(setCurrentLocation({
+                latitude: location.latitude,
+                longitude: location.longitude,
+                place: weatherDetails.city.name,
+            }))
         }
     }, [weatherDetails]);
 

@@ -22,6 +22,7 @@ import Screen from '../components/Screen';
 function LocationsScreen(props) {
     // redux
     const savedLocations = useSelector(state => state.weather.forecasts);
+    const savedCurrentLocation = useSelector(state => state.location.currentLocation);
     const dispatch = useDispatch();
 
     // ui
@@ -116,6 +117,7 @@ function LocationsScreen(props) {
                 keyExtractor={item => item.city.id.toString()}
                 renderItem={({ item }) => 
                     <LocationListItem
+                        currentLocation={savedCurrentLocation}
                         location={item}
                         onPress={() => console.log("[LocationScreen]/Selected-Location", item)}
                         renderRightActions={() => 

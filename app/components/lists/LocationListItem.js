@@ -7,10 +7,10 @@ import { Swipeable } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import colors from "../../config/colors";
+import constants from "../../config/constants";
 import TemperatureUnit from "../TemperatureUnit";
 import YourLocation from "../YourLocation";
 import { getWeatherImage } from "../../config/WeatherImages";
-import constants from "../../config/constants";
 
 const getDateComponents = (dt_txt) => {
     // 2024-01-20 03:00:0
@@ -18,10 +18,10 @@ const getDateComponents = (dt_txt) => {
     return dateComponents
 };
 
-function LocationListItem({ location, onPress, renderRightActions }) {
+function LocationListItem({ currentLocation, location, onPress, renderRightActions }) {
     const theme = useTheme();
 
-    // device location
+    // city name
     const locationName = location.city.name;
 
     // display forecast of the day if available
@@ -45,12 +45,16 @@ function LocationListItem({ location, onPress, renderRightActions }) {
     const momentDate = moment(forecastOfTheDay.dt * 1000);
     const forecastDate = momentDate.format('DD MMMM YYYY | hh:mm a');
 
+    const isCurrentLocation = () => {
+        return locationName === currentLocation.place;
+    };
+
     return (
         <GestureHandlerRootView>
         <Swipeable renderRightActions={renderRightActions}>
             <TouchableWithoutFeedback onPress={onPress}>
                 <View style={[styles.container, { backgroundColor: theme.colors.tertiaryContainer }]}>
-                    <YourLocation />
+                    { isCurrentLocation() && <YourLocation /> }
                     <Image
                         source={weatherImage}
                         style={styles.weatherImage}
