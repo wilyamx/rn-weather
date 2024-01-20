@@ -2,9 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import RBSheet from "react-native-raw-bottom-sheet";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import useLocation from '../hooks/useLocation';
+import forecastApi from '../api/forecast';
+import {
+    addToForecasts,
+    updateFromForecasts,
+} from '../redux/weather/weatherActions';
 
 import CircularIcon from '../components/CircularIcon';
 import Screen from '../components/Screen';
@@ -14,6 +19,11 @@ import WeatherForecast from '../components/WeatherForecast';
 import LOG from '../utility/logger';
 
 function HomeScreen(props) {
+    // redux
+    const savedLocations = useSelector(state => state.weather.forecasts);
+    const dispatch = useDispatch();
+
+    // ui
     const theme = useTheme();
     const [forecast, setForecast] = useState(true)
 
@@ -21,12 +31,56 @@ function HomeScreen(props) {
     
     const location = useLocation();
 
+    // api
+    const {
+        data: weatherDetails,
+        error,
+        loading,
+        request: weatherRequest
+    } = useApi(forecastApi.getForecastByCoordinate);
+
     useEffect(() => {
-        LOG.info("[HomeScreen]", location);
+        
+    }, []);
+
+    useEffect(() => {
+        LOG.info("[HomeScreen]/Device-Location", location);
         if (location) {
-            
+            weatherRequest(
+                location.latitude,
+                location.longitude
+            );
         }
     }, [location]);
+
+    useEffect(() => {
+        let savedLocationNames = savedLocations.map((forecast) => forecast.city.name);
+        LOG.info("[LocationScreen]/Saved-Locations", savedLocationNames);
+
+        if (!weatherDetails) return;
+
+        if (!weatherDetails.list) return;
+        if (weatherDetails.list.length == 0) return;
+
+        if (!weatherDetails.city) return;
+
+        let cityDetails = weatherDetails.city;
+        let forecasts = weatherDetails.list;
+
+        if (savedLocations.length == 0) {
+            dispatch(addToForecasts(weatherDetails));
+        }
+        else {
+            if (!savedLocationNames.includes(cityDetails.name)) {
+                LOG.info("[HomeScreen]/Added-Location", cityDetails.name);
+                dispatch(addToForecasts(weatherDetails));
+            }
+            else {
+                LOG.info("[HomeScreen]/Existing-Location", cityDetails.name);
+                dispatch(updateFromForecasts(weatherDetails));
+            }
+        }
+    }, [weatherDetails]);
 
     return (
         <Screen>

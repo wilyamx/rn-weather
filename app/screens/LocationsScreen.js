@@ -27,8 +27,8 @@ function LocationsScreen(props) {
     // ui
     const [searchQuery, setSearchQuery] = useState('');
  
-     // api
-     const {
+    // api
+    const {
         data: weatherDetails,
         error,
         loading,
