@@ -1,4 +1,5 @@
 import React from "react";
+import Moment from 'moment';
 import { Image, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -12,6 +13,12 @@ import YourLocation from "../YourLocation";
 function LocationListItem({ location, onPress, renderRightActions }) {
     const theme = useTheme();
 
+    const locationName = location.city.name;
+    const latestForecast = location.list[location.list.length - 1];
+
+    const humidity = "Humidity: " + latestForecast.main.humidity;
+    const forecastDate = Moment(latestForecast.dt_txt).format('d MMMM YYYY | h:mm a');
+
     return (
         <GestureHandlerRootView>
         <Swipeable renderRightActions={renderRightActions}>
@@ -23,24 +30,24 @@ function LocationListItem({ location, onPress, renderRightActions }) {
                         style={styles.weatherImage}
                     />
                     <View style={styles.weatherTextContainer}>
-                        <Text variant='titleLarge' style={styles.weatherText}>{location.weather[0].main}</Text>
+                        <Text variant='titleLarge' style={styles.weatherText}>{latestForecast.weather[0].main}</Text>
                         <Text
                             variant='titleSmall'
                             style={[styles.weatherSubtext, { color: theme.colors.tertiary }]}>
-                                {"Humidity: 32°"}
+                                {humidity}
                         </Text>
                     </View>
                     <View style={styles.leftContainer}>
-                        <TemperatureUnit temperature={location.main.temp} fontSize={40}/>
+                        <TemperatureUnit temperature={location.list[0].main.temp} fontSize={40}/>
                         <View style={styles.locationContainer}>
-                        <Text variant='titleLarge' style={styles.location}>{location.name}</Text>
+                        <Text variant='titleLarge' style={styles.location}>{locationName}</Text>
                             <MaterialCommunityIcons
                                 name="map-marker"
                                 size={22}
                                 style={styles.marker}
                             />
                         </View>
-                        <Text variant='labelMedium' style={{color: theme.colors.secondary}} >Mon, January 1, 2024</Text>
+                        <Text variant='labelMedium' style={{color: theme.colors.secondary}} >{forecastDate}</Text>
                     </View>
                 </View>
             </TouchableWithoutFeedback>

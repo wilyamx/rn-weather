@@ -150,8 +150,8 @@ function LocationsScreen(props) {
             }
             
             <FlatList
-                data={locations}
-                keyExtractor={item => item.id.toString()}
+                data={savedForecasts}
+                keyExtractor={item => item.city.id.toString()}
                 renderItem={({ item }) => 
                     <LocationListItem
                         location={item}
