@@ -10,6 +10,7 @@ import colors from "../../config/colors";
 import TemperatureUnit from "../TemperatureUnit";
 import YourLocation from "../YourLocation";
 import { getWeatherImage } from "../../config/WeatherImages";
+import constants from "../../config/constants";
 
 const getDateComponents = (dt_txt) => {
     // 2024-01-20 03:00:0
@@ -20,13 +21,24 @@ const getDateComponents = (dt_txt) => {
 function LocationListItem({ location, onPress, renderRightActions }) {
     const theme = useTheme();
 
+    // device location
     const locationName = location.city.name;
-    const forecastOfTheDay = location.list.filter((forecast) => {
+
+    // display forecast of the day if available
+    // otherwise display the latest forecast available
+    const validForecasts = location.list.filter((forecast) => {
         let dateComponents = getDateComponents(forecast.dt_txt);
         let date = dateComponents[0];
         return date == moment().format("YYYY-MM-DD");
-    })[0];
-
+    });
+    var forecastOfTheDay = constants.defaultForecast;
+    if (validForecasts.length == 0) {
+        forecastOfTheDay = location.list[location.list.length - 1];
+    }
+    else {
+        forecastOfTheDay = validForecasts[0];
+    }
+    
     const humidity = "Humidity: " + forecastOfTheDay.main.humidity;
     const weatherImage = getWeatherImage(forecastOfTheDay.weather[0].main);
     
