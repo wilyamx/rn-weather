@@ -9,21 +9,21 @@ export default useApi = (apiFunc) => {
 
     const request = async (...args) => {
         setLoading(true);
-        const response = await apiFunc(...args);
+        const response = apiFunc(...args);
         setLoading(false);
 
         setError(!response.ok);
         setData(response.data);
 
-        if (response.ok) {
-            LOG.info("[useApi]", response.config.url, response.status.toString())
-            //console.log("[useApi]", response)
-        }
-        else {
-            LOG.error("[useApi]", response.config.url, response.status.toString());
-        }
+        // if (response) {
+        //     LOG.info("[useApi]", response.config.url, response.status.toString())
+        //     //console.log("[useApi]", response)
+        // }
+        // else {
+        //     LOG.error("[useApi]", response.config.url, response.status.toString());
+        // }
 
-        return response
+        return response;
     };
 
     return { data, error, loading, request };

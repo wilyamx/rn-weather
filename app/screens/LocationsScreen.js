@@ -68,19 +68,19 @@ function LocationsScreen(props) {
     const [searchQuery, setSearchQuery] = useState('');
  
      // api
-     const {
-        data: weatherDetails,
-        error,
-        loading,
-        request: weatherRequest
-    } = useApi(forecastApi.getForecastByLocationName);
+    //  const {
+    //     data: weatherDetails,
+    //     error,
+    //     loading,
+    //     request: weatherRequest
+    // } = useApi(forecastApi.getForecastByLocationName);
 
     const handleDelete = (location) => {
         // delete location from locations
         setLocations(locations.filter((l) => l.id !== location.id));
     };
 
-    const handleSubmitSearchKey = (key) => {
+    const handleSubmitSearchKey = async (key) => {
         if (key.length == 0) {
             Alert.alert(
                 "Empty Searchbar",
@@ -91,21 +91,33 @@ function LocationsScreen(props) {
             );
             return;
         }
-        weatherRequest(key);
+        //weatherRequest(key);
+        const response = await forecastApi.getForecastByLocationName(key);
+        console.log("[LocationScreen/data]", response.data)
+        console.log("[LocationScreen/list0]", response.data.list[0])
+        console.log("[LocationScreen/list1]", response.data.list[1])
+
+        let cityDetails = response.data.city
+        let forecasts = response.data.list
+
+        for (let i = 0; i < forecasts.length; i++) {
+            let forecast = forecasts[i];
+            console.info(forecast.main)
+        }
     };
 
-    useEffect(() => {
-        if (weatherDetails.length == 0) return;
+    // useEffect(() => {
+    //     if (weatherDetails.length == 0) return;
 
-        dispatch(addToForecasts({
-            one: 1,
-        }));
-        console.log(forecasts)
-    }, [weatherDetails]);
+    //     // dispatch(addToForecasts({
+    //     //     one: 1,
+    //     // }));
+    //     console.log(forecasts)
+    // }, [weatherDetails]);
 
     return (
         <>
-        <AppActivityIndicator visible={loading} />
+        {/* <AppActivityIndicator visible={loading} /> */}
         <Screen style={styles.container}>
             <Text style={styles.title} variant='titleLarge'>Pick Locations</Text>
             <Text style={styles.subtitle} variant='titleSmall'>
@@ -113,20 +125,21 @@ function LocationsScreen(props) {
             </Text>
             <Searchbar
                 placeholder="Search for a place"
+                autoCorrect={false}
                 value={searchQuery}
                 style={styles.searchBar}
                 onChangeText={setSearchQuery}
                 onSubmitEditing={() => handleSubmitSearchKey(searchQuery)}
             />
 
-            { error &&
+            {/* { error &&
                 <>
                     <Retry
                         message={"Couldn't retrieve the listings."}
                         onRetry={() => handleSubmitSearchKey(searchQuery)}
                     />
                 </>
-            }
+            } */}
             
             <FlatList
                 data={locations}
