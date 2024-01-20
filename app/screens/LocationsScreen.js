@@ -14,6 +14,7 @@ import {
 } from '../redux/weather/weatherActions';
 
 import AppActivityIndicator from '../components/AppActivityIndicator';
+import AppAlert from '../components/AppAlert';
 import ListItemDeleteAction from '../components/lists/ListItemDeleteAction';
 import LocationListItem from '../components/lists/LocationListItem';
 import Retry from '../components/Retry';
@@ -103,9 +104,8 @@ function LocationsScreen(props) {
 
             { error &&
                 <>
-                    <Retry
-                        message={"Couldn't retrieve the listings."}
-                        onRetry={() => handleSubmitSearchKey(searchQuery)}
+                    <AppAlert
+                        message={"No weather forecast available.\nPlease check location used."}
                     />
                 </>
             }
