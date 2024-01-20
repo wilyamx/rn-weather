@@ -11,44 +11,26 @@ const getForecastByLocationName = async (searchKey) => {
         units: "standard",
     }
 
-    // client.addAsyncRequestTransform(async (response) => {
-    //     //console.log("[getForecastByLocationName]", response.data)
+    client.addAsyncResponseTransform(async (response) => {
 
-    //     // if (!response.data.city) return;
+        let cityDetails = response.data.city
+        let forecasts = response.data.list
 
-    //     let cityDetails = response.data.city
-    //     let forecasts = response.data.list
+        if (!forecasts) return;
+        if (!cityDetails) return;
 
-    //     console.log("[getForecastByLocationName]", cityDetails);
-    //     console.log("[getForecastByLocationName]", forecasts.length);
+        console.log("[getForecastByLocationName]", cityDetails);
+        console.log("[getForecastByLocationName]", forecasts.length);
 
-    //     // var dates = []
+        var dates = [];
+        for (let i = 0; i < forecasts.length; i++) {
+            let forecast = forecasts[i];
+            console.info("[forecast]", forecast.dt_txt);
+        }
 
-    //     for (let forecast in forecasts) {
-    //         let dtTxt = forecast.main.temp;
-    //         LOG.info(dtTxt)
-    //     }
+        response.data.list = [];
+    });
 
-    // });
-
-    // const get = client.get;
-    // client.get = async (endpoint, params) => {
-    //     console.log("0000");
-    //     const response = await get(endpoint, params);
-
-    //     let forecasts = response.data.list
-    //     for (let forecast in forecasts) {
-    //         console.log(forecast)
-    //     }
-    //     if (response.ok) {
-    //         console.log("1111")
-    //         return response;
-    //     }
-
-    //     const defaultData = { info: "no-data"}
-    //     return data ? { ok: true, defaultData } : response;
-    // }
-    
     return await client.get(endpoint, params);
 };
 

@@ -68,12 +68,12 @@ function LocationsScreen(props) {
     const [searchQuery, setSearchQuery] = useState('');
  
      // api
-    //  const {
-    //     data: weatherDetails,
-    //     error,
-    //     loading,
-    //     request: weatherRequest
-    // } = useApi(forecastApi.getForecastByLocationName);
+     const {
+        data: weatherDetails,
+        error,
+        loading,
+        request: weatherRequest
+    } = useApi(forecastApi.getForecastByLocationName);
 
     const handleDelete = (location) => {
         // delete location from locations
@@ -91,33 +91,34 @@ function LocationsScreen(props) {
             );
             return;
         }
-        //weatherRequest(key);
-        const response = await forecastApi.getForecastByLocationName(key);
-        console.log("[LocationScreen/data]", response.data)
-        console.log("[LocationScreen/list0]", response.data.list[0])
-        console.log("[LocationScreen/list1]", response.data.list[1])
-
-        let cityDetails = response.data.city
-        let forecasts = response.data.list
-
-        for (let i = 0; i < forecasts.length; i++) {
-            let forecast = forecasts[i];
-            console.info(forecast.main)
-        }
+        weatherRequest(key);
     };
 
-    // useEffect(() => {
-    //     if (weatherDetails.length == 0) return;
+    useEffect(() => {
+        if (!weatherDetails) return;
 
-    //     // dispatch(addToForecasts({
-    //     //     one: 1,
-    //     // }));
-    //     console.log(forecasts)
-    // }, [weatherDetails]);
+        if (!weatherDetails.list) return;
+        if (weatherDetails.list.length == 0) return;
+
+        if (!weatherDetails.city) return;
+        
+        // dispatch(addToForecasts({
+        //     one: 1,
+        // }));
+
+        let cityDetails = weatherDetails.city
+        let forecasts = weatherDetails.list
+
+        console.log("USE-EFFECT!", forecasts.length);
+        for (let i = 0; i < forecasts.length; i++) {
+            let forecast = forecasts[i];
+            console.info("[LocationScreen]", forecast.main)
+        }
+    }, [weatherDetails]);
 
     return (
         <>
-        {/* <AppActivityIndicator visible={loading} /> */}
+        <AppActivityIndicator visible={loading} />
         <Screen style={styles.container}>
             <Text style={styles.title} variant='titleLarge'>Pick Locations</Text>
             <Text style={styles.subtitle} variant='titleSmall'>
@@ -132,14 +133,14 @@ function LocationsScreen(props) {
                 onSubmitEditing={() => handleSubmitSearchKey(searchQuery)}
             />
 
-            {/* { error &&
+            { error &&
                 <>
                     <Retry
                         message={"Couldn't retrieve the listings."}
                         onRetry={() => handleSubmitSearchKey(searchQuery)}
                     />
                 </>
-            } */}
+            }
             
             <FlatList
                 data={locations}
