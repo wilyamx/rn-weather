@@ -101,7 +101,7 @@ function LocationsScreen(props) {
         if (weatherDetails.list.length == 0) return;
 
         if (!weatherDetails.city) return;
-        
+
         // dispatch(addToForecasts({
         //     one: 1,
         // }));
@@ -112,7 +112,8 @@ function LocationsScreen(props) {
         console.log("USE-EFFECT!", forecasts.length);
         for (let i = 0; i < forecasts.length; i++) {
             let forecast = forecasts[i];
-            console.info("[LocationScreen]", forecast.main)
+            console.info("[LocationScreen]/forecast", forecast.dt_txt);
+            console.info("[LocationScreen]/city", cityDetails.name);
         }
     }, [weatherDetails]);
 
