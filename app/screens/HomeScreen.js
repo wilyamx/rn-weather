@@ -1,15 +1,17 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector } from 'react-redux';
 
+import useLocation from '../hooks/useLocation';
+
 import CircularIcon from '../components/CircularIcon';
-import colors from '../config/colors';
 import Screen from '../components/Screen';
 import TemperatureUnit from '../components/TemperatureUnit';
 import YourLocation from '../components/YourLocation';
 import WeatherForecast from '../components/WeatherForecast';
+import LOG from '../utility/logger';
 
 function HomeScreen(props) {
     const theme = useTheme();
@@ -17,6 +19,15 @@ function HomeScreen(props) {
 
     const refRBSheet = useRef();
     
+    const location = useLocation();
+
+    useEffect(() => {
+        LOG.info("[HomeScreen]", location);
+        if (location) {
+            
+        }
+    }, [location]);
+
     return (
         <Screen>
             <View style={styles.container}>

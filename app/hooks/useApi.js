@@ -15,14 +15,6 @@ export default useApi = (apiFunc) => {
         setError(!response.ok);
         setData(response.data);
 
-        // if (response) {
-        //     LOG.info("[useApi]", response.config.url, response.status.toString())
-        //     //console.log("[useApi]", response)
-        // }
-        // else {
-        //     LOG.error("[useApi]", response.config.url, response.status.toString());
-        // }
-
         return response;
     };
 
