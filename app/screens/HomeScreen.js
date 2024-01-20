@@ -4,8 +4,9 @@ import { Text, useTheme } from 'react-native-paper';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useDispatch, useSelector } from 'react-redux';
 
-import useLocation from '../hooks/useLocation';
+import constants from '../config/constants';
 import forecastApi from '../api/forecast';
+import useLocation from '../hooks/useLocation';
 import {
     addToForecasts,
     updateFromForecasts,
@@ -23,14 +24,6 @@ function HomeScreen(props) {
     const savedLocations = useSelector(state => state.weather.forecasts);
     const dispatch = useDispatch();
 
-    // ui
-    const theme = useTheme();
-    const [forecast, setForecast] = useState(true)
-
-    const refRBSheet = useRef();
-    
-    const location = useLocation();
-
     // api
     const {
         data: weatherDetails,
@@ -39,8 +32,36 @@ function HomeScreen(props) {
         request: weatherRequest
     } = useApi(forecastApi.getForecastByCoordinate);
 
+    // ui
+    const theme = useTheme();
+    const refRBSheet = useRef();
+    const location = useLocation();
+    const [yourLocation, setYourLocation] = useState(false);
+
+    const cityName = () => {
+        var datasource = constants.defaultForecast;
+        if(weatherDetails && weatherDetails.city) {
+            datasource = weatherDetails;
+        }
+        return datasource.city.name;
+    };
+    const temperature = () => {
+        var datasource = constants.defaultForecast
+        if (weatherDetails && weatherDetails.list) {
+            datasource = weatherDetails;
+        }
+        return Math.round(datasource.list[datasource.list.length - 1].main.temp);
+    };
+    const weather = () => {
+        var datasource = constants.defaultForecast
+        if (weatherDetails && weatherDetails.list) {
+            datasource = weatherDetails;
+        }
+        return datasource.list[datasource.list.length - 1].weather[0].main;
+    }
+
     useEffect(() => {
-        
+        setYourLocation(false);
     }, []);
 
     useEffect(() => {
@@ -55,7 +76,7 @@ function HomeScreen(props) {
 
     useEffect(() => {
         let savedLocationNames = savedLocations.map((forecast) => forecast.city.name);
-        LOG.info("[LocationScreen]/Saved-Locations", savedLocationNames);
+        LOG.info("[HomeScreen]/Saved-Locations", savedLocationNames);
 
         if (!weatherDetails) return;
 
@@ -69,15 +90,18 @@ function HomeScreen(props) {
 
         if (savedLocations.length == 0) {
             dispatch(addToForecasts(weatherDetails));
+            setYourLocation(true);
         }
         else {
             if (!savedLocationNames.includes(cityDetails.name)) {
                 LOG.info("[HomeScreen]/Added-Location", cityDetails.name);
                 dispatch(addToForecasts(weatherDetails));
+                setYourLocation(true);
             }
             else {
                 LOG.info("[HomeScreen]/Existing-Location", cityDetails.name);
                 dispatch(updateFromForecasts(weatherDetails));
+                setYourLocation(true);
             }
         }
     }, [weatherDetails]);
@@ -97,10 +121,10 @@ function HomeScreen(props) {
                 </View>
 
                 <View style={styles.weatherContainer}>
-                    <YourLocation />
-                    <Text style={styles.location}>Lapulapu City</Text>
-                    <TemperatureUnit temperature={"32"} fontSize={100}/>
-                    <Text style={styles.weatherCondition}>Cloudy</Text>
+                    { yourLocation && <YourLocation /> }
+                    <Text style={styles.location}>{cityName()}</Text>
+                    <TemperatureUnit temperature={temperature()} fontSize={100}/>
+                    <Text style={styles.weatherCondition}>{weather()}</Text>
                 </View>
 
                 <CircularIcon

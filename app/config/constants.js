@@ -3,6 +3,23 @@ export default {
         celsiusUnit: "metric",
         fahrenheitUnit: "imperial",
         kelvinUnit: "standard",
+    },
+    defaultForecast: {
+        city: {
+            name: "Unknown",
+        },
+        list: [{
+            main: {
+                temp: 0,
+                humidity: 0,
+            },
+            weather: [{
+                id: 0,
+                main: "Unknown",
+                description: "Unknown",
+                icon: 0,
+            }]
+        }]
     }
 };
 

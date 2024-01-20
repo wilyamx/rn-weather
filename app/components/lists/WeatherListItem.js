@@ -12,7 +12,7 @@ function WeatherListItem({ forecast }) {
                 source={require("../../../assets/sun.png")}
                 style={styles.image}
             />
-            <Text variant='displayMedium'>{Math.floor(forecast.main.temp)}</Text>
+            <Text variant='displayMedium'>{Math.round(forecast.main.temp)}</Text>
             <Text variant='titleMedium'>{forecast.weather[0].main}</Text>
         </View>
     );
