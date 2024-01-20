@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppContext } from '../auth/AppContextProvider';
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     },
     title: {
         textAlign: "center",
+        fontWeight: "bold",
     },
 });
 
