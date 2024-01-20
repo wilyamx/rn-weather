@@ -40,7 +40,6 @@ function LocationsScreen(props) {
         console.log("location-delete", location.city.name);
         dispatch(removeFromForecasts(location.city.name));
     };
-
     const handleSubmitSearchKey = async (key) => {
         if (key.length == 0) {
             Alert.alert(
@@ -54,7 +53,7 @@ function LocationsScreen(props) {
         }
         weatherRequest(key);
     };
-
+    
     useEffect(() => {
         let savedLocationNames = savedLocations.map((forecast) => forecast.city.name);
         LOG.info("[LocationScreen]/Saved-Locations", savedLocationNames);
@@ -118,7 +117,7 @@ function LocationsScreen(props) {
                 renderItem={({ item }) => 
                     <LocationListItem
                         location={item}
-                        onPress={() => console.log("Location selected", item)}
+                        onPress={() => console.log("[LocationScreen]/Selected-Location", item)}
                         renderRightActions={() => 
                             <ListItemDeleteAction onPress={() => handleDelete(item)}/>
                         }
