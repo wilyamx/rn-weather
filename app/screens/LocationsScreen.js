@@ -10,6 +10,7 @@ import useApi from '../hooks/useApi';
 import {
     addToForecasts,
     removeFromForecasts,
+    updateFromForecasts,
 } from '../redux/weather/weatherActions';
 
 import AppActivityIndicator from '../components/AppActivityIndicator';
@@ -18,57 +19,12 @@ import LocationListItem from '../components/lists/LocationListItem';
 import Retry from '../components/Retry';
 import Screen from '../components/Screen';
 
-const initialLocations = [
-    {
-        id: 1,
-        name: "Cebu City",
-        main: {
-            temp: 292.55,
-            humidity: 70
-        },
-        weather: [{
-            id: 803,
-            main: "Clouds",
-            description: "broken clouds",
-            icon: "04d"
-        }]
-    },
-    {
-        id: 2,
-        name: "Lapu Lapu City",
-        main: {
-            temp: 279.13,
-            humidity: 50
-        },
-        weather: [{
-            id: 800,
-            main: "Clear",
-            description: "clear sky",
-            icon: "01d"
-        }]
-    },
-    {
-        id: 3,
-        name: "Manila",
-        main: {
-            temp: 299.03,
-            humidity: 65
-        },
-        weather: [{
-            id: 500,
-            main: "Rain",
-            description: "light rain",
-            icon: "10d"
-        }]
-    }
-]; 
-
 function LocationsScreen(props) {
     // redux
     const savedLocations = useSelector(state => state.weather.forecasts);
     const dispatch = useDispatch();
 
-    const [locations, setLocations] = useState(initialLocations);
+    // ui
     const [searchQuery, setSearchQuery] = useState('');
  
      // api
@@ -79,6 +35,7 @@ function LocationsScreen(props) {
         request: weatherRequest
     } = useApi(forecastApi.getForecastByLocationName);
 
+    // actions
     const handleDelete = async (location) => {
         console.log("location-delete", location.city.name)
         dispatch(removeFromForecasts(location.city.name))
@@ -122,6 +79,7 @@ function LocationsScreen(props) {
             }
             else {
                 LOG.info("[LocationScreen]/Existing-Location", cityDetails.name);
+                dispatch(updateFromForecasts(weatherDetails));
             }
         }
     }, [weatherDetails]);

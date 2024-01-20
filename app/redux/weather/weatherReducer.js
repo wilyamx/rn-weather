@@ -1,6 +1,8 @@
+import forecast from '../../api/forecast';
 import {
     ADD_TO_FORECASTS,
     REMOVE_FROM_FORECASTS,
+    UPDATE_FROM_FORECASTS,
 } from './weatherTypes';
 
 const initialState = {
@@ -18,6 +20,16 @@ const weatherReducer = (state = initialState, action) => {
             return {
                 ...state,
                 forecasts: state.forecasts.filter((forecast) => forecast.city.name !== action.payload)
+            }
+        case UPDATE_FROM_FORECASTS:
+            return {
+                ...state,
+                forecasts: state.forecasts.map((forecast) => {
+                    if (forecast.city.name === action.payload.city.name) {
+                        return action.payload;
+                    }
+                    return forecast;
+                })
             }
         default:
             return state
