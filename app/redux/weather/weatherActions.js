@@ -10,8 +10,9 @@ export const addToForecasts = (info = {}) => {
     }
 };
 
-export const removeFromForecasts = () => {
+export const removeFromForecasts = (locationName = "") => {
     return {
         type: REMOVE_FROM_FORECASTS,
+        payload: locationName,
     }
 };

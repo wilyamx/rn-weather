@@ -14,6 +14,11 @@ const weatherReducer = (state = initialState, action) => {
                 ...state,
                 forecasts: [...state.forecasts, action.payload]
             }
+        case REMOVE_FROM_FORECASTS:
+            return {
+                ...state,
+                forecasts: state.forecasts.filter((forecast) => forecast.city.name !== action.payload)
+            }
         default:
             return state
     }

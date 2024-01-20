@@ -7,7 +7,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import forecastApi from '../api/forecast';
 import useApi from '../hooks/useApi';
-import { addToForecasts } from '../redux/weather/weatherActions';
+import {
+    addToForecasts,
+    removeFromForecasts,
+} from '../redux/weather/weatherActions';
 
 import AppActivityIndicator from '../components/AppActivityIndicator';
 import ListItemDeleteAction from '../components/lists/ListItemDeleteAction';
@@ -62,7 +65,7 @@ const initialLocations = [
 
 function LocationsScreen(props) {
     // redux
-    const savedForecasts = useSelector(state => state.weather.forecasts);
+    const savedLocations = useSelector(state => state.weather.forecasts);
     const dispatch = useDispatch();
 
     const [locations, setLocations] = useState(initialLocations);
@@ -76,9 +79,9 @@ function LocationsScreen(props) {
         request: weatherRequest
     } = useApi(forecastApi.getForecastByLocationName);
 
-    const handleDelete = (location) => {
-        // delete location from locations
-        setLocations(locations.filter((l) => l.id !== location.id));
+    const handleDelete = async (location) => {
+        console.log("location-delete", location.city.name)
+        dispatch(removeFromForecasts(location.city.name))
     };
 
     const handleSubmitSearchKey = async (key) => {
@@ -96,8 +99,8 @@ function LocationsScreen(props) {
     };
 
     useEffect(() => {
-        let savedLocations = savedForecasts.map((forecast) => forecast.city.name);
-        LOG.info("[LocationScreen]/Saved-Locations", savedLocations);
+        let savedLocationNames = savedLocations.map((forecast) => forecast.city.name);
+        LOG.info("[LocationScreen]/Saved-Locations", savedLocationNames);
 
         if (!weatherDetails) return;
 
@@ -109,11 +112,11 @@ function LocationsScreen(props) {
         let cityDetails = weatherDetails.city
         let forecasts = weatherDetails.list
 
-        if (savedForecasts.length == 0) {
+        if (savedLocations.length == 0) {
             dispatch(addToForecasts(weatherDetails))
         }
         else {
-            if (!savedLocations.includes(cityDetails.name)) {
+            if (!savedLocationNames.includes(cityDetails.name)) {
                 LOG.info("[LocationScreen]/Added-Location", cityDetails.name);
                 dispatch(addToForecasts(weatherDetails));
             }
@@ -150,7 +153,7 @@ function LocationsScreen(props) {
             }
             
             <FlatList
-                data={savedForecasts}
+                data={savedLocations}
                 keyExtractor={item => item.city.id.toString()}
                 renderItem={({ item }) => 
                     <LocationListItem
