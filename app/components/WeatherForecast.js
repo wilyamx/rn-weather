@@ -78,7 +78,7 @@ const initialForecasts = [
     
 ];
 
-function WeatherForecast({ onRefresh, onDismiss }) {
+function WeatherForecast({ forecast, onRefresh, onDismiss }) {
     const theme = useTheme();
 
     return (

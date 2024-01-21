@@ -36,7 +36,9 @@ function HomeScreen(props) {
     // ui
     const theme = useTheme();
     const refRBSheet = useRef();
+    // detect device location
     const location = useLocation();
+    // your location indicator
     const [yourLocation, setYourLocation] = useState(false);
 
     const cityName = () => {
@@ -68,6 +70,7 @@ function HomeScreen(props) {
     useEffect(() => {
         LOG.info("[HomeScreen]/Device-Location", location);
         if (location) {
+            // request forecast using device location
             weatherRequest(
                 location.latitude,
                 location.longitude
@@ -164,6 +167,7 @@ function HomeScreen(props) {
                 height={350}
             >
                 <WeatherForecast
+                    forecast={weatherDetails}
                     onRefresh={() => console.log("Refresh")}
                     onDismiss={() => refRBSheet.current.close()}
                 />

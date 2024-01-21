@@ -12,10 +12,12 @@ export default useLocation = () => {
                 LOG.debug("[useLocation] Permission to access location was denied");
                 return;
             }
+
             const {
                 coords: { latitude, longitude },
             } = await Location.getLastKnownPositionAsync();
             setLocation({ latitude, longitude });
+            
         } catch (error) {
             LOG.error("[useLocation]", error)
         }
@@ -25,5 +27,6 @@ export default useLocation = () => {
         getLocation();
     }, []);
 
+    LOG.info("[useLocation]/Device-Location", location);
     return location;
 };
