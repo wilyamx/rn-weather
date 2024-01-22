@@ -85,8 +85,8 @@ function WeatherForecast({ forecast, onRefresh, onDismiss }) {
         <View style={[styles.container, { backgroundColor: theme.colors.onSecondary }]}>
             <View style={styles.header}>
                 <View>
-                    <Text variant='titleLarge'>5 Day Forecasts</Text>
-                    <Text variant='titleSmall'>Updated 12m ago</Text>
+                    <Text variant='titleLarge' style={styles.title}>{forecast.length} Day Forecasts</Text>
+                    <Text variant='titleSmall' style={{color: theme.colors.secondary}}>Updated 12m ago</Text>
                 </View>
                 <View style={styles.actions}>
                     <CircularIcon
@@ -107,8 +107,8 @@ function WeatherForecast({ forecast, onRefresh, onDismiss }) {
             <View style={styles.forecastContainer} >
                 <FlatList
                     horizontal={true}
-                    data={initialForecasts}
-                    keyExtractor={item => item.day}
+                    data={forecast}
+                    keyExtractor={item => item.dt.toString()}
                     renderItem={({ item }) => 
                         <WeatherListItem forecast={item} />
                     }
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     title: {
-        flexDirection: "row",
+        fontWeight: "600",
     },
     weather: {
         

@@ -167,7 +167,7 @@ function HomeScreen(props) {
                 height={350}
             >
                 <WeatherForecast
-                    forecast={weatherDetails}
+                    forecast={weatherDetails.list}
                     onRefresh={() => console.log("Refresh")}
                     onDismiss={() => refRBSheet.current.close()}
                 />
