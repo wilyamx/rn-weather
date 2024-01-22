@@ -91,6 +91,14 @@ function LocationsScreen(props) {
         <>
         <AppActivityIndicator visible={loading} />
         <Screen style={styles.container}>
+            { error &&
+                <>
+                    <AppAlert
+                        message={"No weather forecast available.\nPlease check location used."}
+                    />
+                </>
+            }
+
             <Text style={styles.title} variant='titleLarge'>Pick Locations</Text>
             <Text style={styles.subtitle} variant='titleSmall'>
                 Find the city that you want to know{'\n'} the detailed weather into at this time.
@@ -104,13 +112,7 @@ function LocationsScreen(props) {
                 onSubmitEditing={() => handleSubmitSearchKey(searchQuery)}
             />
 
-            { error &&
-                <>
-                    <AppAlert
-                        message={"No weather forecast available.\nPlease check location used."}
-                    />
-                </>
-            }
+            
             
             <FlatList
                 data={savedLocations}

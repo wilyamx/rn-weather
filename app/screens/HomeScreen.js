@@ -14,6 +14,8 @@ import {
 } from '../redux/weather/weatherActions';
 import { setCurrentLocation } from '../redux/location/locationActions';
 
+import AppActivityIndicator from '../components/AppActivityIndicator';
+import AppAlert from '../components/AppAlert';
 import CircularIcon from '../components/CircularIcon';
 import Screen from '../components/Screen';
 import TemperatureUnit from '../components/TemperatureUnit';
@@ -97,6 +99,7 @@ function HomeScreen(props) {
     };
     const detectDeviceLocationHandler = () => {
         console.log("[HomeScreen]", "detectDeviceLocationHandler");
+        setYourLocation(false);
         getDeviceLocation();
     };
     const searchLocationsHandler = () => {
@@ -165,7 +168,17 @@ function HomeScreen(props) {
     }, [weatherDetails]);
 
     return (
+        <>
+        <AppActivityIndicator visible={loading} />
         <Screen>
+            { error &&
+                <>
+                    <AppAlert
+                        message={"No weather forecast available from your location."}
+                    />
+                </>
+            }
+
             <View style={styles.container}>
                 <View style={styles.headerContainer}>
                     <View style={styles.headerSideButtonContainer}>
@@ -238,6 +251,7 @@ function HomeScreen(props) {
             </RBSheet>
 
         </Screen>
+        </>
     );
 }
 
