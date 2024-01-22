@@ -4,7 +4,13 @@ export default {
         fahrenheitUnit: "imperial",
         kelvinUnit: "standard",
     },
+    temperatureUnitSign: {
+        celsiusUnit: "C",
+        fahrenheitUnit: "F",
+        kelvinUnit: "K",
+    },
     defaultForecast: {
+        temperatureUnit: "metric",
         city: {
             name: "Unknown",
         },

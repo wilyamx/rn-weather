@@ -7,9 +7,12 @@ import {
 
 const initialState = {
     colorScheme: "light",
-    temperatureUnit: "celsius",
+    temperatureUnit: "metric",
 }
 
+// temperatureUnit = standard (Kelvin)
+// temperatureUnit = metric (Celsius) (Default)
+// temperatureUnit = imperial (Fahrenheit)
 const themeReducer = (state = initialState, action) => {
     switch (action.type) {
         case SWITCH_TO_DARK_MODE: 
@@ -25,12 +28,12 @@ const themeReducer = (state = initialState, action) => {
         case TEMPERATURE_IN_CELSIUS:
             return {
                 ...state,
-                temperatureUnit: "celsius"
+                temperatureUnit: "metric"
             }
         case TEMPERATURE_IN_FAHRENHEIT:
             return {
                 ...state,
-                temperatureUnit: "fahrenheit"
+                temperatureUnit: "imperial"
             }
         default:
             return state

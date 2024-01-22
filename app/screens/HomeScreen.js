@@ -213,7 +213,11 @@ function HomeScreen({ navigation }) {
                 <View style={styles.weatherContainer}>
                     { yourLocation && <YourLocation style={styles.yourLocation} marginBottom={20} /> }
                     <Text style={styles.location}>{cityName()}</Text>
-                    <TemperatureUnit temperature={temperature()} fontSize={100}/>
+                    <TemperatureUnit
+                        temperature={temperature()}
+                        fontSize={100}
+                        color={theme.colors.tertiary}
+                    />
                     <Text style={[styles.weatherCondition, { color: theme.colors.tertiary }]}>{weather()}</Text>
                 </View>
 

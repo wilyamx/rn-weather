@@ -5,6 +5,7 @@ import { Text, useTheme } from "react-native-paper";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Swipeable } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { useSelector } from 'react-redux';
 
 import colors from "../../config/colors";
 import constants from "../../config/constants";
@@ -12,13 +13,75 @@ import TemperatureUnit from "../TemperatureUnit";
 import YourLocation from "../YourLocation";
 import { getWeatherImage } from "../../config/WeatherImages";
 
+const DEBUG = true;
+
 const getDateComponents = (dt_txt) => {
     // 2024-01-20 03:00:0
     let dateComponents = dt_txt.split(" ");
     return dateComponents
 };
 
-function LocationListItem({ currentLocation, location, onPress, renderRightActions }) {
+const getTemperatureUnitSign = (forecastUnit, unitTemperature, debug = false) => {
+    // forecastUnit - unit of the weather forecast from api response
+    // unitTemperature - unit to display from the settings view
+
+    var unit = unitTemperature;
+    if (debug) {
+        unit = forecastUnit
+    }
+    
+    if (unit == constants.temperatureUnit.celsiusUnit) {
+        return constants.temperatureUnitSign.celsiusUnit;
+    }
+    else if (unit == constants.temperatureUnit.fahrenheitUnit) {
+        return constants.temperatureUnitSign.fahrenheitUnit;
+    }
+    else {
+        return constants.temperatureUnitSign.kelvinUnit;
+    }
+};
+
+const celsiusToFahrenheit = (celsius) => {
+    return (celsius * 9 / 5) + 32;
+};
+
+const fahrenheitToCelsius = (fahrenheit) => {
+    return (fahrenheit - 32) * 5 / 9;
+};
+
+const getTemperatureDisplay = (reading, fromDisplayUnit, temperatureUnit, debug = false) => {
+    
+    if (debug) return reading;
+
+    // from: metric (celsius), to: metric (celsius)
+    if (fromDisplayUnit == constants.temperatureUnit.celsiusUnit &&
+        temperatureUnit == constants.temperatureUnit.celsiusUnit) {
+            return reading
+        }
+    // from metric (celsius), to: imperial (fahrenheit)
+    else if (fromDisplayUnit == constants.temperatureUnit.celsiusUnit &&
+        temperatureUnit == constants.temperatureUnit.fahrenheitUnit) {
+            return celsiusToFahrenheit(reading).toFixed(2);
+        }
+    // from imperial (fahrenheit), to: metric (celsius)
+    else if (fromDisplayUnit == constants.temperatureUnit.fahrenheitUnit &&
+        temperatureUnit == constants.temperatureUnit.celsiusUnit) {
+            return fahrenheitToCelsius(reading).toFixed(2);
+        }
+    return reading;
+};
+
+function LocationListItem({
+    currentLocation,
+    location,
+    onPress,
+    renderRightActions
+}) {
+    // redux
+    const temperatureUnitSaved = useSelector(state => state.theme.temperatureUnit);
+
+    // ui
+
     const theme = useTheme();
 
     // city name
@@ -69,7 +132,18 @@ function LocationListItem({ currentLocation, location, onPress, renderRightActio
                         </Text>
                     </View>
                     <View style={styles.leftContainer}>
-                        <TemperatureUnit temperature={location.list[0].main.temp} fontSize={40}/>
+                        <TemperatureUnit
+                            temperature={
+                                getTemperatureDisplay(
+                                    location.list[0].main.temp,
+                                    location.temperatureUnit,
+                                    temperatureUnitSaved,
+                                    DEBUG
+                                )}
+                            fontSize={40}
+                            unit={getTemperatureUnitSign(location.temperatureUnit, temperatureUnitSaved, DEBUG)}
+                            color={theme.colors.tertiary}
+                        />
                         <View style={styles.locationContainer}>
                         <Text variant='titleLarge' style={styles.location}>{locationName}</Text>
                             <MaterialCommunityIcons

@@ -2,13 +2,20 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 
-function TemperatureUnit({ temperature, fontSize = 100 }) {
-    const unitFontSize = fontSize / 2;
+import constants from '../config/constants';
+
+function TemperatureUnit({
+    color = "black",
+    temperature,
+    fontSize = 100,
+    unit = constants.temperatureUnitSign.celsiusUnit
+}) {
+    const unitFontSize = fontSize * 0.6;
 
     return (
         <View style={styles.container}>
             <Text style={[styles.temperature, { fontSize }]}>{temperature}</Text>
-            <Text style={{ fontSize: unitFontSize }}>°C</Text>
+            <Text style={{ color, fontSize: unitFontSize }}>°{unit}</Text>
         </View>
     );
 }

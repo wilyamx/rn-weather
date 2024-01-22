@@ -4,12 +4,14 @@ import LOG from '../utility/logger';
 
 var endpoint = '/forecast';
 
-const getForecastByLocationName = async (searchKey) => {
+const getForecastByLocationName = async (
+    searchKey,
+    units = constants.temperatureUnit.celsiusUnit) => {
 
     const params = {
         appid: "368b07291c6814df232003d0f78f47b9",
         q: searchKey,
-        units: constants.temperatureUnit.celsiusUnit,
+        units
     }
 
     client.addAsyncResponseTransform(async (response) => {
@@ -61,6 +63,9 @@ const getForecastByLocationName = async (searchKey) => {
 
         // update the response using the validated forecasts
         response.data.list = filteredForecasts;
+
+        // new keys
+        response.data.temperatureUnit = units
     });
 
     return await client.get(endpoint, params);
@@ -72,12 +77,16 @@ const getDateComponents = (dt_txt) => {
     return dateComponents
 };
 
-const getForecastByCoordinate = async (latitude, longitude) => {
+const getForecastByCoordinate = async (
+    latitude,
+    longitude,
+    units = constants.temperatureUnit.celsiusUnit) => {
+
     const params = {
         appid: "368b07291c6814df232003d0f78f47b9",
         lat: latitude,
         lon: longitude,
-        units: constants.temperatureUnit.celsiusUnit,
+        units
     }
 
     client.addAsyncResponseTransform(async (response) => {
@@ -129,6 +138,9 @@ const getForecastByCoordinate = async (latitude, longitude) => {
 
         // update the response using the validated forecasts
         response.data.list = filteredForecasts;
+
+        // new keys
+        response.data.temperatureUnit = units
     });
     
     return await client.get(endpoint, params);

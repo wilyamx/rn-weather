@@ -33,7 +33,7 @@ function SettingsScreen(props) {
     // https://static.enapter.com/rn/icons/material-community.html
     const configItems = [
         {
-            title: "Temperature Unit\nin Celsius",
+            title: "Temperature Unit\nin Fahrenheit",
             icon: "coolant-temperature",
             getState: isSwitchOn1,
             setState: setIsSwitchOn1
@@ -49,10 +49,10 @@ function SettingsScreen(props) {
     // temperature unit
     useEffect(() => {
         if (isSwitchOn1) {
-            dispatch(temperatureInCelsius());
+            dispatch(temperatureInFahrenheit());
         }
         else {
-            dispatch(temperatureInFahrenheit())
+            dispatch(temperatureInCelsius())
         }
     }, [isSwitchOn1]);
 

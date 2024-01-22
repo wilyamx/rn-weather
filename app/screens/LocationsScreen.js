@@ -21,6 +21,7 @@ import Screen from '../components/Screen';
 
 function LocationsScreen({ navigation }) {
     // redux
+    const temperatureUnit = useSelector(state => state.theme.temperatureUnit);
     const savedLocations = useSelector(state => state.weather.forecasts);
     const savedCurrentLocation = useSelector(state => state.location.currentLocation);
     const dispatch = useDispatch();
@@ -53,13 +54,17 @@ function LocationsScreen({ navigation }) {
             );
             return;
         }
-        weatherRequest(key);
+        weatherRequest(key, temperatureUnit);
     };
     const handleSelectedForecast = (forecast) => {
         console.log("[LocationScreen]/Selected-Location", forecast.city.name);
         navigation.navigate("Home");
     };
     
+    useEffect(() => {
+        console.info("[LocationsScreen]/Temperature-Unit-Saved", temperatureUnit);
+    }, []);
+
     useEffect(() => {
         let savedLocationNames = savedLocations.map((forecast) => forecast.city.name);
         LOG.info("[LocationScreen]/Saved-Locations", savedLocationNames);
