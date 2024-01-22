@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from "moment/moment";
 import RBSheet from "react-native-raw-bottom-sheet";
 
 import constants from '../config/constants';
@@ -26,6 +27,7 @@ function HomeScreen(props) {
     const dispatch = useDispatch();
 
     // api
+
     const {
         data: weatherDetails,
         error,
@@ -34,12 +36,17 @@ function HomeScreen(props) {
     } = useApi(forecastApi.getForecastByCoordinate);
 
     // ui
+
     const theme = useTheme();
     const refRBSheet = useRef();
     // detect device location
-    const location = useLocation();
+    const { location, getLocation: getDeviceLocation } = useLocation();
     // your location indicator
     const [yourLocation, setYourLocation] = useState(false);
+    // re-detect device location button display
+    const [detectLocation, setDetectLocation] = useState(false);
+    // search button display
+    const [searchButton, setSearchButton] = useState(false);
 
     const cityName = () => {
         var datasource = constants.defaultForecast;
@@ -62,8 +69,38 @@ function HomeScreen(props) {
         }
         return datasource.list[datasource.list.length - 1].weather[0].main;
     }
+    const forecastDate = () => {
+        var datasource = constants.defaultForecast
+        if (weatherDetails && weatherDetails.list) {
+            datasource = weatherDetails;
+        }
+        // default forecast data
+        if (datasource.list[0].dt == 0) {
+            return "Unknown";
+        }
+        const momentDate = moment(datasource.list[0].dt * 1000);
+        const forecastDate = momentDate.format('DD MMMM YYYY | hh:mm a');
+        return forecastDate
+    };
+
+    // actions
+
+    const refreshHandler = () => {
+        console.log("[HomeScreen]", "refreshHandler");
+    };
+    const detectDeviceLocationHandler = () => {
+        console.log("[HomeScreen]", "detectDeviceLocationHandler");
+        getDeviceLocation();
+    };
+    const searchLocationsHandler = () => {
+        console.log("[HomeScreen]", "searchLocationsHandler");
+    };
+
+    // listeners
 
     useEffect(() => {
+        setDetectLocation(false);
+        setSearchButton(false);
         setYourLocation(false);
     }, []);
 
@@ -76,6 +113,7 @@ function HomeScreen(props) {
                 location.longitude
             );
         }
+        setDetectLocation(location != null);
     }, [location]);
 
     useEffect(() => {
@@ -122,21 +160,39 @@ function HomeScreen(props) {
         <Screen>
             <View style={styles.container}>
                 <View style={styles.headerContainer}>
-                    <CircularIcon image={"map-marker"} backgroundColor={theme.colors.primary}/>
-                    <View>
+                    <View style={styles.headerSideButtonContainer}>
+                    { detectLocation &&
+                        <CircularIcon
+                            image={"map-marker"}
+                            backgroundColor={theme.colors.primary}
+                            onPress={detectDeviceLocationHandler}
+                        />
+                    }
+                    </View>
+
+                    <View style={styles.headerCenterContainer}>
                         <Text style={styles.title} variant='titleLarge'>Forecast Report</Text>
-                        <Text style={styles.date} variant='titleSmall'>
-                            Mon, January 1, 2024
+                        <Text style={[styles.date, { color: theme.colors.tertiary }]} variant='titleSmall'>
+                            {forecastDate()}
                         </Text>
                     </View>
-                    <CircularIcon image={"magnify"} backgroundColor={theme.colors.primary} />
+                    
+                    <View style={styles.headerSideButtonContainer}>
+                    { searchButton &&
+                        <CircularIcon
+                            image={"magnify"}
+                            backgroundColor={theme.colors.primary}
+                            onPress={searchLocationsHandler}
+                        />
+                    }
+                    </View>
                 </View>
 
                 <View style={styles.weatherContainer}>
-                    { yourLocation && <YourLocation /> }
+                    { yourLocation && <YourLocation style={styles.yourLocation} marginBottom={20} /> }
                     <Text style={styles.location}>{cityName()}</Text>
                     <TemperatureUnit temperature={temperature()} fontSize={100}/>
-                    <Text style={styles.weatherCondition}>{weather()}</Text>
+                    <Text style={[styles.weatherCondition, { color: theme.colors.tertiary }]}>{weather()}</Text>
                 </View>
 
                 <CircularIcon
@@ -168,7 +224,7 @@ function HomeScreen(props) {
             >
                 <WeatherForecast
                     forecast={weatherDetails.list}
-                    onRefresh={() => console.log("Refresh")}
+                    onRefresh={refreshHandler}
                     onDismiss={() => refRBSheet.current.close()}
                 />
             </RBSheet>
@@ -185,11 +241,16 @@ const styles = StyleSheet.create({
         padding: 20,
         alignItems: "center",
     },
+    headerSideButtonContainer: {
+        minWidth: "20%",
+        alignItems:'center',
+        justifyContent: "center",
+    },
+    headerCenterContainer: {
+        minWidth: "60%",
+    },
     headerContainer: {
-        justifyContent: "space-between",
-        alignItems: "center",
         flexDirection: "row",
-        width: "100%"
     },
     iconContainer: {
         alignItems: "center",
@@ -209,12 +270,15 @@ const styles = StyleSheet.create({
     },
     weatherCondition: {
         textAlign: "center",
-        fontSize: 20,
+        fontSize: 25,
     },
     weatherContainer: {
         alignItems: "center",
         justifyContent: "center",
         height: "82%"
+    },
+    yourLocation: {
+        marginBottom: 20,
     },
 });
 

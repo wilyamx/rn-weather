@@ -6,6 +6,7 @@ export default useLocation = () => {
     const [location, setLocation] = useState();
 
     const getLocation = async () => {
+        LOG.debug("[useLocation]", "getLocation...");
         try {
             const { granted } = await Location.requestForegroundPermissionsAsync();
             if (!granted) {
@@ -28,5 +29,5 @@ export default useLocation = () => {
     }, []);
 
     LOG.info("[useLocation]/Device-Location", location);
-    return location;
+    return { location, getLocation };
 };

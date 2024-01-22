@@ -4,9 +4,9 @@ import { Text } from 'react-native-paper';
 
 import colors from '../config/colors';
 
-function YourLocation(props) {
+function YourLocation({ marginBottom }) {
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { marginBottom }]}>
             <Text variant='labelMedium' style={styles.text}>Your Location</Text>
         </View>
     );

@@ -9,6 +9,7 @@ export default {
             name: "Unknown",
         },
         list: [{
+            dt: 0,
             main: {
                 temp: 0,
                 humidity: 0,
