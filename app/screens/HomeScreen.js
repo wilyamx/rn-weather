@@ -87,6 +87,13 @@ function HomeScreen(props) {
 
     const refreshHandler = () => {
         console.log("[HomeScreen]", "refreshHandler");
+        if (location) {
+            // request forecast using device location
+            weatherRequest(
+                location.latitude,
+                location.longitude
+            );
+        }
     };
     const detectDeviceLocationHandler = () => {
         console.log("[HomeScreen]", "detectDeviceLocationHandler");
@@ -114,6 +121,7 @@ function HomeScreen(props) {
             );
         }
         setDetectLocation(location != null);
+        setSearchButton(location == null);
     }, [location]);
 
     useEffect(() => {

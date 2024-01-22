@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, TouchableHighlight } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { GestureHandlerRootView, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+
 import colors from '../config/colors';
-import { GestureHandlerRootView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 function CircularIcon({
     image = "lock-question",
@@ -16,7 +17,7 @@ function CircularIcon({
 
     return (
         <GestureHandlerRootView>
-        <TouchableWithoutFeedback onPress={onPress}>
+        <TouchableOpacity onPress={onPress}>
             <View style={[
                 styles.container,
                 { 
@@ -33,7 +34,7 @@ function CircularIcon({
                     color={color}
                 />
             </View>
-        </TouchableWithoutFeedback>
+        </TouchableOpacity>
         </GestureHandlerRootView>
     );
 }
