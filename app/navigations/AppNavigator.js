@@ -1,34 +1,59 @@
 import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { BottomNavigation, Text } from 'react-native-paper';
+import { BottomNavigation, useTheme } from 'react-native-paper';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 
 import SettingsScreen from '../screens/SettingsScreen';
 import LocationsScreen from '../screens/LocationsScreen';
 import HomeScreen from '../screens/HomeScreen';
 
-function AppNavigator(props) {
-    const [index, setIndex] = useState(0);
-    const [routes] = useState([
-        { key: "home", title: "Home", focusedIcon: "home", unfocusedIcon: "home-outline"},
-        { key: "locations", title: "Locations", focusedIcon: "map-marker", unfocusedIcon: "map-marker-outline"},
-        { key: "settings", title: "Settings", focusedIcon: "account", unfocusedIcon: "account-outline"},
-    ]);
+const Tab = createBottomTabNavigator();
 
-    const renderScene = BottomNavigation.SceneMap({
-        home: HomeScreen,
-        locations: LocationsScreen,
-        settings: SettingsScreen,
-    });
-    
+function AppNavigator(props) {
+    const theme = useTheme();
+
     return (
         <NavigationContainer>
-            <BottomNavigation
-                navigationState={{ index, routes }}
-                onIndexChange={setIndex}
-                renderScene={renderScene}
-            />
+            <Tab.Navigator
+                screenOptions={{
+                    tabBarActiveTintColor: theme.colors.primary,
+                    tabBarLabelStyle: {
+                        fontSize: 13,
+                        fontWeight: "bold",
+                    },
+                    tabBarStyle: {
+                        backgroundColor: theme.colors.background,
+                    }
+                }}
+            >
+                <Tab.Screen
+                    name="Home"
+                    component={HomeScreen}
+                    options={{ 
+                        headerShown: false,
+                        tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="home" color={color} size={size} />
+                    }}
+                />
+                <Tab.Screen
+                    name="Locations"
+                    component={LocationsScreen}
+                    options={{ 
+                        headerShown: false,
+                        tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="map-marker" color={color} size={size} />
+                    }}
+                />
+                <Tab.Screen
+                    name="Settings"
+                    component={SettingsScreen}
+                    options={{ 
+                        headerShown: false,
+                        tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="account" color={color} size={size} />
+                    }}
+                />
+            </Tab.Navigator>
         </NavigationContainer>
     );
 }

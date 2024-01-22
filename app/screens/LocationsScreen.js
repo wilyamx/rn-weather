@@ -19,7 +19,7 @@ import ListItemDeleteAction from '../components/lists/ListItemDeleteAction';
 import LocationListItem from '../components/lists/LocationListItem';
 import Screen from '../components/Screen';
 
-function LocationsScreen(props) {
+function LocationsScreen({ navigation }) {
     // redux
     const savedLocations = useSelector(state => state.weather.forecasts);
     const savedCurrentLocation = useSelector(state => state.location.currentLocation);
@@ -37,8 +37,9 @@ function LocationsScreen(props) {
     } = useApi(forecastApi.getForecastByLocationName);
 
     // actions
+
     const handleDelete = async (location) => {
-        console.log("location-delete", location.city.name);
+        LOG.info("[LocationScreen]/Remove-Selected-Forecast", location.city.name);
         dispatch(removeFromForecasts(location.city.name));
     };
     const handleSubmitSearchKey = async (key) => {
@@ -53,6 +54,10 @@ function LocationsScreen(props) {
             return;
         }
         weatherRequest(key);
+    };
+    const handleSelectedForecast = (forecast) => {
+        console.log("[LocationScreen]/Selected-Location", forecast.city.name);
+        navigation.navigate("Home");
     };
     
     useEffect(() => {
@@ -112,8 +117,6 @@ function LocationsScreen(props) {
                 onSubmitEditing={() => handleSubmitSearchKey(searchQuery)}
             />
 
-            
-            
             <FlatList
                 data={savedLocations}
                 keyExtractor={item => item.city.id.toString()}
@@ -121,7 +124,7 @@ function LocationsScreen(props) {
                     <LocationListItem
                         currentLocation={savedCurrentLocation}
                         location={item}
-                        onPress={() => console.log("[LocationScreen]/Selected-Location", item)}
+                        onPress={() => handleSelectedForecast(item)}
                         renderRightActions={() => 
                             <ListItemDeleteAction onPress={() => handleDelete(item)}/>
                         }

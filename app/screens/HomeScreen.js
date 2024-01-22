@@ -23,7 +23,7 @@ import YourLocation from '../components/YourLocation';
 import WeatherForecast from '../components/WeatherForecast';
 import LOG from '../utility/logger';
 
-function HomeScreen(props) {
+function HomeScreen({ navigation }) {
     // redux
     const savedLocations = useSelector(state => state.weather.forecasts);
     const dispatch = useDispatch();
@@ -104,6 +104,7 @@ function HomeScreen(props) {
     };
     const searchLocationsHandler = () => {
         console.log("[HomeScreen]", "searchLocationsHandler");
+        navigation.navigate("Locations");
     };
 
     // listeners
@@ -182,13 +183,13 @@ function HomeScreen(props) {
             <View style={styles.container}>
                 <View style={styles.headerContainer}>
                     <View style={styles.headerSideButtonContainer}>
-                    { detectLocation &&
-                        <CircularIcon
-                            image={"map-marker"}
-                            backgroundColor={theme.colors.primary}
-                            onPress={detectDeviceLocationHandler}
-                        />
-                    }
+                        { detectLocation &&
+                            <CircularIcon
+                                image={"map-marker"}
+                                backgroundColor={theme.colors.primary}
+                                onPress={detectDeviceLocationHandler}
+                            />
+                        }
                     </View>
 
                     <View style={styles.headerCenterContainer}>
@@ -199,13 +200,13 @@ function HomeScreen(props) {
                     </View>
                     
                     <View style={styles.headerSideButtonContainer}>
-                    { searchButton &&
-                        <CircularIcon
-                            image={"magnify"}
-                            backgroundColor={theme.colors.primary}
-                            onPress={searchLocationsHandler}
-                        />
-                    }
+                        { searchButton &&
+                            <CircularIcon
+                                image={"magnify"}
+                                backgroundColor={theme.colors.primary}
+                                onPress={searchLocationsHandler}
+                            />
+                        }
                     </View>
                 </View>
 
