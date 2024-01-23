@@ -39,7 +39,8 @@ React Native Training Assessment Project
 1. Redux + [Redux-Persist](https://github.com/rt2zz/redux-persist)
 1. [Apisauce](https://github.com/infinitered/apisauce)
 1. [React Native Logs](https://www.npmjs.com/package/react-native-logs)
-1. [Moment](https://momentjs.com/) - 
+1. [Moment](https://momentjs.com/) - display dates and time
+1. [React Native Dot Env](https://github.com/goatandsheep/react-native-dotenv) - environment variables
 
 ## References
 

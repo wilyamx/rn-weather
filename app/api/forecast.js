@@ -2,6 +2,8 @@ import client from './client';
 import constants from '../config/constants';
 import LOG from '../utility/logger';
 
+import { APP_ID } from '@env';
+
 var endpoint = '/forecast';
 
 const getForecastByLocationName = async (
@@ -9,7 +11,7 @@ const getForecastByLocationName = async (
     units = constants.temperatureUnit.celsiusUnit) => {
 
     const params = {
-        appid: "368b07291c6814df232003d0f78f47b9",
+        appid: APP_ID,
         q: searchKey,
         units
     }
@@ -83,7 +85,7 @@ const getForecastByCoordinate = async (
     units = constants.temperatureUnit.celsiusUnit) => {
 
     const params = {
-        appid: "368b07291c6814df232003d0f78f47b9",
+        appid: APP_ID,
         lat: latitude,
         lon: longitude,
         units
