@@ -1,6 +1,6 @@
 import client from './client';
 import constants from '../config/constants';
-import LOG from '../utility/logger';
+import uuid from 'react-native-uuid';
 
 import { APP_ID } from '@env';
 
@@ -67,7 +67,9 @@ const getForecastByLocationName = async (
         response.data.list = filteredForecasts;
 
         // new keys
-        response.data.temperatureUnit = units
+        response.data.temperatureUnit = units;
+        // Cebu City and Mandaue have same city.id
+        response.data.uuid = uuid.v4();
     });
 
     return await client.get(endpoint, params);
@@ -142,7 +144,9 @@ const getForecastByCoordinate = async (
         response.data.list = filteredForecasts;
 
         // new keys
-        response.data.temperatureUnit = units
+        response.data.temperatureUnit = units;
+        // Cebu City and Mandaue have same city.id
+        response.data.uuid = uuid.v4();
     });
     
     return await client.get(endpoint, params);

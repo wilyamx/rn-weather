@@ -4,6 +4,7 @@ import { Text, useTheme } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from "moment/moment";
 import RBSheet from "react-native-raw-bottom-sheet";
+import * as Network from 'expo-network';
 
 import constants from '../config/constants';
 import forecastApi from '../api/forecast';
@@ -92,11 +93,24 @@ const getTemperatureDisplay = (
     return withDecimal ? result.toFixed(2) : Math.round(result);
 };
 
-function HomeScreen({ navigation }) {
+function HomeScreen({ route, navigation}) {
+    LOG.info("[HomeScreen]", "function");
+
     // redux
+
     const temperatureUnitSaved = useSelector(state => state.theme.temperatureUnit);
     const savedLocations = useSelector(state => state.weather.forecasts);
     const dispatch = useDispatch();
+
+    // hardware
+
+    const [isInternetReachable, setIsInternetReachable] = useState(false);
+    (async () => {
+        let networkState = await Network.getNetworkStateAsync();
+        setIsInternetReachable(networkState.isInternetReachable);
+        //
+        LOG.info("[HomeScreen]/networkState", isInternetReachable);
+    })();
 
     // api
 
@@ -119,6 +133,14 @@ function HomeScreen({ navigation }) {
     const [detectLocation, setDetectLocation] = useState(false);
     // search button display
     const [searchButton, setSearchButton] = useState(false);
+    // selected location from location screen
+    const [selectedLocation, setSelectedLocation] = useState({
+        uniqueId: "",
+        cityId: 0,
+        name: ""
+    })
+
+    // calculated variables
 
     const cityName = () => {
         var datasource = constants.defaultForecast;
@@ -184,17 +206,34 @@ function HomeScreen({ navigation }) {
         navigation.navigate("Locations");
     };
 
+    // route
+
+    if (route && route.params) {
+        setSelectedLocation(route.params);
+    }
+    LOG.info("[HomeScreen]/selectedLocation", selectedLocation);
+    if (selectedLocation.uniqueId.length > 0) {
+        if (isInternetReachable) {
+            
+        }
+        else {
+
+        }
+    }
+    
     // listeners
 
     useEffect(() => {
-        LOG.info("[HomeScreen]", "useEffect");
+        LOG.info("[HomeScreen]/useEffect", "initialize");
+        //
         setDetectLocation(false);
         setSearchButton(false);
         setYourLocation(false);
     }, []);
 
     useEffect(() => {
-        LOG.info("[HomeScreen]/Device-Location", location);
+        LOG.info("[HomeScreen]/useEffect", "Device-Location", location);
+        //
         if (location) {
             // request forecast using device location
             weatherRequest(
@@ -207,6 +246,8 @@ function HomeScreen({ navigation }) {
     }, [location]);
 
     useEffect(() => {
+        LOG.info("[HomeScreen]/useEffect", "weatherDetails");
+        //
         let savedLocationNames = savedLocations.map((forecast) => forecast.city.name);
         LOG.info("[HomeScreen]/Saved-Locations", savedLocationNames);
 

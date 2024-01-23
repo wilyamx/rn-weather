@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import LOG from '../utility/logger';
-import uuid from 'react-native-uuid';
 import { useState } from 'react';
 import { Alert, FlatList, StyleSheet } from 'react-native';
 import { Searchbar, Text } from 'react-native-paper';
@@ -59,7 +58,11 @@ function LocationsScreen({ navigation }) {
     };
     const handleSelectedForecast = (forecast) => {
         console.log("[LocationScreen]/Selected-Location", forecast.city.id, forecast.city.name);
-        navigation.navigate("Home");
+        navigation.navigate("Home", {
+            uniqueId: forecast.uuid,
+            cityId: forecast.city.id,
+            name: forecast.city.name,
+        });
     };
     
     useEffect(() => {
@@ -125,7 +128,7 @@ function LocationsScreen({ navigation }) {
 
             <FlatList
                 data={savedLocations}
-                keyExtractor={item => uuid.v4()}
+                keyExtractor={item => item.uuid.toString()}
                 renderItem={({ item }) => 
                     <LocationListItem
                         currentLocation={savedCurrentLocation}
