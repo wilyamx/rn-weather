@@ -11,6 +11,11 @@ const weatherImages = [
         image: require("../../assets/rainy.png"),
     },
     {
+        main: "Snow",
+        icon: "0",
+        image: require("../../assets/snow.png"),
+    },
+    {
         main: "Default",
         icon: "0",
         image: require("../../assets/rainbow.png"),
@@ -18,6 +23,7 @@ const weatherImages = [
 ];
 
 export const getWeatherImage = (main = "Default") => {
+    console.log("[WeatherImages]/getWeatherImage", main);
     let weatherImage = weatherImages.filter((detail) => detail.main == main);
     return weatherImage[0].image;
 };

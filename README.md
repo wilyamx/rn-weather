@@ -32,15 +32,17 @@ React Native Training Assessment Project
 ## Libraries
 
 1. [Expo SDK](https://docs.expo.dev/versions/latest/) - provides access to device and system functionality such as contacts, camera, gyroscope, GPS location, and so on, in the form of packages
+	* [Expo Network](https://docs.expo.dev/versions/latest/sdk/network/) - provides access to the device's network
 1.  [React Native Paper](https://callstack.github.io/react-native-paper/) - Cross-platform Material Design for React Native
 	* [Guides](https://callstack.github.io/react-native-paper/docs/guides/getting-started) 
 	* [Components](https://callstack.github.io/react-native-paper/docs/components/ActivityIndicator)
 1. [Bottom Sheet](https://www.npmjs.com/package/react-native-raw-bottom-sheet)
-1. Redux + [Redux-Persist](https://github.com/rt2zz/redux-persist)
+1. Redux + [Redux-Persist](https://github.com/rt2zz/redux-persist) - predictable state container
 1. [Apisauce](https://github.com/infinitered/apisauce)
 1. [React Native Logs](https://www.npmjs.com/package/react-native-logs)
 1. [Moment](https://momentjs.com/) - display dates and time
 1. [React Native Dot Env](https://github.com/goatandsheep/react-native-dotenv) - environment variables
+1. [React Native UUID](https://www.npmjs.com/package/react-native-uuid) - 
 
 ## References
 
