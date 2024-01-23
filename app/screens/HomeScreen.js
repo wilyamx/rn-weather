@@ -23,8 +23,78 @@ import YourLocation from '../components/YourLocation';
 import WeatherForecast from '../components/WeatherForecast';
 import LOG from '../utility/logger';
 
+const DEBUG = constants.debug;
+
+const getTemperatureUnitSign = (
+    forecastUnit,
+    unitTemperature,
+    debug = false) => {
+        
+    // forecastUnit - unit of the weather forecast from api response
+    // unitTemperature - unit to display from the settings view
+
+    var unit = unitTemperature;
+    if (debug) {
+        unit = forecastUnit
+    }
+    
+    if (unit == constants.temperatureUnit.celsiusUnit) {
+        return constants.temperatureUnitSign.celsiusUnit;
+    }
+    else if (unit == constants.temperatureUnit.fahrenheitUnit) {
+        return constants.temperatureUnitSign.fahrenheitUnit;
+    }
+    else {
+        return constants.temperatureUnitSign.kelvinUnit;
+    }
+};
+
+const celsiusToFahrenheit = (celsius) => {
+    return (celsius * 9 / 5) + 32;
+};
+
+const fahrenheitToCelsius = (fahrenheit) => {
+    return (fahrenheit - 32) * 5 / 9;
+};
+
+const getTemperatureDisplay = (
+    reading,
+    fromDisplayUnit,
+    temperatureUnit,
+    withDecimal = false,
+    debug = false) => {
+    
+    // LOG.info("[HomeScreen]/getTemperatureDisplay", reading);
+    if (debug) return reading;
+
+    var result = reading;
+
+    // from: metric (celsius), to: metric (celsius)
+    if (fromDisplayUnit == constants.temperatureUnit.celsiusUnit &&
+        temperatureUnit == constants.temperatureUnit.celsiusUnit) {
+            result = reading;
+        }
+    // from: imperial (fahrenheit), to: imperial (fahrenheit)
+    else if (fromDisplayUnit == constants.temperatureUnit.fahrenheitUnit &&
+        temperatureUnit == constants.temperatureUnit.fahrenheitUnit) {
+            result = reading;
+        }
+    // from metric (celsius), to: imperial (fahrenheit)
+    else if (fromDisplayUnit == constants.temperatureUnit.celsiusUnit &&
+        temperatureUnit == constants.temperatureUnit.fahrenheitUnit) {
+            result = celsiusToFahrenheit(reading);
+        }
+    // from imperial (fahrenheit), to: metric (celsius)
+    else if (fromDisplayUnit == constants.temperatureUnit.fahrenheitUnit &&
+        temperatureUnit == constants.temperatureUnit.celsiusUnit) {
+            result = fahrenheitToCelsius(reading);
+        }
+    return withDecimal ? result.toFixed(2) : Math.round(result);
+};
+
 function HomeScreen({ navigation }) {
     // redux
+    const temperatureUnitSaved = useSelector(state => state.theme.temperatureUnit);
     const savedLocations = useSelector(state => state.weather.forecasts);
     const dispatch = useDispatch();
 
@@ -62,14 +132,14 @@ function HomeScreen({ navigation }) {
         if (weatherDetails && weatherDetails.list) {
             datasource = weatherDetails;
         }
-        return Math.round(datasource.list[datasource.list.length - 1].main.temp);
+        return Math.round(datasource.list[0].main.temp);
     };
     const weather = () => {
         var datasource = constants.defaultForecast
         if (weatherDetails && weatherDetails.list) {
             datasource = weatherDetails;
         }
-        return datasource.list[datasource.list.length - 1].weather[0].main;
+        return datasource.list[0].weather[0].description;
     }
     const forecastDate = () => {
         var datasource = constants.defaultForecast
@@ -83,6 +153,13 @@ function HomeScreen({ navigation }) {
         const momentDate = moment(datasource.list[0].dt * 1000);
         const forecastDate = momentDate.format('DD MMMM YYYY | hh:mm a');
         return forecastDate
+    };
+    const temperatureUnit = () => {
+        var datasource = constants.defaultForecast
+        if (weatherDetails && weatherDetails.list) {
+            datasource = weatherDetails;
+        }
+        return datasource.temperatureUnit;
     };
 
     // actions
@@ -110,6 +187,7 @@ function HomeScreen({ navigation }) {
     // listeners
 
     useEffect(() => {
+        LOG.info("[HomeScreen]", "useEffect");
         setDetectLocation(false);
         setSearchButton(false);
         setYourLocation(false);
@@ -214,9 +292,18 @@ function HomeScreen({ navigation }) {
                     { yourLocation && <YourLocation style={styles.yourLocation} marginBottom={20} /> }
                     <Text style={styles.location}>{cityName()}</Text>
                     <TemperatureUnit
-                        temperature={temperature()}
+                        temperature={
+                            getTemperatureDisplay(
+                                temperature(),
+                                temperatureUnit(),
+                                temperatureUnitSaved,
+                                false,
+                                DEBUG
+                            )
+                        }
                         fontSize={100}
                         color={theme.colors.tertiary}
+                        unit={getTemperatureUnitSign(temperatureUnit, temperatureUnitSaved, DEBUG)}
                     />
                     <Text style={[styles.weatherCondition, { color: theme.colors.tertiary }]}>{weather()}</Text>
                 </View>
@@ -298,6 +385,7 @@ const styles = StyleSheet.create({
     weatherCondition: {
         textAlign: "center",
         fontSize: 25,
+        textTransform: "capitalize",
     },
     weatherContainer: {
         alignItems: "center",

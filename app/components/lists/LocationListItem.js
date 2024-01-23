@@ -13,7 +13,7 @@ import TemperatureUnit from "../TemperatureUnit";
 import YourLocation from "../YourLocation";
 import { getWeatherImage } from "../../config/WeatherImages";
 
-const DEBUG = true;
+const DEBUG = constants.debug;
 
 const getDateComponents = (dt_txt) => {
     // 2024-01-20 03:00:0
@@ -21,7 +21,11 @@ const getDateComponents = (dt_txt) => {
     return dateComponents
 };
 
-const getTemperatureUnitSign = (forecastUnit, unitTemperature, debug = false) => {
+const getTemperatureUnitSign = (
+    forecastUnit,
+    unitTemperature,
+    debug = false) => {
+
     // forecastUnit - unit of the weather forecast from api response
     // unitTemperature - unit to display from the settings view
 
@@ -49,26 +53,39 @@ const fahrenheitToCelsius = (fahrenheit) => {
     return (fahrenheit - 32) * 5 / 9;
 };
 
-const getTemperatureDisplay = (reading, fromDisplayUnit, temperatureUnit, debug = false) => {
+const getTemperatureDisplay = (
+    reading,
+    fromDisplayUnit,
+    temperatureUnit,
+    withDecimal = false,
+    debug = false) => {
     
+    // LOG.info("[HomeScreen]/getTemperatureDisplay", reading);
     if (debug) return reading;
+
+    var result = reading;
 
     // from: metric (celsius), to: metric (celsius)
     if (fromDisplayUnit == constants.temperatureUnit.celsiusUnit &&
         temperatureUnit == constants.temperatureUnit.celsiusUnit) {
-            return reading
+            result = reading;
+        }
+    // from: imperial (fahrenheit), to: imperial (fahrenheit)
+    else if (fromDisplayUnit == constants.temperatureUnit.fahrenheitUnit &&
+        temperatureUnit == constants.temperatureUnit.fahrenheitUnit) {
+            result = reading;
         }
     // from metric (celsius), to: imperial (fahrenheit)
     else if (fromDisplayUnit == constants.temperatureUnit.celsiusUnit &&
         temperatureUnit == constants.temperatureUnit.fahrenheitUnit) {
-            return celsiusToFahrenheit(reading).toFixed(2);
+            result = celsiusToFahrenheit(reading);
         }
     // from imperial (fahrenheit), to: metric (celsius)
     else if (fromDisplayUnit == constants.temperatureUnit.fahrenheitUnit &&
         temperatureUnit == constants.temperatureUnit.celsiusUnit) {
-            return fahrenheitToCelsius(reading).toFixed(2);
+            result = fahrenheitToCelsius(reading);
         }
-    return reading;
+    return withDecimal ? result.toFixed(2) : Math.round(result);
 };
 
 function LocationListItem({
@@ -138,6 +155,7 @@ function LocationListItem({
                                     location.list[0].main.temp,
                                     location.temperatureUnit,
                                     temperatureUnitSaved,
+                                    true,
                                     DEBUG
                                 )}
                             fontSize={40}

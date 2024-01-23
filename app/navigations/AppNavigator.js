@@ -1,10 +1,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { BottomNavigation, useTheme } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
+import { StyleSheet } from 'react-native';
+import { useTheme } from 'react-native-paper';
 
 import SettingsScreen from '../screens/SettingsScreen';
 import LocationsScreen from '../screens/LocationsScreen';

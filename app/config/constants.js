@@ -1,4 +1,5 @@
 export default {
+    debug: false,
     temperatureUnit: {
         celsiusUnit: "metric",
         fahrenheitUnit: "imperial",
