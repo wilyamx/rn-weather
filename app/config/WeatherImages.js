@@ -23,7 +23,8 @@ const weatherImages = [
 ];
 
 export const getWeatherImage = (main = "Default") => {
-    console.log("[WeatherImages]/getWeatherImage", main);
+    //console.log("[WeatherImages]/getWeatherImage", main);
+    //
     let weatherImage = weatherImages.filter((detail) => detail.main == main);
     return weatherImage[0].image;
 };
