@@ -45,6 +45,7 @@ React Native Training Assessment Project
 1. [Moment](https://momentjs.com/) - display dates and time
 1. [React Native Dot Env](https://github.com/goatandsheep/react-native-dotenv) - environment variables
 1. [React Native UUID](https://www.npmjs.com/package/react-native-uuid)
+1. [React Navigation](https://reactnavigation.org/docs/getting-started/)
 
 ## References
 

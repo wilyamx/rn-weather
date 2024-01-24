@@ -8,6 +8,7 @@ import { useTheme } from 'react-native-paper';
 import SettingsScreen from '../screens/SettingsScreen';
 import LocationsScreen from '../screens/LocationsScreen';
 import HomeScreen from '../screens/HomeScreen';
+import LOG from '../utility/logger';
 
 const Tab = createBottomTabNavigator();
 
@@ -35,6 +36,14 @@ function AppNavigator(props) {
                         headerShown: false,
                         tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="home" color={color} size={size} />
                     }}
+                    listeners={({ navigation }) => ({ tabPress: () => {
+                        LOG.info("[AppNavigator]/tabPress", "HomeScreen");
+                        navigation.setParams({
+                            cityId: 0,
+                            locationId: "",
+                            name: ""})
+                        }})
+                    }
                 />
                 <Tab.Screen
                     name="Locations"
@@ -51,6 +60,7 @@ function AppNavigator(props) {
                         headerShown: false,
                         tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="account" color={color} size={size} />
                     }}
+                    
                 />
             </Tab.Navigator>
         </NavigationContainer>

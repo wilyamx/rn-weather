@@ -57,9 +57,9 @@ function LocationsScreen({ navigation }) {
         weatherRequest(key, temperatureUnit);
     };
     const handleSelectedForecast = (forecast) => {
-        console.log("[LocationScreen]/Selected-Location", forecast.city.id, forecast.city.name);
+        LOG.info("[LocationScreen]/Selected-Location", forecast.uuid, forecast.city.id, forecast.city.name);
         navigation.navigate("Home", {
-            uniqueId: forecast.uuid,
+            locationId: forecast.uuid,
             cityId: forecast.city.id,
             name: forecast.city.name,
         });

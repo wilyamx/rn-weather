@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
+import { useFocusEffect, useNavigationState } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from "moment/moment";
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -23,6 +24,7 @@ import TemperatureUnit from '../components/TemperatureUnit';
 import YourLocation from '../components/YourLocation';
 import WeatherForecast from '../components/WeatherForecast';
 import LOG from '../utility/logger';
+
 
 const DEBUG = constants.debug;
 
@@ -93,7 +95,7 @@ const getTemperatureDisplay = (
     return withDecimal ? result.toFixed(2) : Math.round(result);
 };
 
-function HomeScreen({ route, navigation}) {
+function HomeScreen({ route, navigation }) {
     LOG.info("[HomeScreen]", "function");
 
     // redux
@@ -114,7 +116,9 @@ function HomeScreen({ route, navigation}) {
 
     // api
 
-    const {
+    const [details, setDetails] = useState(constants.defaultForecast);
+    
+    var {
         data: weatherDetails,
         error,
         loading,
@@ -133,16 +137,11 @@ function HomeScreen({ route, navigation}) {
     const [detectLocation, setDetectLocation] = useState(false);
     // search button display
     const [searchButton, setSearchButton] = useState(false);
-    // selected location from location screen
-    const [selectedLocation, setSelectedLocation] = useState({
-        uniqueId: "",
-        cityId: 0,
-        name: ""
-    })
-
-    // calculated variables
 
     const cityName = () => {
+        console.log("[HomeScreen]/cityName/weatherDetails", weatherDetails.uuid);
+        console.log("[HomeScreen]/cityName/details", details.uuid);
+
         var datasource = constants.defaultForecast;
         if(weatherDetails && weatherDetails.city) {
             datasource = weatherDetails;
@@ -183,6 +182,13 @@ function HomeScreen({ route, navigation}) {
         }
         return datasource.temperatureUnit;
     };
+    const getForecastByIdentifier = (uuid) => {
+        const validForecasts = savedLocations.filter((forecast) => {
+            return forecast.uuid == uuid;
+        });
+        //LOG.info("[HomeScreen]/getForecastByIdentifier", uuid, savedLocations.length, validForecasts.length);
+        return validForecasts[0];
+    };
 
     // actions
 
@@ -206,23 +212,9 @@ function HomeScreen({ route, navigation}) {
         navigation.navigate("Locations");
     };
 
-    // route
+    // hooks
 
-    if (route && route.params) {
-        setSelectedLocation(route.params);
-    }
-    LOG.info("[HomeScreen]/selectedLocation", selectedLocation);
-    if (selectedLocation.uniqueId.length > 0) {
-        if (isInternetReachable) {
-            
-        }
-        else {
-
-        }
-    }
-    
-    // listeners
-
+    // this will trigger once only
     useEffect(() => {
         LOG.info("[HomeScreen]/useEffect", "initialize");
         //
@@ -246,7 +238,7 @@ function HomeScreen({ route, navigation}) {
     }, [location]);
 
     useEffect(() => {
-        LOG.info("[HomeScreen]/useEffect", "weatherDetails");
+        LOG.info("[HomeScreen]/useEffect/weatherDetails");
         //
         let savedLocationNames = savedLocations.map((forecast) => forecast.city.name);
         LOG.info("[HomeScreen]/Saved-Locations", savedLocationNames);
@@ -285,7 +277,52 @@ function HomeScreen({ route, navigation}) {
                 place: weatherDetails.city.name,
             }))
         }
+
     }, [weatherDetails]);
+
+    useEffect(() => {
+        LOG.info("[HomeScreen]/useEffect/details");
+        
+        if (!details) return;
+
+        if (!details.list) return;
+        if (details.list.length == 0) return;
+
+        if (!details.city) return;
+
+        let cityDetails = details.city;
+        let forecasts = details.list;
+    }, [details]);
+
+    // works every time the page is navigated even with same route params
+    useFocusEffect(
+        // routes
+        useCallback(() => {
+            if (route.params) {
+                // from locations
+                LOG.info("[HomeScreen]/useFocusEffect", route.params);
+                //
+                if (route.params.locationId &&
+                    route.params.cityId &&
+                    route.params.name) {
+                    
+                    let details = getForecastByIdentifier(route.params.locationId);
+                    console.log("[HomeScreen]/useFocusEffect/details", details.uuid);
+                    console.log("[HomeScreen]/useFocusEffect/weatherDetails", weatherDetails.uuid);
+                    console.log("[HomeScreen]/useFocusEffect/defaultForecast", constants.defaultForecast);
+                    
+                    //setDetails(details);
+                    
+                    // if (isInternetReachable) {
+                    //     console.log("HomeScreen]/1111");
+                    // }
+                    // else {
+                    //     weatherDetails = getForecastByIdentifier(route.params.locationId);
+                    // }
+                }
+            }
+        }, [route])
+    );
 
     return (
         <>

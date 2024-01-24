@@ -11,12 +11,14 @@ export default {
         kelvinUnit: "K",
     },
     defaultForecast: {
+        uuid: "",
         temperatureUnit: "metric",
         city: {
             name: "Unknown",
         },
         list: [{
             dt: 0,
+            dt_txt: "",
             main: {
                 temp: 0,
                 humidity: 0,

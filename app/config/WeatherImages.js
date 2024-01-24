@@ -16,6 +16,11 @@ const weatherImages = [
         image: require("../../assets/snow.png"),
     },
     {
+        main: "Clear",
+        icon: "0",
+        image: require("../../assets/sun.png"),
+    },
+    {
         main: "Default",
         icon: "0",
         image: require("../../assets/rainbow.png"),
