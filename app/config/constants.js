@@ -14,7 +14,7 @@ export default {
         uuid: "",
         temperatureUnit: "metric",
         city: {
-            name: "Unknown",
+            name: "",
         },
         list: [{
             dt: 0,
@@ -25,8 +25,8 @@ export default {
             },
             weather: [{
                 id: 0,
-                main: "Unknown",
-                description: "Unknown",
+                main: "Default",
+                description: "",
                 icon: 0,
             }]
         }]

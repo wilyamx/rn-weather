@@ -117,9 +117,10 @@ function HomeScreen({ route, navigation }) {
     // api
 
     const [details, setDetails] = useState(constants.defaultForecast);
+    const [weatherDetails, setWeatherDetails] = useState(constants.defaultForecast);
     
     var {
-        data: weatherDetails,
+        data: weatherDetailData,
         error,
         loading,
         request: weatherRequest
@@ -146,12 +147,18 @@ function HomeScreen({ route, navigation }) {
         if(weatherDetails && weatherDetails.city) {
             datasource = weatherDetails;
         }
+        else if (details && details.city) {
+            datasource = details;
+        }
         return datasource.city.name;
     };
     const temperature = () => {
         var datasource = constants.defaultForecast
         if (weatherDetails && weatherDetails.list) {
             datasource = weatherDetails;
+        }
+        else if (details && details.city) {
+            datasource = details;
         }
         return Math.round(datasource.list[0].main.temp);
     };
@@ -160,12 +167,18 @@ function HomeScreen({ route, navigation }) {
         if (weatherDetails && weatherDetails.list) {
             datasource = weatherDetails;
         }
+        else if (details && details.city) {
+            datasource = details;
+        }
         return datasource.list[0].weather[0].description;
     }
     const forecastDate = () => {
         var datasource = constants.defaultForecast
         if (weatherDetails && weatherDetails.list) {
             datasource = weatherDetails;
+        }
+        else if (details && details.city) {
+            datasource = details;
         }
         // default forecast data
         if (datasource.list[0].dt == 0) {
@@ -179,6 +192,9 @@ function HomeScreen({ route, navigation }) {
         var datasource = constants.defaultForecast
         if (weatherDetails && weatherDetails.list) {
             datasource = weatherDetails;
+        }
+        else if (details && details.city) {
+            datasource = details;
         }
         return datasource.temperatureUnit;
     };
@@ -221,6 +237,8 @@ function HomeScreen({ route, navigation }) {
         setDetectLocation(false);
         setSearchButton(false);
         setYourLocation(false);
+        // apply initially in useState hook
+        setWeatherDetails(weatherDetailData);
     }, []);
 
     useEffect(() => {
@@ -307,9 +325,11 @@ function HomeScreen({ route, navigation }) {
                     route.params.name) {
                     
                     let details = getForecastByIdentifier(route.params.locationId);
-                    console.log("[HomeScreen]/useFocusEffect/details", details.uuid);
-                    console.log("[HomeScreen]/useFocusEffect/weatherDetails", weatherDetails.uuid);
-                    console.log("[HomeScreen]/useFocusEffect/defaultForecast", constants.defaultForecast);
+                    setDetails(details);
+
+                    // console.log("[HomeScreen]/useFocusEffect/details", details.uuid);
+                    // console.log("[HomeScreen]/useFocusEffect/weatherDetails", weatherDetails.uuid);
+                    // console.log("[HomeScreen]/useFocusEffect/defaultForecast", constants.defaultForecast);
                     
                     //setDetails(details);
                     

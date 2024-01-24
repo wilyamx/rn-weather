@@ -24,6 +24,11 @@ const weatherImages = [
         main: "Default",
         icon: "0",
         image: require("../../assets/rainbow.png"),
+    },
+    {
+        main: "Unknown",
+        icon: "0",
+        image: require("../../assets/rainbow.png"),
     }
 ];
 
