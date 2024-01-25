@@ -143,7 +143,7 @@ function HomeScreen({ route, navigation }) {
     // re-detect device location button display
     const [detectLocation, setDetectLocation] = useState(false);
     // search button display
-    const [searchButton, setSearchButton] = useState(false);
+    const [searchButton, setSearchButton] = useState(true);
 
     const cityName = () => {
         var datasource = constants.defaultForecast;
@@ -224,7 +224,6 @@ function HomeScreen({ route, navigation }) {
         LOG.info("[HomeScreen]/useEffect", "initialize");
         //
         setDetectLocation(false);
-        setSearchButton(false);
 
         // apply initially weather details in useState hook
         setWeatherDetails(weatherDetailData);
@@ -242,7 +241,6 @@ function HomeScreen({ route, navigation }) {
             );
         }
         setDetectLocation(location != null);
-        setSearchButton(location == null);
     }, [location]);
 
     useEffect(() => {
