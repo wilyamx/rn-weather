@@ -138,7 +138,6 @@ function HomeScreen({ route, navigation }) {
     // detect device location
     const { location, getLocation: getDeviceLocation } = useLocation();
     // your location indicator
-    //const [yourLocation, setYourLocation] = useState(false);
     // use the current location button
     const [useCurrentLocation, setUseCurrentLocation] = useState(true);
     // re-detect device location button display
@@ -271,14 +270,15 @@ function HomeScreen({ route, navigation }) {
 
         if (!weatherDetails.city) return;
 
+        let uuid = weatherDetails.uuid;
         let cityDetails = weatherDetails.city;
         let forecasts = weatherDetails.list;
-
-        if (savedLocations.length == 0) {
+        
+        if (savedLocations.length == 0 && uuid.length > 0) {
             dispatch(addToForecasts(weatherDetails));
         }
         else {
-            if (!savedLocationNames.includes(cityDetails.name)) {
+            if (!savedLocationNames.includes(cityDetails.name) && uuid.length > 0) {
                 LOG.info("[HomeScreen]/useEffect/Added-Location", cityDetails.name);
                 dispatch(addToForecasts(weatherDetails));
             }
@@ -332,9 +332,9 @@ function HomeScreen({ route, navigation }) {
 
     return (
         <>
-        <AppActivityIndicator visible={loading} />
+        <AppActivityIndicator visible={loading || loading2} />
         <Screen>
-            { error &&
+            { (error || error2) &&
                 <>
                     <AppAlert
                         message={"No weather forecast available from your location."}
