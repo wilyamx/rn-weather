@@ -138,7 +138,7 @@ function HomeScreen({ route, navigation }) {
     // detect device location
     const { location, getLocation: getDeviceLocation } = useLocation();
     // your location indicator
-    const [yourLocation, setYourLocation] = useState(false);
+    //const [yourLocation, setYourLocation] = useState(false);
     // use the current location button
     const [useCurrentLocation, setUseCurrentLocation] = useState(true);
     // re-detect device location button display
@@ -210,7 +210,6 @@ function HomeScreen({ route, navigation }) {
     const detectDeviceLocationHandler = () => {
         LOG.info("[HomeScreen]", "detectDeviceLocationHandler");
         setUseCurrentLocation(true);
-        setYourLocation(false);
         //
         getDeviceLocation();
     };
@@ -227,7 +226,6 @@ function HomeScreen({ route, navigation }) {
         //
         setDetectLocation(false);
         setSearchButton(false);
-        setYourLocation(false);
 
         // apply initially weather details in useState hook
         setWeatherDetails(weatherDetailData);
@@ -238,10 +236,6 @@ function HomeScreen({ route, navigation }) {
         //
         if (location) {
             LOG.info("[HomeScreen]/useEffect/weatherRequest");
-            // show your location indicator
-            if (useCurrentLocation) {
-                setYourLocation(true);
-            }
             // request forecast using device location
             weatherRequest(
                 location.latitude,

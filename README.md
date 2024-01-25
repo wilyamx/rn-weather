@@ -2,6 +2,29 @@
 
 React Native Training Assessment Project
 
+## Screenshots
+
+<p float="left">
+	<img src="screenshots/home-dark-mode.png" alt="home-dark-mode" height="400">
+	<img src="screenshots/home-days-forecast-dark-mode.png" alt="home-days-forecast-dark-mode" height="400">
+	<img src="screenshots/home-forecast.png" alt="home-forecast" height="400">
+	<img src="screenshots/home-your-location.png" alt="home-your-location" height="400">
+	<img src="screenshots/home-your-location.png" alt="home-your-location" height="400">
+</p>
+
+<p float="left">
+	<img src="screenshots/locations-dark-mode.png" alt="locations-dark-mode" height="400">
+	<img src="screenshots/locations-celsius.png" alt="locations-celsius" height="400">
+	<img src="screenshots/locations-fahrenheit.png" alt="locations-fahrenheit" height="400">
+	<img src="screenshots/locations-activity-indicator.png" alt="locations-activity-indicator" height="400">
+	<img src="screenshots/locations-delete-selected.png" alt="home-days-forecast.png" height="400">
+</p>
+
+<p float="left">
+	<img src="screenshots/settings-dark-mode.png" alt="settings-dark-mode" height="400">
+	<img src="screenshots/settings-light-mode.png" alt="settings-light-mode" height="400">
+</p>
+
 ## Expo App Initialization
 
 	% ls
