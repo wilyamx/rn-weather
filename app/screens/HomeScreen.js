@@ -457,8 +457,10 @@ const styles = StyleSheet.create({
         backgroundColor: "orange"
     },
     location: {
-        textAlign: "center",
         fontSize: 30,
+        fontWeight: "600",
+        textAlign: "center",
+        textTransform: "uppercase",
     },
     title: {
         textAlign: "center",

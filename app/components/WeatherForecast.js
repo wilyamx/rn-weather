@@ -1,92 +1,28 @@
 import React from 'react';
+import moment, { now } from "moment/moment";
 import { FlatList, View, StyleSheet } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
-import { GestureHandlerRootView, TouchableHighlight } from 'react-native-gesture-handler';
 
-import colors from '../config/colors';
 import CircularIcon from './CircularIcon';
 import WeatherListItem from './lists/WeatherListItem';
 import ListItemSeparator from './lists/ListItemSeparator';
 
-
-const initialForecasts = [
-    {
-        day: "MON",
-        main: {
-            temp: 212.55,
-            humidity: 50
-        },
-        weather: [{
-            id: 803,
-            main: "Clouds",
-            description: "broken clouds",
-            icon: "04d"
-        }]
-    },
-    {
-        day: "TUE",
-        main: {
-            temp: 192.55,
-            humidity: 70
-        },
-        weather: [{
-            id: 803,
-            main: "Rain",
-            description: "broken clouds",
-            icon: "04d"
-        }]
-    },
-    {
-        day: "WED",
-        main: {
-            temp: 294.55,
-            humidity: 60
-        },
-        weather: [{
-            id: 803,
-            main: "Clear",
-            description: "broken clouds",
-            icon: "04d"
-        }]
-    },
-    {
-        day: "THU",
-        main: {
-            temp: 222.55,
-            humidity: 63
-        },
-        weather: [{
-            id: 803,
-            main: "Thunder",
-            description: "broken clouds",
-            icon: "04d"
-        }]
-    },
-    {
-        day: "FRI",
-        main: {
-            temp: 202.55,
-            humidity: 55
-        },
-        weather: [{
-            id: 803,
-            main: "Clouds",
-            description: "broken clouds",
-            icon: "04d"
-        }]
-    }
-    
-];
-
 function WeatherForecast({ forecast, onRefresh, onDismiss }) {
     const theme = useTheme();
+
+    const timeAgo = () => {
+        let momentDate = moment(forecast.dt * 1000);
+        let momentDate2 = moment(forecast.dt_txt);
+        
+        return momentDate2.fromNow();
+    };
 
     return (
         <View style={[styles.container, { backgroundColor: theme.colors.onSecondary }]}>
             <View style={styles.header}>
                 <View>
                     <Text variant='titleLarge' style={styles.title}>{forecast.length} Day Forecasts</Text>
-                    <Text variant='titleSmall' style={{color: theme.colors.secondary}}>Updated 12m ago</Text>
+                    <Text variant='titleSmall' style={{color: theme.colors.secondary}}>{timeAgo()}</Text>
                 </View>
                 <View style={styles.actions}>
                     <CircularIcon
