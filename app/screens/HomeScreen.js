@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
-import { useFocusEffect, useNavigationState } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from "moment/moment";
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -24,7 +24,6 @@ import TemperatureUnit from '../components/TemperatureUnit';
 import YourLocation from '../components/YourLocation';
 import WeatherForecast from '../components/WeatherForecast';
 import LOG from '../utility/logger';
-
 
 const DEBUG = constants.debug;
 
@@ -111,12 +110,11 @@ function HomeScreen({ route, navigation }) {
         let networkState = await Network.getNetworkStateAsync();
         setIsInternetReachable(networkState.isInternetReachable);
         //
-        LOG.info("[HomeScreen]/networkState", isInternetReachable);
+        //LOG.info("[HomeScreen]/networkState", isInternetReachable);
     })();
 
     // api
 
-    const [details, setDetails] = useState(constants.defaultForecast);
     const [weatherDetails, setWeatherDetails] = useState(constants.defaultForecast);
     
     const {
@@ -126,6 +124,13 @@ function HomeScreen({ route, navigation }) {
         request: weatherRequest
     } = useApi(forecastApi.getForecastByCoordinate);
 
+    const {
+        data: weatherDetailData2,
+        error: error2,
+        loading: loading2,
+        request: weatherRequest2
+    } = useApi(forecastApi.getForecastByLocationName);
+
     // ui
 
     const theme = useTheme();
@@ -134,6 +139,8 @@ function HomeScreen({ route, navigation }) {
     const { location, getLocation: getDeviceLocation } = useLocation();
     // your location indicator
     const [yourLocation, setYourLocation] = useState(false);
+    // use the current location button
+    const [useCurrentLocation, setUseCurrentLocation] = useState(true);
     // re-detect device location button display
     const [detectLocation, setDetectLocation] = useState(false);
     // search button display
@@ -144,18 +151,12 @@ function HomeScreen({ route, navigation }) {
         if(weatherDetails && weatherDetails.city) {
             datasource = weatherDetails;
         }
-        else if (details && details.city) {
-            datasource = details;
-        }
         return datasource.city.name;
     };
     const temperature = () => {
         var datasource = constants.defaultForecast
         if (weatherDetails && weatherDetails.list) {
             datasource = weatherDetails;
-        }
-        else if (details && details.city) {
-            datasource = details;
         }
         return Math.round(datasource.list[0].main.temp);
     };
@@ -164,18 +165,12 @@ function HomeScreen({ route, navigation }) {
         if (weatherDetails && weatherDetails.list) {
             datasource = weatherDetails;
         }
-        else if (details && details.city) {
-            datasource = details;
-        }
         return datasource.list[0].weather[0].description;
     }
     const forecastDate = () => {
         var datasource = constants.defaultForecast
         if (weatherDetails && weatherDetails.list) {
             datasource = weatherDetails;
-        }
-        else if (details && details.city) {
-            datasource = details;
         }
         // default forecast data
         if (datasource.list[0].dt == 0) {
@@ -189,9 +184,6 @@ function HomeScreen({ route, navigation }) {
         var datasource = constants.defaultForecast
         if (weatherDetails && weatherDetails.list) {
             datasource = weatherDetails;
-        }
-        else if (details && details.city) {
-            datasource = details;
         }
         return datasource.temperatureUnit;
     };
@@ -217,6 +209,7 @@ function HomeScreen({ route, navigation }) {
     };
     const detectDeviceLocationHandler = () => {
         LOG.info("[HomeScreen]", "detectDeviceLocationHandler");
+        setUseCurrentLocation(true);
         setYourLocation(false);
         //
         getDeviceLocation();
@@ -245,6 +238,10 @@ function HomeScreen({ route, navigation }) {
         //
         if (location) {
             LOG.info("[HomeScreen]/useEffect/weatherRequest");
+            // show your location indicator
+            if (useCurrentLocation) {
+                setYourLocation(true);
+            }
             // request forecast using device location
             weatherRequest(
                 location.latitude,
@@ -260,6 +257,12 @@ function HomeScreen({ route, navigation }) {
         //
         setWeatherDetails(weatherDetailData);
     }, [weatherDetailData]);
+
+    useEffect(() => {
+        LOG.info("[HomeScreen]/useEffect/weatherDetailData2");
+        //
+        setWeatherDetails(weatherDetailData2);
+    }, [weatherDetailData2]);
 
     useEffect(() => {
         LOG.info("[HomeScreen]/useEffect/weatherDetails");
@@ -279,22 +282,19 @@ function HomeScreen({ route, navigation }) {
 
         if (savedLocations.length == 0) {
             dispatch(addToForecasts(weatherDetails));
-            setYourLocation(true);
         }
         else {
             if (!savedLocationNames.includes(cityDetails.name)) {
                 LOG.info("[HomeScreen]/useEffect/Added-Location", cityDetails.name);
                 dispatch(addToForecasts(weatherDetails));
-                setYourLocation(true);
             }
             else {
                 LOG.info("[HomeScreen]/useEffect/Existing-Location", cityDetails.name);
                 dispatch(updateFromForecasts(weatherDetails));
-                setYourLocation(true);
             }
         }
 
-        if (location) {
+        if (location && useCurrentLocation) {
             dispatch(setCurrentLocation({
                 latitude: location.latitude,
                 longitude: location.longitude,
@@ -302,8 +302,6 @@ function HomeScreen({ route, navigation }) {
             }))
         }
     
-        setDetails(weatherDetails);
-
     }, [weatherDetails]);
 
     // works every time the page is navigated even with same route params
@@ -318,19 +316,16 @@ function HomeScreen({ route, navigation }) {
                     route.params.cityId &&
                     route.params.name) {
                     
+                    setUseCurrentLocation(route.params.isCurrentLocation);
+                    
                     let selectedForecast = getForecastByIdentifier(route.params.locationId);
                     setWeatherDetails(selectedForecast);
 
                     if (isInternetReachable) {
                         // request for updated weather forecast
                         LOG.info("[HomeScreen]/useFocusEffect/online");
-
-                        let coord = selectedForecast.city.coord;
-                        LOG.info("[HomeScreen]/useFocusEffect/weatherRequest", selectedForecast.city.name, coord);
-                        weatherRequest(
-                            coord.lat,
-                            coord.lon
-                        );
+                        LOG.info("[HomeScreen]/useFocusEffect/weatherRequest", selectedForecast.city.name);
+                        weatherRequest2(selectedForecast.city.name)
                     }
                     else {
                         // just display the saved data
@@ -384,7 +379,7 @@ function HomeScreen({ route, navigation }) {
                 </View>
 
                 <View style={styles.weatherContainer}>
-                    { yourLocation && <YourLocation style={styles.yourLocation} marginBottom={20} /> }
+                    { useCurrentLocation && <YourLocation style={styles.yourLocation} marginBottom={20} /> }
                     <Text style={styles.location}>{cityName()}</Text>
                     <TemperatureUnit
                         temperature={

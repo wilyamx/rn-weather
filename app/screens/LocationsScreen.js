@@ -28,7 +28,8 @@ function LocationsScreen({ navigation }) {
 
     // ui
     const [searchQuery, setSearchQuery] = useState('');
- 
+    const [refreshing, setRefreshing] = useState(false);
+
     // api
     const {
         data: weatherDetails,
@@ -57,14 +58,22 @@ function LocationsScreen({ navigation }) {
         weatherRequest(key, temperatureUnit);
     };
     const handleSelectedForecast = (forecast) => {
-        LOG.info("[LocationScreen]/Selected-Location", forecast.uuid, forecast.city.id, forecast.city.name);
+        const isCurrentLocation = savedCurrentLocation.place == forecast.city.name 
+        LOG.info("[LocationScreen]/Selected-Location", forecast.uuid, forecast.city.name, isCurrentLocation);
+        //
         navigation.navigate("Home", {
             locationId: forecast.uuid,
             cityId: forecast.city.id,
             name: forecast.city.name,
+            isCurrentLocation: isCurrentLocation,
         });
     };
-    
+    const handlePullToRefresh = () => {
+        LOG.info("[LocationScreen]/handlePullToRefresh");
+    };
+
+    // hooks
+
     useEffect(() => {
         console.info("[LocationsScreen]/Temperature-Unit-Saved", temperatureUnit);
     }, []);
@@ -127,7 +136,7 @@ function LocationsScreen({ navigation }) {
             />
 
             <FlatList
-                data={savedLocations}
+                data={savedLocations.slice().sort((a, b) => a.city.name.localeCompare(b.city.name))}
                 keyExtractor={item => item.uuid.toString()}
                 renderItem={({ item }) => 
                     <LocationListItem
@@ -139,6 +148,9 @@ function LocationsScreen({ navigation }) {
                         }
                     />
                 }
+                refreshing={refreshing}
+                onRefresh={handlePullToRefresh}
+                
             />
         </Screen>
         </>
