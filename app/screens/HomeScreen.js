@@ -104,7 +104,7 @@ function HomeScreen({ route, navigation }) {
     const savedLocations = useSelector(state => state.weather.forecasts);
     const dispatch = useDispatch();
 
-    // hardware
+    // hardware status
 
     const [isInternetReachable, setIsInternetReachable] = useState(false);
     (async () => {
@@ -119,7 +119,7 @@ function HomeScreen({ route, navigation }) {
     const [details, setDetails] = useState(constants.defaultForecast);
     const [weatherDetails, setWeatherDetails] = useState(constants.defaultForecast);
     
-    var {
+    const {
         data: weatherDetailData,
         error,
         loading,
@@ -140,9 +140,6 @@ function HomeScreen({ route, navigation }) {
     const [searchButton, setSearchButton] = useState(false);
 
     const cityName = () => {
-        console.log("[HomeScreen]/cityName/weatherDetails", weatherDetails.uuid);
-        console.log("[HomeScreen]/cityName/details", details.uuid);
-
         var datasource = constants.defaultForecast;
         if(weatherDetails && weatherDetails.city) {
             datasource = weatherDetails;
@@ -209,7 +206,7 @@ function HomeScreen({ route, navigation }) {
     // actions
 
     const refreshHandler = () => {
-        console.log("[HomeScreen]", "refreshHandler");
+        LOG.info("[HomeScreen]", "refreshHandler");
         if (location) {
             // request forecast using device location
             weatherRequest(
@@ -219,12 +216,13 @@ function HomeScreen({ route, navigation }) {
         }
     };
     const detectDeviceLocationHandler = () => {
-        console.log("[HomeScreen]", "detectDeviceLocationHandler");
+        LOG.info("[HomeScreen]", "detectDeviceLocationHandler");
         setYourLocation(false);
+        //
         getDeviceLocation();
     };
     const searchLocationsHandler = () => {
-        console.log("[HomeScreen]", "searchLocationsHandler");
+        LOG.info("[HomeScreen]", "searchLocationsHandler");
         navigation.navigate("Locations");
     };
 
@@ -237,14 +235,16 @@ function HomeScreen({ route, navigation }) {
         setDetectLocation(false);
         setSearchButton(false);
         setYourLocation(false);
-        // apply initially in useState hook
+
+        // apply initially weather details in useState hook
         setWeatherDetails(weatherDetailData);
     }, []);
 
     useEffect(() => {
-        LOG.info("[HomeScreen]/useEffect", "Device-Location", location);
+        LOG.info("[HomeScreen]/useEffect/Device-Location", location);
         //
         if (location) {
+            LOG.info("[HomeScreen]/useEffect/weatherRequest");
             // request forecast using device location
             weatherRequest(
                 location.latitude,
@@ -254,6 +254,12 @@ function HomeScreen({ route, navigation }) {
         setDetectLocation(location != null);
         setSearchButton(location == null);
     }, [location]);
+
+    useEffect(() => {
+        LOG.info("[HomeScreen]/useEffect/weatherDetailData");
+        //
+        setWeatherDetails(weatherDetailData);
+    }, [weatherDetailData]);
 
     useEffect(() => {
         LOG.info("[HomeScreen]/useEffect/weatherDetails");
@@ -277,12 +283,12 @@ function HomeScreen({ route, navigation }) {
         }
         else {
             if (!savedLocationNames.includes(cityDetails.name)) {
-                LOG.info("[HomeScreen]/Added-Location", cityDetails.name);
+                LOG.info("[HomeScreen]/useEffect/Added-Location", cityDetails.name);
                 dispatch(addToForecasts(weatherDetails));
                 setYourLocation(true);
             }
             else {
-                LOG.info("[HomeScreen]/Existing-Location", cityDetails.name);
+                LOG.info("[HomeScreen]/useEffect/Existing-Location", cityDetails.name);
                 dispatch(updateFromForecasts(weatherDetails));
                 setYourLocation(true);
             }
@@ -295,22 +301,10 @@ function HomeScreen({ route, navigation }) {
                 place: weatherDetails.city.name,
             }))
         }
+    
+        setDetails(weatherDetails);
 
     }, [weatherDetails]);
-
-    useEffect(() => {
-        LOG.info("[HomeScreen]/useEffect/details");
-        
-        if (!details) return;
-
-        if (!details.list) return;
-        if (details.list.length == 0) return;
-
-        if (!details.city) return;
-
-        let cityDetails = details.city;
-        let forecasts = details.list;
-    }, [details]);
 
     // works every time the page is navigated even with same route params
     useFocusEffect(
@@ -324,21 +318,24 @@ function HomeScreen({ route, navigation }) {
                     route.params.cityId &&
                     route.params.name) {
                     
-                    let details = getForecastByIdentifier(route.params.locationId);
-                    setDetails(details);
+                    let selectedForecast = getForecastByIdentifier(route.params.locationId);
+                    setWeatherDetails(selectedForecast);
 
-                    // console.log("[HomeScreen]/useFocusEffect/details", details.uuid);
-                    // console.log("[HomeScreen]/useFocusEffect/weatherDetails", weatherDetails.uuid);
-                    // console.log("[HomeScreen]/useFocusEffect/defaultForecast", constants.defaultForecast);
-                    
-                    //setDetails(details);
-                    
-                    // if (isInternetReachable) {
-                    //     console.log("HomeScreen]/1111");
-                    // }
-                    // else {
-                    //     weatherDetails = getForecastByIdentifier(route.params.locationId);
-                    // }
+                    if (isInternetReachable) {
+                        // request for updated weather forecast
+                        LOG.info("[HomeScreen]/useFocusEffect/online");
+
+                        let coord = selectedForecast.city.coord;
+                        LOG.info("[HomeScreen]/useFocusEffect/weatherRequest", selectedForecast.city.name, coord);
+                        weatherRequest(
+                            coord.lat,
+                            coord.lon
+                        );
+                    }
+                    else {
+                        // just display the saved data
+                        LOG.info("[HomeScreen]/useFocusEffect/offline");
+                    }
                 }
             }
         }, [route])
