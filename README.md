@@ -10,7 +10,6 @@ React Native Training Assessment Project
 	<img src="screenshots/home-days-forecast-dark-mode.png" alt="home-days-forecast-dark-mode" height="400">
 	<img src="screenshots/home-forecast.png" alt="home-forecast" height="400">
 	<img src="screenshots/home-your-location.png" alt="home-your-location" height="400">
-	<img src="screenshots/home-your-location.png" alt="home-your-location" height="400">
 </p>
 
 <p float="left">
@@ -25,6 +24,15 @@ React Native Training Assessment Project
 	<img src="screenshots/settings-dark-mode.png" alt="settings-dark-mode" height="400">
 	<img src="screenshots/settings-light-mode.png" alt="settings-light-mode" height="400">
 </p>
+
+## Features
+
+1. Get weather forecast to any location
+1. Get weather location of current location
+1. Switching Celsius to Fahrenheit temperature unit
+1. Persistent data to allow display offline data
+1. Delete persisted data
+1. Dark and Light theme mode
 
 ## Expo App Initialization
 
@@ -53,7 +61,7 @@ React Native Training Assessment Project
 
 * **rnfc** - Function Component
 
-## Libraries
+## Libraries and APIs
 
 1. [Expo SDK](https://docs.expo.dev/versions/latest/) - provides access to device and system functionality such as contacts, camera, gyroscope, GPS location, and so on, in the form of packages
 	* [Expo Location](https://docs.expo.dev/versions/latest/sdk/location/) - provides access to reading geolocation information, polling current location from the device
@@ -70,6 +78,7 @@ React Native Training Assessment Project
 1. [React Native Dot Env](https://github.com/goatandsheep/react-native-dotenv) - environment variables
 1. [React Native UUID](https://www.npmjs.com/package/react-native-uuid)
 1. [React Navigation](https://reactnavigation.org/docs/getting-started/)
+1. [Open Weather Map API](https://openweathermap.org/forecast5) - 5 day forecast is available at any location on the globe
 
 ## References
 
