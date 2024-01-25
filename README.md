@@ -89,4 +89,4 @@ React Native Training Assessment Project
 
 1. [Dynamic Switching of Themes](https://medium.com/@SeishinBG/dynamic-switching-of-themes-in-react-native-app-the-funky-way-with-hooks-48b57ab62a79)	
 
-1. [How to persist the shopping cart state to local storage](How to persist the shopping cart state to local storage)
+1. [How to persist the shopping cart state to local storage](https://www.youtube.com/watch?v=shLz_kmA68Q)
