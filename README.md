@@ -5,6 +5,7 @@ React Native Training Assessment Project
 ## Screenshots
 
 <p float="left">
+	<img src="screenshots/location-use-permission.png" alt="location-use-permission" height="400">
 	<img src="screenshots/home-dark-mode.png" alt="home-dark-mode" height="400">
 	<img src="screenshots/home-days-forecast-dark-mode.png" alt="home-days-forecast-dark-mode" height="400">
 	<img src="screenshots/home-forecast.png" alt="home-forecast" height="400">
