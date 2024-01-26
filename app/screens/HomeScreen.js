@@ -12,7 +12,6 @@ import forecastApi from '../api/forecast';
 import useLocation from '../hooks/useLocation';
 import {
     addToForecasts,
-    displayedToHome,
     updateFromForecasts,
 } from '../redux/weather/weatherActions';
 import { setCurrentLocation } from '../redux/location/locationActions';
@@ -102,6 +101,7 @@ function HomeScreen({ route, navigation }) {
 
     const temperatureUnitSaved = useSelector(state => state.theme.temperatureUnit);
     const savedLocations = useSelector(state => state.weather.forecasts);
+    const homeDisplayedForecast = useSelector(state => state.weather.homeDisplayForecast);
     const dispatch = useDispatch();
 
     // hardware status
@@ -109,7 +109,7 @@ function HomeScreen({ route, navigation }) {
     const [isInternetReachable, setIsInternetReachable] = useState(false);
     (async () => {
         let networkState = await Network.getNetworkStateAsync();
-        setIsInternetReachable(networkState.isInternetReachable);
+        //setIsInternetReachable(networkState.isInternetReachable);
         //
         //LOG.info("[HomeScreen]/networkState", isInternetReachable);
     })();
@@ -194,7 +194,7 @@ function HomeScreen({ route, navigation }) {
         //LOG.info("[HomeScreen]/getForecastByIdentifier", uuid, savedLocations.length, validForecasts.length);
         return validForecasts[0];
     };
-
+    
     // actions
 
     const refreshHandler = () => {
@@ -226,20 +226,29 @@ function HomeScreen({ route, navigation }) {
         //
         setDetectLocation(false);
 
-        // apply initially weather details in useState hook
-        setWeatherDetails(weatherDetailData);
+        if (isInternetReachable) {
+            // apply initially weather details in useState hook
+            setWeatherDetails(weatherDetailData);
+        }
     }, []);
 
     useEffect(() => {
         LOG.info("[HomeScreen]/useEffect/Device-Location", location);
         //
         if (location) {
-            LOG.info("[HomeScreen]/useEffect/weatherRequest");
-            // request forecast using device location
-            weatherRequest(
-                location.latitude,
-                location.longitude
-            );
+            if (isInternetReachable) {
+                LOG.info("[HomeScreen]/useEffect/weatherRequest");
+                // request forecast using device location
+                weatherRequest(
+                    location.latitude,
+                    location.longitude
+                );
+            }
+            else {
+                LOG.info("[HomeScreen]/useEffect/loadLocationHomeDisplay");
+                let forecastHomeDisplayed = getForecastByIdentifier(homeDisplayedForecast.uuid)
+                setWeatherDetails(forecastHomeDisplayed);
+            }
         }
         setDetectLocation(location != null);
     }, [location]);
@@ -248,7 +257,6 @@ function HomeScreen({ route, navigation }) {
         LOG.info("[HomeScreen]/useEffect/weatherDetailData");
         //
         setWeatherDetails(weatherDetailData);
-        dispatch(displayedToHome(weatherDetailData.uuid));
         //
         // Update the home display status from locations tab
         let data = weatherDetailData;

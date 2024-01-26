@@ -97,6 +97,7 @@ function LocationListItem({
 }) {
     // redux
     const temperatureUnitSaved = useSelector(state => state.theme.temperatureUnit);
+    const homeDisplayedForecast = useSelector(state => state.weather.homeDisplayForecast);
 
     // ui
 
@@ -130,8 +131,8 @@ function LocationListItem({
         return locationName === currentLocation.place;
     };
     const homeDisplayed = () => {
-        //console.log("LocationListItem/homeDisplayed", location.homeDisplayed);
-        return location.homeDisplayed == 1;
+        //console.log("LocationListItem/homeDisplayed", homeDisplayedForecast);
+        return homeDisplayedForecast.uuid === location.uuid;
     };
 
     return (

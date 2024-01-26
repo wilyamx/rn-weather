@@ -7,6 +7,7 @@ import {
 
 const initialState = {
     forecasts: [],
+    homeDisplayForecast: {},
 };
 
 const weatherReducer = (state = initialState, action) => {
@@ -34,20 +35,7 @@ const weatherReducer = (state = initialState, action) => {
         case DISPLAYED_TO_HOME:
             return {
                 ...state,
-                forecasts: state.forecasts.map((forecast) => {
-                    if (forecast.uuid === action.payload) {
-                        console.log("DISPLAYED_TO_HOME", forecast.city.name, false)
-                        return { ...forecast,
-                            homeDisplayed: 1,
-                        }
-                    }
-                    else {
-                        console.log("DISPLAYED_TO_HOME", forecast.city.name, false)
-                        return { ...forecast,
-                            homeDisplayed: 0,
-                        }
-                    }
-                })
+                homeDisplayForecast: action.payload
             }
         default:
             return state

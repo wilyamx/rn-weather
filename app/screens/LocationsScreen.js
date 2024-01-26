@@ -24,6 +24,7 @@ function LocationsScreen({ navigation }) {
     // redux
     const temperatureUnit = useSelector(state => state.theme.temperatureUnit);
     const savedLocations = useSelector(state => state.weather.forecasts);
+    const homeDisplayedForecast = useSelector(state => state.weather.homeDisplayForecast);
     const savedCurrentLocation = useSelector(state => state.location.currentLocation);
     const dispatch = useDispatch();
 
@@ -64,7 +65,7 @@ function LocationsScreen({ navigation }) {
         LOG.info("[LocationScreen]/Selected-Location", forecast.uuid, forecast.city.name, isCurrentLocation, homeDisplayed);
         
         // indicator that this location displayed from home tab
-        dispatch(displayedToHome(forecast.uuid));
+        dispatch(displayedToHome(forecast));
 
         navigation.navigate("Home", {
             locationId: forecast.uuid,
@@ -75,9 +76,7 @@ function LocationsScreen({ navigation }) {
     };
     const handlePullToRefresh = () => {
         LOG.info("[LocationScreen]/handlePullToRefresh");
-        //
-        let savedLocationNames = savedLocations.map((forecast) => forecast.homeDisplayed);
-        LOG.info("[LocationScreen]/Saved-Locations", savedLocationNames);
+        LOG.info("[LocationScreen]/Home-Displayed-Forecast", homeDisplayedForecast.city.name);
     };
 
     // hooks

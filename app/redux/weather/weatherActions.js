@@ -30,7 +30,7 @@ export const updateFromForecasts = (info = {}) => {
 };
 
 // info - uuid
-export const displayedToHome = (info = "") => {
+export const displayedToHome = (info = {}) => {
     return {
         type: DISPLAYED_TO_HOME,
         payload: info,
