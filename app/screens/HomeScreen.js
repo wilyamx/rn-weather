@@ -12,6 +12,7 @@ import forecastApi from '../api/forecast';
 import useLocation from '../hooks/useLocation';
 import {
     addToForecasts,
+    displayedToHome,
     updateFromForecasts,
 } from '../redux/weather/weatherActions';
 import { setCurrentLocation } from '../redux/location/locationActions';
@@ -247,12 +248,35 @@ function HomeScreen({ route, navigation }) {
         LOG.info("[HomeScreen]/useEffect/weatherDetailData");
         //
         setWeatherDetails(weatherDetailData);
+        dispatch(displayedToHome(weatherDetailData.uuid));
+        //
+        // Update the home display status from locations tab
+        let data = weatherDetailData;
+        data.homeDisplayed = true;
+
+        if (!data) return;
+        if (!data.list) return;
+        if (data.list.length == 0) return;
+        if (!data.city) return;
+
+        dispatch(updateFromForecasts(data));
     }, [weatherDetailData]);
 
     useEffect(() => {
         LOG.info("[HomeScreen]/useEffect/weatherDetailData2");
         //
         setWeatherDetails(weatherDetailData2);
+        //
+        // Update the home display status from locations tab
+        let data = weatherDetailData2;
+        data.homeDisplayed = true;
+
+        if (!data) return;
+        if (!data.list) return;
+        if (data.list.length == 0) return;
+        if (!data.city) return;
+
+        dispatch(updateFromForecasts(data));
     }, [weatherDetailData2]);
 
     useEffect(() => {
@@ -311,17 +335,18 @@ function HomeScreen({ route, navigation }) {
                     setUseCurrentLocation(route.params.isCurrentLocation);
                     
                     let selectedForecast = getForecastByIdentifier(route.params.locationId);
-                    setWeatherDetails(selectedForecast);
-
+                    
                     if (isInternetReachable) {
                         // request for updated weather forecast
                         LOG.info("[HomeScreen]/useFocusEffect/online");
                         LOG.info("[HomeScreen]/useFocusEffect/weatherRequest", selectedForecast.city.name);
+                        //
                         weatherRequest2(selectedForecast.city.name)
                     }
                     else {
                         // just display the saved data
                         LOG.info("[HomeScreen]/useFocusEffect/offline");
+                        setWeatherDetails(selectedForecast);
                     }
                 }
             }

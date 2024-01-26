@@ -1,8 +1,8 @@
-import forecast from '../../api/forecast';
 import {
     ADD_TO_FORECASTS,
     REMOVE_FROM_FORECASTS,
     UPDATE_FROM_FORECASTS,
+    DISPLAYED_TO_HOME,
 } from './weatherTypes';
 
 const initialState = {
@@ -29,6 +29,24 @@ const weatherReducer = (state = initialState, action) => {
                         return action.payload;
                     }
                     return forecast;
+                })
+            }
+        case DISPLAYED_TO_HOME:
+            return {
+                ...state,
+                forecasts: state.forecasts.map((forecast) => {
+                    if (forecast.uuid === action.payload) {
+                        console.log("DISPLAYED_TO_HOME", forecast.city.name, false)
+                        return { ...forecast,
+                            homeDisplayed: 1,
+                        }
+                    }
+                    else {
+                        console.log("DISPLAYED_TO_HOME", forecast.city.name, false)
+                        return { ...forecast,
+                            homeDisplayed: 0,
+                        }
+                    }
                 })
             }
         default:

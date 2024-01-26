@@ -70,6 +70,8 @@ const getForecastByLocationName = async (
         response.data.temperatureUnit = units;
         // Cebu City and Mandaue have same city.id
         response.data.uuid = uuid.v4();
+        // home displayed location
+        response.data.homeDisplayed = 0;
     });
 
     return await client.get(endpoint, params);
@@ -147,6 +149,8 @@ const getForecastByCoordinate = async (
         response.data.temperatureUnit = units;
         // Cebu City and Mandaue have same city.id
         response.data.uuid = uuid.v4();
+        // home displayed location
+        response.data.homeDisplayed = 0;
     });
     
     return await client.get(endpoint, params);

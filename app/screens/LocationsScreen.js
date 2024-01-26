@@ -11,6 +11,7 @@ import {
     addToForecasts,
     removeFromForecasts,
     updateFromForecasts,
+    displayedToHome,
 } from '../redux/weather/weatherActions';
 
 import AppActivityIndicator from '../components/AppActivityIndicator';
@@ -58,9 +59,13 @@ function LocationsScreen({ navigation }) {
         weatherRequest(key, temperatureUnit);
     };
     const handleSelectedForecast = (forecast) => {
-        const isCurrentLocation = savedCurrentLocation.place == forecast.city.name 
-        LOG.info("[LocationScreen]/Selected-Location", forecast.uuid, forecast.city.name, isCurrentLocation);
-        //
+        const isCurrentLocation = savedCurrentLocation.place == forecast.city.name
+        const homeDisplayed = forecast.homeDisplayed; 
+        LOG.info("[LocationScreen]/Selected-Location", forecast.uuid, forecast.city.name, isCurrentLocation, homeDisplayed);
+        
+        // indicator that this location displayed from home tab
+        dispatch(displayedToHome(forecast.uuid));
+
         navigation.navigate("Home", {
             locationId: forecast.uuid,
             cityId: forecast.city.id,
@@ -70,6 +75,9 @@ function LocationsScreen({ navigation }) {
     };
     const handlePullToRefresh = () => {
         LOG.info("[LocationScreen]/handlePullToRefresh");
+        //
+        let savedLocationNames = savedLocations.map((forecast) => forecast.homeDisplayed);
+        LOG.info("[LocationScreen]/Saved-Locations", savedLocationNames);
     };
 
     // hooks

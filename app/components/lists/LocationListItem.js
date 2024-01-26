@@ -7,6 +7,7 @@ import { Swipeable } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 
+import CircularIcon from "../CircularIcon";
 import colors from "../../config/colors";
 import constants from "../../config/constants";
 import TemperatureUnit from "../TemperatureUnit";
@@ -128,6 +129,10 @@ function LocationListItem({
     const isCurrentLocation = () => {
         return locationName === currentLocation.place;
     };
+    const homeDisplayed = () => {
+        //console.log("LocationListItem/homeDisplayed", location.homeDisplayed);
+        return location.homeDisplayed == 1;
+    };
 
     return (
         <GestureHandlerRootView>
@@ -140,6 +145,14 @@ function LocationListItem({
                         style={styles.weatherImage}
                         resizeMode="contain"
                     />
+                    { homeDisplayed() &&
+                        <View style={styles.homeDisplayContainer}>
+                            <CircularIcon
+                                image={"home"}
+                                backgroundColor={theme.colors.primary}
+                            />
+                        </View>
+                    }
                     <View style={styles.weatherTextContainer}>
                         <Text variant='titleLarge' style={styles.weatherText}>{forecastOfTheDay.weather[0].main}</Text>
                         <Text
@@ -186,6 +199,11 @@ const styles = StyleSheet.create({
         marginTop: 35,
         padding: 15,
         height: 160,
+    },
+    homeDisplayContainer: {
+        position: "absolute",
+        top: -25,
+        right: 10,
     },
     location: {
         fontWeight: "500",

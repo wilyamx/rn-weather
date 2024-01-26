@@ -13,6 +13,7 @@ export default {
     defaultForecast: {
         uuid: "",
         temperatureUnit: "metric",
+        homeDisplayed: 0,
         city: {
             name: "",
         },

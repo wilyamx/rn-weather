@@ -22,7 +22,7 @@ function WeatherForecast({ forecast, onRefresh, onDismiss }) {
             <View style={styles.header}>
                 <View>
                     <Text variant='titleLarge' style={styles.title}>{forecast.length} Day Forecasts</Text>
-                    <Text variant='titleSmall' style={{color: theme.colors.secondary}}>{timeAgo()}</Text>
+                    <Text variant='titleSmall' style={{color: theme.colors.secondary}}>Updated {timeAgo()}</Text>
                 </View>
                 <View style={styles.actions}>
                     <CircularIcon
