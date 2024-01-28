@@ -363,20 +363,19 @@ function HomeScreen({ route, navigation }) {
                 // from locations
                 LOG.info("[HomeScreen]/useFocusEffect/route.params", route.params);
                 LOG.info("[HomeScreen]/useFocusEffect/homeDisplayedForecast", homeDisplayedForecast.city);
-                //
+                
+                // user selected a location from locations tab and navigate to home tab
                 if (route.params.locationId &&
                     route.params.cityId &&
                     route.params.name) {
                     
                     setUseCurrentLocation(route.params.isCurrentLocation);
-                    
-                    let selectedForecast = getForecastByIdentifier(route.params.locationId);
-                    
+                    const selectedForecast = getForecastByIdentifier(route.params.locationId);
+
                     if (isInternetReachable) {
-                        // request for updated weather forecast
                         LOG.info("[HomeScreen]/useFocusEffect/online");
                         LOG.info("[HomeScreen]/useFocusEffect/weatherRequest", selectedForecast.city.name);
-                        //
+                        // request for updated weather forecast
                         weatherRequestByLocationName(selectedForecast.city.name)
                     }
                     else {
@@ -385,6 +384,26 @@ function HomeScreen({ route, navigation }) {
                         setWeatherDetails(selectedForecast);
                     }
                 }
+                // user just switch from location tab to home tab only
+                else {
+                    const selectedForecast = getForecastByIdentifier(homeDisplayedForecast.uuid);
+
+                    if (isInternetReachable) {
+                        LOG.info("[HomeScreen]/useFocusEffect/online");
+                        LOG.info("[HomeScreen]/useFocusEffect/weatherRequest", selectedForecast.city.name);
+                        // request for updated weather forecast
+                        // only if current displayed is not the home displayed location
+                        if (weatherDetails.uuid != selectedForecast.uuid) {
+                            weatherRequestByLocationName(selectedForecast.city.name)
+                        }
+                    }
+                    else {
+                        // just display the saved data
+                        LOG.info("[HomeScreen]/useFocusEffect/offline");
+                        setWeatherDetails(selectedForecast);
+                    }
+                }
+               
             }
         }, [route])
     );

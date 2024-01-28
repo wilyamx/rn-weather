@@ -11,6 +11,7 @@ import {
     addToForecasts,
     removeFromForecasts,
     updateFromForecasts,
+    displayedToHome,
 } from '../redux/weather/weatherActions';
 
 import AppActivityIndicator from '../components/AppActivityIndicator';
@@ -18,6 +19,16 @@ import AppAlert from '../components/AppAlert';
 import ListItemDeleteAction from '../components/lists/ListItemDeleteAction';
 import LocationListItem from '../components/lists/LocationListItem';
 import Screen from '../components/Screen';
+
+const showAlert = (title, message) => {
+    Alert.alert(
+        title,
+        message,
+        [
+            { text: "OK" },
+        ]
+    );
+};
 
 function LocationsScreen({ navigation }) {
     // redux
@@ -43,17 +54,18 @@ function LocationsScreen({ navigation }) {
 
     const handleDelete = async (location) => {
         LOG.info("[LocationScreen]/Remove-Selected-Forecast", location.city.name);
+        if (homeDisplayedForecast.uuid == location.uuid) {
+            showAlert(
+                "Deleting Selected Location",
+                "You cannot delete this because currently displayed from home."
+            );
+            return;
+        }
         dispatch(removeFromForecasts(location.city.name));
     };
     const handleSubmitSearchKey = async (key) => {
         if (key.length == 0) {
-            Alert.alert(
-                "Empty Searchbar",
-                "Please input valid place.",
-                [
-                    { text: "OK" },
-                ]
-            );
+            showAlert("Empty Searchbar", "Please input valid place.");
             return;
         }
         weatherRequest(key, temperatureUnit);
@@ -112,6 +124,7 @@ function LocationsScreen({ navigation }) {
                 dispatch(updateFromForecasts(weatherDetails));
                 setSearchQuery("");
             }
+            dispatch(displayedToHome(weatherDetails));
         }
     }, [weatherDetails]);
 
