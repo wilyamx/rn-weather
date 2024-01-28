@@ -110,7 +110,7 @@ function HomeScreen({ route, navigation }) {
     const [isInternetReachable, setIsInternetReachable] = useState(false);
     (async () => {
         let networkState = await Network.getNetworkStateAsync();
-        //setIsInternetReachable(networkState.isInternetReachable);
+        setIsInternetReachable(networkState.isInternetReachable);
         //
         //LOG.info("[HomeScreen]/networkState", isInternetReachable);
     })();
@@ -272,8 +272,6 @@ function HomeScreen({ route, navigation }) {
         LOG.info("[HomeScreen]/useEffect/weatherDetailData");
         //
         setWeatherDetails(weatherDetailData);
-        // indicator that this location displayed from home tab
-        dispatch(displayedToHome(weatherDetailData));
         //
         // Update the home display status from locations tab
         let data = weatherDetailData;
@@ -284,7 +282,9 @@ function HomeScreen({ route, navigation }) {
         if (data.list.length == 0) return;
         if (!data.city) return;
 
-        dispatch(updateFromForecasts(data));
+        dispatch(updateFromForecasts(weatherDetailData));
+        // indicator that this location displayed from home tab
+        dispatch(displayedToHome(weatherDetailData));
     }, [weatherDetailData]);
 
     useEffect(() => {
@@ -315,6 +315,11 @@ function HomeScreen({ route, navigation }) {
         let savedLocationNames = savedLocations.map((forecast) => forecast.city.name);
         //LOG.info("[HomeScreen]/Saved-Locations", savedLocationNames);
 
+        if (!isInternetReachable) {
+            setWeatherDetails(homeDisplayedForecast);
+            return;
+        }
+        
         if (!weatherDetails) return;
 
         if (!weatherDetails.list) return;
@@ -356,7 +361,8 @@ function HomeScreen({ route, navigation }) {
         useCallback(() => {
             if (route.params) {
                 // from locations
-                LOG.info("[HomeScreen]/useFocusEffect", route.params);
+                LOG.info("[HomeScreen]/useFocusEffect/route.params", route.params);
+                LOG.info("[HomeScreen]/useFocusEffect/homeDisplayedForecast", homeDisplayedForecast.city);
                 //
                 if (route.params.locationId &&
                     route.params.cityId &&
@@ -472,11 +478,11 @@ function HomeScreen({ route, navigation }) {
                 }}
                 height={350}
             >
-                {/* <WeatherForecast
+                <WeatherForecast
                     forecast={weatherDetails.list}
                     onRefresh={refreshHandler}
                     onDismiss={() => refRBSheet.current.close()}
-                /> */}
+                />
             </RBSheet>
 
         </Screen>

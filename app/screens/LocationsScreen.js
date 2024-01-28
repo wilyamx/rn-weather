@@ -77,14 +77,11 @@ function LocationsScreen({ navigation }) {
             cityName: forecast.city.name,
             homeDisplayed: forecast.homeDisplayed
         }));
-        LOG.info("[LocationScreen]/Home-Displayed-Forecast", savedLocationNames);
+        LOG.info("[LocationScreen]/Saved-Locations", savedLocationNames);
+        LOG.info("[LocationScreen]/Home-Displayed-Forecast", homeDisplayedForecast.city);
     };
 
     // hooks
-
-    useEffect(() => {
-        console.info("[LocationsScreen]/Temperature-Unit-Saved", temperatureUnit);
-    }, []);
 
     useEffect(() => {
         let savedLocationNames = savedLocations.map((forecast) => forecast.city.name);
