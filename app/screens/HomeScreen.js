@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { Alert, View, StyleSheet } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +13,7 @@ import useLocation from '../hooks/useLocation';
 import {
     addToForecasts,
     updateFromForecasts,
+    displayedToHome,
 } from '../redux/weather/weatherActions';
 import { setCurrentLocation } from '../redux/location/locationActions';
 
@@ -122,14 +123,14 @@ function HomeScreen({ route, navigation }) {
         data: weatherDetailData,
         error,
         loading,
-        request: weatherRequest
+        request: weatherRequestByCoordinate
     } = useApi(forecastApi.getForecastByCoordinate);
 
     const {
         data: weatherDetailData2,
         error: error2,
         loading: loading2,
-        request: weatherRequest2
+        request: weatherRequestByLocationName
     } = useApi(forecastApi.getForecastByLocationName);
 
     // ui
@@ -201,7 +202,7 @@ function HomeScreen({ route, navigation }) {
         LOG.info("[HomeScreen]", "refreshHandler");
         if (location) {
             // request forecast using device location
-            weatherRequest(
+            weatherRequestByCoordinate(
                 location.latitude,
                 location.longitude
             );
@@ -209,9 +210,20 @@ function HomeScreen({ route, navigation }) {
     };
     const detectDeviceLocationHandler = () => {
         LOG.info("[HomeScreen]", "detectDeviceLocationHandler");
-        setUseCurrentLocation(true);
-        //
-        getDeviceLocation();
+        if (isInternetReachable) {
+            setUseCurrentLocation(true);
+            //
+            getDeviceLocation();
+        }
+        else {
+            Alert.alert(
+                "Offline",
+                "Please check your internet connection.",
+                [
+                    { text: "OK" },
+                ]
+            );
+        }
     };
     const searchLocationsHandler = () => {
         LOG.info("[HomeScreen]", "searchLocationsHandler");
@@ -230,6 +242,9 @@ function HomeScreen({ route, navigation }) {
             // apply initially weather details in useState hook
             setWeatherDetails(weatherDetailData);
         }
+        else {
+            setUseCurrentLocation(false);
+        }
     }, []);
 
     useEffect(() => {
@@ -237,9 +252,9 @@ function HomeScreen({ route, navigation }) {
         //
         if (location) {
             if (isInternetReachable) {
-                LOG.info("[HomeScreen]/useEffect/weatherRequest");
+                LOG.info("[HomeScreen]/useEffect/weatherRequestByCooridnate");
                 // request forecast using device location
-                weatherRequest(
+                weatherRequestByCoordinate(
                     location.latitude,
                     location.longitude
                 );
@@ -257,6 +272,8 @@ function HomeScreen({ route, navigation }) {
         LOG.info("[HomeScreen]/useEffect/weatherDetailData");
         //
         setWeatherDetails(weatherDetailData);
+        // indicator that this location displayed from home tab
+        dispatch(displayedToHome(weatherDetailData));
         //
         // Update the home display status from locations tab
         let data = weatherDetailData;
@@ -271,19 +288,24 @@ function HomeScreen({ route, navigation }) {
     }, [weatherDetailData]);
 
     useEffect(() => {
-        LOG.info("[HomeScreen]/useEffect/weatherDetailData2");
-        //
-        setWeatherDetails(weatherDetailData2);
+        if (!weatherDetailData2.city) return;
+
+        LOG.info("[HomeScreen]/useEffect/weatherDetailData2", weatherDetailData2.city.name);
         //
         // Update the home display status from locations tab
         let data = weatherDetailData2;
         data.homeDisplayed = true;
-
+        //
+        setWeatherDetails(data);
+        // indicator that this location displayed from home tab
+        dispatch(displayedToHome(data));
+        //
         if (!data) return;
         if (!data.list) return;
         if (data.list.length == 0) return;
         if (!data.city) return;
 
+        LOG.info("[HomeScreen]/useEffect/weatherDetailData2", data);
         dispatch(updateFromForecasts(data));
     }, [weatherDetailData2]);
 
@@ -291,7 +313,7 @@ function HomeScreen({ route, navigation }) {
         LOG.info("[HomeScreen]/useEffect/weatherDetails");
         //
         let savedLocationNames = savedLocations.map((forecast) => forecast.city.name);
-        LOG.info("[HomeScreen]/Saved-Locations", savedLocationNames);
+        //LOG.info("[HomeScreen]/Saved-Locations", savedLocationNames);
 
         if (!weatherDetails) return;
 
@@ -349,7 +371,7 @@ function HomeScreen({ route, navigation }) {
                         LOG.info("[HomeScreen]/useFocusEffect/online");
                         LOG.info("[HomeScreen]/useFocusEffect/weatherRequest", selectedForecast.city.name);
                         //
-                        weatherRequest2(selectedForecast.city.name)
+                        weatherRequestByLocationName(selectedForecast.city.name)
                     }
                     else {
                         // just display the saved data
@@ -450,11 +472,11 @@ function HomeScreen({ route, navigation }) {
                 }}
                 height={350}
             >
-                <WeatherForecast
+                {/* <WeatherForecast
                     forecast={weatherDetails.list}
                     onRefresh={refreshHandler}
                     onDismiss={() => refRBSheet.current.close()}
-                />
+                /> */}
             </RBSheet>
 
         </Screen>
