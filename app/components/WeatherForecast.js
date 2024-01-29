@@ -7,7 +7,8 @@ import CircularIcon from './CircularIcon';
 import WeatherListItem from './lists/WeatherListItem';
 import ListItemSeparator from './lists/ListItemSeparator';
 
-function WeatherForecast({ forecast, onRefresh, onDismiss }) {
+// forecast - list of weather forecast
+function WeatherForecast({ forecast, temperatureUnit, onRefresh, onDismiss }) {
     const theme = useTheme();
 
     const timeAgo = () => {
@@ -46,7 +47,7 @@ function WeatherForecast({ forecast, onRefresh, onDismiss }) {
                     data={forecast}
                     keyExtractor={item => item.dt.toString()}
                     renderItem={({ item }) => 
-                        <WeatherListItem forecast={item} />
+                        <WeatherListItem forecast={item} temperatureUnit={temperatureUnit} />
                     }
                 />
             </View>

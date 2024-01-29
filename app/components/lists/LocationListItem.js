@@ -14,6 +14,7 @@ import TemperatureUnit from "../TemperatureUnit";
 import YourLocation from "../YourLocation";
 import { getWeatherImage } from "../../config/WeatherImages";
 
+// to show the actual temperature unit saved locally
 const DEBUG = constants.debug;
 
 const getDateComponents = (dt_txt) => {

@@ -28,13 +28,9 @@ import YourLocation from '../components/YourLocation';
 import WeatherForecast from '../components/WeatherForecast';
 import LOG from '../utility/logger';
 
+// to show the actual temperature unit saved locally
 const DEBUG = constants.debug;
 
-// const getNetworkStatus = async () => {
-//     LOG.info("#1.1 [HomeScreen]/getNetworkStatus");
-//     const network = await Network.getNetworkStateAsync();
-//     return network.isInternetReachable
-// };
 const getTemperatureUnitSign = (
     forecastUnit,
     unitTemperature,
@@ -563,6 +559,7 @@ function HomeScreen({ route, navigation }) {
             >
                 { weatherDetails && weatherDetails.list && <WeatherForecast
                     forecast={weatherDetails.list}
+                    temperatureUnit={weatherDetails.temperatureUnit}
                     onRefresh={refreshHandler}
                     onDismiss={() => refRBSheet.current.close()}
                 />}

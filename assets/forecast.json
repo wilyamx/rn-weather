@@ -1,0 +1,59 @@
+{
+    "cod": "200",
+    "message": 0,
+    "cnt": 40,
+    "list": [
+      {
+        "dt": 1705978800,
+        "main": {
+          "temp": 29.99,
+          "feels_like": 34.08,
+          "temp_min": 28.24,
+          "temp_max": 29.99,
+          "pressure": 1015,
+          "sea_level": 1015,
+          "grnd_level": 1013,
+          "humidity": 66,
+          "temp_kf": 1.75
+        },
+        "weather": [
+          {
+            "id": 500,
+            "main": "Rain",
+            "description": "light rain",
+            "icon": "10d"
+          }
+        ],
+        "clouds": {
+          "all": 75
+        },
+        "wind": {
+          "speed": 4.81,
+          "deg": 55,
+          "gust": 4.94
+        },
+        "visibility": 10000,
+        "pop": 0.37,
+        "rain": {
+          "3h": 0.36
+        },
+        "sys": {
+          "pod": "d"
+        },
+        "dt_txt": "2024-01-23 03:00:00"
+      }
+    ],
+    "city": {
+      "id": 1707266,
+      "name": "Lapu-Lapu City (Opon)",
+      "coord": {
+        "lat": 10.3167,
+        "lon": 123.9659
+      },
+      "country": "PH",
+      "population": 241456,
+      "timezone": 28800,
+      "sunrise": 1705961212,
+      "sunset": 1706003053
+    }
+  }
