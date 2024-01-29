@@ -126,7 +126,6 @@ function HomeScreen({ route, navigation }) {
 
     const netInfo = useNetInfo();
     const [isInternetReachable, setIsInternetReachable] = useState(false);
-    const [hasInternet, setHasInternet] = useState(false);
 
     // (async () => {
     //     let networkState = await Network.getNetworkStateAsync();
@@ -244,7 +243,7 @@ function HomeScreen({ route, navigation }) {
             getDeviceLocation();
         }
         else {
-            showAlert("Offline", "Please check your internet connection.");
+            showAlert("You are Offline", "Please check your internet connection.");
         }
     };
     const searchLocationsHandler = () => {

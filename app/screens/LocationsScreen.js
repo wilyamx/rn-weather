@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { Alert, FlatList, StyleSheet } from 'react-native';
 import { Searchbar, Text } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import * as Network from 'expo-network';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 import forecastApi from '../api/forecast';
 import useApi from '../hooks/useApi';
@@ -38,6 +40,11 @@ function LocationsScreen({ navigation }) {
     const savedCurrentLocation = useSelector(state => state.location.currentLocation);
     const dispatch = useDispatch();
 
+    // hardware status
+
+    const netInfo = useNetInfo();
+    const [isInternetReachable, setIsInternetReachable] = useState(false);
+
     // ui
     const [searchQuery, setSearchQuery] = useState('');
     const [refreshing, setRefreshing] = useState(false);
@@ -64,6 +71,10 @@ function LocationsScreen({ navigation }) {
         dispatch(removeFromForecasts(location.city.name));
     };
     const handleSubmitSearchKey = async (key) => {
+        if (!isInternetReachable) {
+            showAlert("You are Offline", "Please check your internet connection.");
+            return;
+        }
         if (key.length == 0) {
             showAlert("Empty Searchbar", "Please input valid place.");
             return;
@@ -94,6 +105,32 @@ function LocationsScreen({ navigation }) {
     };
 
     // hooks
+
+    useEffect(() => {
+        (async () => {
+            let network = await Network.getNetworkStateAsync();
+            if (network.isConnected) {
+                setIsInternetReachable(true);
+            }
+            else {
+                setIsInternetReachable(false);
+            }
+        })();
+    }, []);
+
+    // this will update every time change in internet connection status
+    // user turn off/on the device wifi
+    useEffect(() => {
+        (async () => {
+            let network = await Network.getNetworkStateAsync();
+            if (network.isConnected) {
+                setIsInternetReachable(true);
+            }
+            else {
+                setIsInternetReachable(false);
+            }
+        })();
+    }), [netInfo.isInternetReachable];
 
     useEffect(() => {
         let savedLocationNames = savedLocations.map((forecast) => forecast.city.name);
