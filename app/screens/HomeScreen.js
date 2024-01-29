@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Alert, View, StyleSheet } from 'react-native';
-import { Text, useTheme } from 'react-native-paper';
+import { Snackbar, Text, useTheme } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from "moment/moment";
 import RBSheet from "react-native-raw-bottom-sheet";
 import * as Network from 'expo-network';
+import NetInfo from "@react-native-community/netinfo"; 
+import { useNetInfo } from '@react-native-community/netinfo';
 
 import constants from '../config/constants';
 import forecastApi from '../api/forecast';
@@ -28,6 +30,11 @@ import LOG from '../utility/logger';
 
 const DEBUG = constants.debug;
 
+// const getNetworkStatus = async () => {
+//     LOG.info("#1.1 [HomeScreen]/getNetworkStatus");
+//     const network = await Network.getNetworkStateAsync();
+//     return network.isInternetReachable
+// };
 const getTemperatureUnitSign = (
     forecastUnit,
     unitTemperature,
@@ -95,8 +102,18 @@ const getTemperatureDisplay = (
     return withDecimal ? result.toFixed(2) : Math.round(result);
 };
 
+const showAlert = (title, message) => {
+    Alert.alert(
+        title,
+        message,
+        [
+            { text: "OK" },
+        ]
+    );
+};
+
 function HomeScreen({ route, navigation }) {
-    LOG.info("[HomeScreen]", "function");
+    LOG.info("[HomeScreen]/Function-Component");
 
     // redux
 
@@ -107,13 +124,16 @@ function HomeScreen({ route, navigation }) {
 
     // hardware status
 
+    const netInfo = useNetInfo();
     const [isInternetReachable, setIsInternetReachable] = useState(false);
-    (async () => {
-        let networkState = await Network.getNetworkStateAsync();
-        setIsInternetReachable(networkState.isInternetReachable);
-        //
-        //LOG.info("[HomeScreen]/networkState", isInternetReachable);
-    })();
+    const [hasInternet, setHasInternet] = useState(false);
+
+    // (async () => {
+    //     let networkState = await Network.getNetworkStateAsync();
+    //     setIsInternetReachable(networkState.isInternetReachable);
+    //     //
+    //     //LOG.info("[HomeScreen]/networkState", isInternetReachable);
+    // })();
 
     // api
 
@@ -146,7 +166,12 @@ function HomeScreen({ route, navigation }) {
     const [detectLocation, setDetectLocation] = useState(false);
     // search button display
     const [searchButton, setSearchButton] = useState(true);
+    // snackbar visibility (no internet connection)
+    const [snackbarVisible, setSnackbarVisible] = useState(false);
 
+    const hasInterNetConnection = () => {
+        return isInternetReachable
+    };
     const cityName = () => {
         var datasource = constants.defaultForecast;
         if(weatherDetails && weatherDetails.city) {
@@ -209,20 +234,17 @@ function HomeScreen({ route, navigation }) {
         }
     };
     const detectDeviceLocationHandler = () => {
-        LOG.info("[HomeScreen]", "detectDeviceLocationHandler");
-        if (isInternetReachable) {
+        LOG.info("[HomeScreen]", "detectDeviceLocationHandler", hasInterNetConnection());
+
+        //showAlert("hasInternetConnection?", hasInterNetConnection() ? 'YES' : 'NO');
+        
+        if (hasInterNetConnection()) {
             setUseCurrentLocation(true);
             //
             getDeviceLocation();
         }
         else {
-            Alert.alert(
-                "Offline",
-                "Please check your internet connection.",
-                [
-                    { text: "OK" },
-                ]
-            );
+            showAlert("Offline", "Please check your internet connection.");
         }
     };
     const searchLocationsHandler = () => {
@@ -232,26 +254,66 @@ function HomeScreen({ route, navigation }) {
 
     // hooks
 
-    // this will trigger once only
+    const getNetworkStatus = async () => {
+        LOG.info("#1.1 [HomeScreen]/getNetworkStatus");
+        let network = await Network.getNetworkStateAsync();
+        
+        return network
+    };
+
+    // this will trigger once only when reload
     useEffect(() => {
-        LOG.info("[HomeScreen]/useEffect", "initialize");
-        //
+        LOG.info("#1.0 [HomeScreen]/initialize");
+        LOG.info("#1.1 [HomeScreen]/useEffect/initialize/weatherDetailData", weatherDetailData);
+
         setDetectLocation(false);
 
-        if (isInternetReachable) {
-            // apply initially weather details in useState hook
-            setWeatherDetails(weatherDetailData);
-        }
-        else {
-            setUseCurrentLocation(false);
-        }
+        (async () => {
+            let network = await Network.getNetworkStateAsync();
+            if (network.isConnected) {
+                LOG.info("#1.2 [HomeScreen]/internetConnect", network);
+                setIsInternetReachable(true);
+            }
+            else {
+                setIsInternetReachable(false);
+                LOG.info("#1.3 [HomeScreen]/internetNotConnected");
+            }
+        })();
     }, []);
 
     useEffect(() => {
-        LOG.info("[HomeScreen]/useEffect/Device-Location", location);
+        LOG.info("#2.0 [HomeScreen]/isInternetReachable", isInternetReachable);
+    }, [isInternetReachable]);
+
+    useEffect(() => {
+        LOG.info("#3.0 [HomeScreen]/useEffect/weatherDetailData", weatherDetailData.city);
+        //
+        //setWeatherDetails(weatherDetailData);
+        //setUseCurrentLocation(true);
+        //
+        // Update the home display status from locations tab
+        let data = weatherDetailData;
+        data.homeDisplayed = true;
+
+        if (!data) return;
+        if (!data.list) return;
+        if (data.list.length == 0) return;
+        if (!data.city) return;
+
+        LOG.info("#3.1 [HomeScreen]/useEffect/weatherDetailData/validated");
+
+        setWeatherDetails(weatherDetailData);
+
+        dispatch(updateFromForecasts(weatherDetailData));
+        // indicator that this location displayed from home tab
+        dispatch(displayedToHome(weatherDetailData));
+    }, [weatherDetailData]);
+
+    useEffect(() => {
+        LOG.info("#0.0 [HomeScreen]/useEffect/Device-Location", location);
         //
         if (location) {
-            if (isInternetReachable) {
+            if (hasInterNetConnection()) {
                 LOG.info("[HomeScreen]/useEffect/weatherRequestByCooridnate");
                 // request forecast using device location
                 weatherRequestByCoordinate(
@@ -268,24 +330,19 @@ function HomeScreen({ route, navigation }) {
         setDetectLocation(location != null);
     }, [location]);
 
+    // this will update every time change in internet connection status
+    // user turn off/on the device wifi
     useEffect(() => {
-        LOG.info("[HomeScreen]/useEffect/weatherDetailData");
-        //
-        setWeatherDetails(weatherDetailData);
-        //
-        // Update the home display status from locations tab
-        let data = weatherDetailData;
-        data.homeDisplayed = true;
-
-        if (!data) return;
-        if (!data.list) return;
-        if (data.list.length == 0) return;
-        if (!data.city) return;
-
-        dispatch(updateFromForecasts(weatherDetailData));
-        // indicator that this location displayed from home tab
-        dispatch(displayedToHome(weatherDetailData));
-    }, [weatherDetailData]);
+        (async () => {
+            let network = await Network.getNetworkStateAsync();
+            if (network.isConnected) {
+                setIsInternetReachable(true);
+            }
+            else {
+                setIsInternetReachable(false);
+            }
+        })();
+    }), [netInfo.isInternetReachable];
 
     useEffect(() => {
         if (!weatherDetailData2.city) return;
@@ -315,8 +372,9 @@ function HomeScreen({ route, navigation }) {
         let savedLocationNames = savedLocations.map((forecast) => forecast.city.name);
         //LOG.info("[HomeScreen]/Saved-Locations", savedLocationNames);
 
-        if (!isInternetReachable) {
-            setWeatherDetails(homeDisplayedForecast);
+        if (!hasInterNetConnection()) {
+            //setWeatherDetails(homeDisplayedForecast);
+            dispatch(displayedToHome(weatherDetails));
             return;
         }
         
@@ -372,7 +430,9 @@ function HomeScreen({ route, navigation }) {
                     setUseCurrentLocation(route.params.isCurrentLocation);
                     const selectedForecast = getForecastByIdentifier(route.params.locationId);
 
-                    if (isInternetReachable) {
+                    showAlert("hasInternetConnection?" + selectedForecast.city.name, hasInterNetConnection() ? 'YES' : 'NO');
+
+                    if (hasInterNetConnection()) {
                         LOG.info("[HomeScreen]/useFocusEffect/online");
                         LOG.info("[HomeScreen]/useFocusEffect/weatherRequest", selectedForecast.city.name);
                         // request for updated weather forecast
@@ -388,7 +448,7 @@ function HomeScreen({ route, navigation }) {
                 else {
                     const selectedForecast = getForecastByIdentifier(homeDisplayedForecast.uuid);
 
-                    if (isInternetReachable) {
+                    if (hasInterNetConnection()) {
                         LOG.info("[HomeScreen]/useFocusEffect/online");
                         LOG.info("[HomeScreen]/useFocusEffect/weatherRequest", selectedForecast.city.name);
                         // request for updated weather forecast
@@ -495,15 +555,21 @@ function HomeScreen({ route, navigation }) {
                         overflow: "hidden",
                     },
                 }}
-                height={350}
+                height={360}
             >
-                <WeatherForecast
+                { weatherDetails && weatherDetails.list && <WeatherForecast
                     forecast={weatherDetails.list}
                     onRefresh={refreshHandler}
                     onDismiss={() => refRBSheet.current.close()}
-                />
+                />}
             </RBSheet>
-
+            
+            <Snackbar
+                visible={snackbarVisible}
+                onDismiss={() => setSnackbarVisible(false)}
+            >
+                No internet connection
+            </Snackbar>
         </Screen>
         </>
     );
