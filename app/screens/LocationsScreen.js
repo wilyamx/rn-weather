@@ -27,7 +27,9 @@ const showAlert = (title, message) => {
         title,
         message,
         [
-            { text: "OK" },
+            { 
+                text: "OK",
+            },
         ]
     );
 };
@@ -54,7 +56,8 @@ function LocationsScreen({ navigation }) {
         data: weatherDetails,
         error,
         loading,
-        request: weatherRequest
+        request: weatherRequest,
+        responseStatus
     } = useApi(forecastApi.getForecastByLocationName);
 
     // actions
@@ -133,6 +136,20 @@ function LocationsScreen({ navigation }) {
     }), [netInfo.isInternetReachable];
 
     useEffect(() => {
+        LOG.info("[LocationScreen]/error", error);
+    }, [error]);
+
+    useEffect(() => {
+        LOG.info("[LocationScreen]/responseStatus", responseStatus);
+        if (responseStatus == 404) {
+            showAlert(
+                "Location not found!",
+                `Please use different name.\nUnable to find (${searchQuery}) from the places.`
+            );
+        }
+    }, [responseStatus]);
+
+    useEffect(() => {
         let savedLocationNames = savedLocations.map((forecast) => forecast.city.name);
         LOG.info("[LocationScreen]/Saved-Locations", savedLocationNames);
 
@@ -169,13 +186,17 @@ function LocationsScreen({ navigation }) {
         <>
         <AppActivityIndicator visible={loading} />
         <Screen style={styles.container}>
-            { error &&
+            {/* { error && */}
                 <>
                     <AppAlert
                         message={"No weather forecast available.\nPlease check location used."}
+                        onPressOk={() => {
+                            
+                        }}
+                        show={error}
                     />
                 </>
-            }
+            {/* } */}
 
             <Text style={styles.title} variant='titleLarge'>Pick Locations</Text>
             <Text style={styles.subtitle} variant='titleSmall'>

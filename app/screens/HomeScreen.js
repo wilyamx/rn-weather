@@ -142,14 +142,16 @@ function HomeScreen({ route, navigation }) {
         data: weatherDetailData,
         error,
         loading,
-        request: weatherRequestByCoordinate
+        request: weatherRequestByCoordinate,
+        responseStatus: responseRequestByCoordinate
     } = useApi(forecastApi.getForecastByCoordinate);
 
     const {
         data: weatherDetailData2,
         error: error2,
         loading: loading2,
-        request: weatherRequestByLocationName
+        request: weatherRequestByLocationName,
+        responseStatus: responseRequestByLocationName
     } = useApi(forecastApi.getForecastByLocationName);
 
     // ui
@@ -309,7 +311,7 @@ function HomeScreen({ route, navigation }) {
     }, [weatherDetailData]);
 
     useEffect(() => {
-        LOG.info("#0.0 [HomeScreen]/useEffect/Device-Location", location);
+        LOG.info("[HomeScreen]/useEffect/Device-Location", location);
         //
         if (location) {
             if (hasInterNetConnection()) {
@@ -429,7 +431,7 @@ function HomeScreen({ route, navigation }) {
                     setUseCurrentLocation(route.params.isCurrentLocation);
                     const selectedForecast = getForecastByIdentifier(route.params.locationId);
 
-                    showAlert("hasInternetConnection?" + selectedForecast.city.name, hasInterNetConnection() ? 'YES' : 'NO');
+                    //showAlert("hasInternetConnection?" + selectedForecast.city.name, hasInterNetConnection() ? 'YES' : 'NO');
 
                     if (hasInterNetConnection()) {
                         LOG.info("[HomeScreen]/useFocusEffect/online");

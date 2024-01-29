@@ -6,8 +6,10 @@ export default useApi = (apiFunc) => {
     const [data, setData] = useState([]);
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [responseStatus, setResponseStatus] = useState(0)
 
     const request = async (...args) => {
+        setResponseStatus(0);
         setLoading(true);
         const response = await apiFunc(...args);
         setLoading(false);
@@ -16,6 +18,8 @@ export default useApi = (apiFunc) => {
         setData(response.data);
 
         if (response && response.config && response.status) {
+            setResponseStatus(response.status);
+
             LOG.info("[useApi]", response.config.url, response.status.toString())
             //LOG.info("[useApi]", response);
         }
@@ -26,5 +30,5 @@ export default useApi = (apiFunc) => {
         return response;
     };
 
-    return { data, error, loading, request };
+    return { data, error, loading, request, responseStatus };
 }

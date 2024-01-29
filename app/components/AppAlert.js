@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, Dialog, Portal, Text } from 'react-native-paper';
 
-function AppAlert({ message }) {
+function AppAlert({ message, onPressOk, show }) {
     const [visible, setVisible] = useState(true);
 
-    const hideDialog = () => setVisible(false);
+    const hideDialog = () => {
+      onPressOk();
+      setVisible(false);
+    };
     
     return (
         <View style={styles.container}>
