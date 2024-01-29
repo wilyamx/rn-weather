@@ -3,7 +3,7 @@ import {
 } from "./locationTypes";
 
 const initialState = {
-    currentLocation: "",
+    currentLocation: {},
 }
 
 const locationReducer = (state = initialState, action) => {

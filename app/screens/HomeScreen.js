@@ -120,6 +120,7 @@ function HomeScreen({ route, navigation }) {
     const temperatureUnitSaved = useSelector(state => state.theme.temperatureUnit);
     const savedLocations = useSelector(state => state.weather.forecasts);
     const homeDisplayedForecast = useSelector(state => state.weather.homeDisplayForecast);
+    const currentLocation = useSelector(state => state.location.currentLocation);
     const dispatch = useDispatch();
 
     // hardware status
@@ -428,8 +429,8 @@ function HomeScreen({ route, navigation }) {
                     route.params.cityId &&
                     route.params.name) {
                     
-                    setUseCurrentLocation(route.params.isCurrentLocation);
                     const selectedForecast = getForecastByIdentifier(route.params.locationId);
+                    setUseCurrentLocation(route.params.isCurrentLocation);
 
                     //showAlert("hasInternetConnection?" + selectedForecast.city.name, hasInterNetConnection() ? 'YES' : 'NO');
 
@@ -447,8 +448,10 @@ function HomeScreen({ route, navigation }) {
                 }
                 // user just switch from location tab to home tab only
                 else {
+                    // home displayed
                     const selectedForecast = getForecastByIdentifier(homeDisplayedForecast.uuid);
-
+                    setUseCurrentLocation(selectedForecast.city.name == currentLocation.place);
+                
                     if (hasInterNetConnection()) {
                         LOG.info("[HomeScreen]/useFocusEffect/online");
                         LOG.info("[HomeScreen]/useFocusEffect/weatherRequest", selectedForecast.city.name);
