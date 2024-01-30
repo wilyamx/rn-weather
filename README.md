@@ -5,19 +5,25 @@ React Native Training Assessment Project
 ## Screenshots
 
 <p float="left">
+	<img src="screenshots/splashscreen.png" alt="splashscreen" height="400">
 	<img src="screenshots/location-use-permission.png" alt="location-use-permission" height="400">
+	<img src="screenshots/home.png" alt="home" height="400">
 	<img src="screenshots/home-dark-mode.png" alt="home-dark-mode" height="400">
+	<img src="screenshots/home-days-forecast.png" alt="home-days-forecast" height="400">
 	<img src="screenshots/home-days-forecast-dark-mode.png" alt="home-days-forecast-dark-mode" height="400">
-	<img src="screenshots/home-forecast.png" alt="home-forecast" height="400">
-	<img src="screenshots/home-your-location.png" alt="home-your-location" height="400">
 </p>
 
 <p float="left">
+	<img src="screenshots/locations.png" alt="locations" height="400">
 	<img src="screenshots/locations-dark-mode.png" alt="locations-dark-mode" height="400">
+	<img src="screenshots/locations-filter.png" alt="locations-filter" height="400">
+	<img src="screenshots/locations-filter-dark-mode.png" alt="locations-filter-dark-mode" height="400">
 	<img src="screenshots/locations-celsius.png" alt="locations-celsius" height="400">
 	<img src="screenshots/locations-fahrenheit.png" alt="locations-fahrenheit" height="400">
 	<img src="screenshots/locations-activity-indicator.png" alt="locations-activity-indicator" height="400">
-	<img src="screenshots/locations-delete-selected.png" alt="home-days-forecast.png" height="400">
+	<img src="screenshots/locations-activity-indicator-dark-mode.png" alt="locations-activity-indicator-dark-mode" height="400">
+	<img src="screenshots/locations-delete-selected.png" alt="locations-delete-selected" height="400">
+	<img src="screenshots/locations-delete-selected-dark-mode.png" alt="locations-delete-selected-dark-mode" height="400">
 </p>
 
 <p float="left">
@@ -33,6 +39,13 @@ React Native Training Assessment Project
 1. Persistent data to allow display offline data
 1. Delete persisted data
 1. Dark and Light theme mode
+
+## More Features
+
+1. Your Location indicator - [HomeScreen] [Locations] 
+1. Displayed from home indicator - [Locations]
+1. API Activity Indicator - [HomeScreen] [Locations]
+1. Filtered locations - [Locations] 
 
 ## Expo App Initialization
 
@@ -77,10 +90,10 @@ React Native Training Assessment Project
 	* [Components](https://callstack.github.io/react-native-paper/docs/components/ActivityIndicator)
 
 1. Redux + [Redux-Persist](https://github.com/rt2zz/redux-persist) - predictable state container
-1. [Apisauce](https://github.com/infinitered/apisauce)
+1. [Apisauce](https://github.com/infinitered/apisauce) - api integration
 1. [Moment](https://momentjs.com/) - display dates and time
 1. [React Native Dot Env](https://github.com/goatandsheep/react-native-dotenv) - environment variables
-1. [React Navigation](https://reactnavigation.org/docs/getting-started/)
+1. [React Navigation](https://reactnavigation.org/docs/getting-started/) - routing and navigation for Expo and React Native apps
 1. [Open Weather Map API](https://openweathermap.org/forecast5) - 5 day forecast is available at any location on the globe
 
 ## References
