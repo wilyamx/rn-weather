@@ -43,13 +43,13 @@ function LocationsScreen({ navigation }) {
     const dispatch = useDispatch();
 
     // hardware status
-
     const netInfo = useNetInfo();
     const [isInternetReachable, setIsInternetReachable] = useState(false);
 
     // ui
     const [searchQuery, setSearchQuery] = useState('');
     const [refreshing, setRefreshing] = useState(false);
+    const [savedLocationsFiltered, setSavedLocationsFiltered] = useState([]);
 
     // api
     const {
@@ -107,9 +107,32 @@ function LocationsScreen({ navigation }) {
         LOG.info("[LocationScreen]/Home-Displayed-Forecast", homeDisplayedForecast.city);
     };
 
+    const filterSavedLocationBySearchKey = (text) => {
+        //
+        var data = [];
+        if (text) {
+            let keyFormatted = text.toLowerCase();
+            let filteredData = savedLocations.filter((forecast) => {
+                let cityName = forecast.city.name.toLowerCase();
+                return cityName.includes(keyFormatted);
+            });
+            //let mapData = filteredData.map((forecast) => forecast.city.name);
+            //LOG.info("[LocationsScreen]/filteredData", mapData);
+            data = filteredData;
+        }
+        else {
+            data = savedLocations;
+        }
+
+        let sortedData = data.sort((a, b) => a.city.name.localeCompare(b.city.name))
+        setSavedLocationsFiltered(sortedData);
+    };
+
     // hooks
 
     useEffect(() => {
+        setSavedLocationsFiltered(savedLocations);
+
         (async () => {
             let network = await Network.getNetworkStateAsync();
             if (network.isConnected) {
@@ -120,6 +143,11 @@ function LocationsScreen({ navigation }) {
             }
         })();
     }, []);
+
+    useEffect(() => {
+        LOG.info("[LocationScreen]/searchQuery", searchQuery);
+        filterSavedLocationBySearchKey(searchQuery);
+    }, [searchQuery]);
 
     // this will update every time change in internet connection status
     // user turn off/on the device wifi
@@ -200,7 +228,7 @@ function LocationsScreen({ navigation }) {
             />
 
             <FlatList
-                data={savedLocations.slice().sort((a, b) => a.city.name.localeCompare(b.city.name))}
+                data={savedLocationsFiltered}
                 keyExtractor={item => item.uuid.toString()}
                 renderItem={({ item }) => 
                     <LocationListItem
