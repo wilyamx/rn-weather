@@ -184,7 +184,7 @@ function LocationsScreen({ navigation }) {
     }, [responseStatus]);
 
     useEffect(() => {
-        let savedLocationNames = savedLocationsFiltered.map((forecast) => forecast.city.name);
+        let savedLocationNames = savedLocations.map((forecast) => forecast.city.name);
         LOG.info("[LocationScreen]/Saved-Locations", savedLocationNames);
 
         if (!weatherDetails) return;
@@ -197,19 +197,21 @@ function LocationsScreen({ navigation }) {
         let cityDetails = weatherDetails.city;
         let forecasts = weatherDetails.list;
 
-        if (savedLocationsFiltered.length == 0) {
+        if (savedLocations.length == 0) {
             dispatch(addToForecasts(weatherDetails));
         }
         else {
             if (!savedLocationNames.includes(cityDetails.name)) {
                 LOG.info("[LocationScreen]/Added-Location", cityDetails.name);
                 dispatch(addToForecasts(weatherDetails));
+                showAlert("New place added", `(${cityDetails.name}) has been added to the list!`);
             }
             else {
                 LOG.info("[LocationScreen]/Existing-Location", cityDetails.name);
                 dispatch(updateFromForecasts(weatherDetails));
             }
             dispatch(displayedToHome(weatherDetails));
+            LOG.info("[LocationsScreen]/homeDisplayedForecast/1");
         }
 
         setSearchQuery("");
