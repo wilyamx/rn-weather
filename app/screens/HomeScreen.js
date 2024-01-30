@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from "moment/moment";
 import RBSheet from "react-native-raw-bottom-sheet";
 import * as Network from 'expo-network';
-import NetInfo from "@react-native-community/netinfo"; 
 import { useNetInfo } from '@react-native-community/netinfo';
 
 import constants from '../config/constants';

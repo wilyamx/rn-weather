@@ -17,7 +17,6 @@ import {
 } from '../redux/weather/weatherActions';
 
 import AppActivityIndicator from '../components/AppActivityIndicator';
-import AppAlert from '../components/AppAlert';
 import ListItemDeleteAction from '../components/lists/ListItemDeleteAction';
 import LocationListItem from '../components/lists/LocationListItem';
 import Screen from '../components/Screen';
@@ -72,6 +71,11 @@ function LocationsScreen({ navigation }) {
             return;
         }
         dispatch(removeFromForecasts(location.city.name));
+
+        let list = savedLocationsFiltered.filter((forecast) => {
+            return forecast.uuid != location.uuid
+        });
+        setSavedLocationsFiltered(list);
     };
     const handleSubmitSearchKey = async (key) => {
         if (!isInternetReachable) {
@@ -99,16 +103,18 @@ function LocationsScreen({ navigation }) {
     const handlePullToRefresh = () => {
         LOG.info("[LocationScreen]/handlePullToRefresh");
 
-        let savedLocationNames = savedLocations.map((forecast) => ({
+        let savedLocationNames = savedLocationsFiltered.map((forecast) => ({
             cityName: forecast.city.name,
             homeDisplayed: forecast.homeDisplayed
         }));
         LOG.info("[LocationScreen]/Saved-Locations", savedLocationNames);
         LOG.info("[LocationScreen]/Home-Displayed-Forecast", homeDisplayedForecast.city);
+
+        filterSavedLocationBySearchKey(searchQuery);
     };
 
     const filterSavedLocationBySearchKey = (text) => {
-        //
+        LOG.info("[LocationsScreen]/filterSavedLocationBySearchKey", text);
         var data = [];
         if (text) {
             let keyFormatted = text.toLowerCase();
@@ -178,7 +184,7 @@ function LocationsScreen({ navigation }) {
     }, [responseStatus]);
 
     useEffect(() => {
-        let savedLocationNames = savedLocations.map((forecast) => forecast.city.name);
+        let savedLocationNames = savedLocationsFiltered.map((forecast) => forecast.city.name);
         LOG.info("[LocationScreen]/Saved-Locations", savedLocationNames);
 
         if (!weatherDetails) return;
@@ -191,23 +197,23 @@ function LocationsScreen({ navigation }) {
         let cityDetails = weatherDetails.city;
         let forecasts = weatherDetails.list;
 
-        if (savedLocations.length == 0) {
+        if (savedLocationsFiltered.length == 0) {
             dispatch(addToForecasts(weatherDetails));
-            setSearchQuery("");
         }
         else {
             if (!savedLocationNames.includes(cityDetails.name)) {
                 LOG.info("[LocationScreen]/Added-Location", cityDetails.name);
                 dispatch(addToForecasts(weatherDetails));
-                setSearchQuery("");
             }
             else {
                 LOG.info("[LocationScreen]/Existing-Location", cityDetails.name);
                 dispatch(updateFromForecasts(weatherDetails));
-                setSearchQuery("");
             }
             dispatch(displayedToHome(weatherDetails));
         }
+
+        setSearchQuery("");
+
     }, [weatherDetails]);
 
     return (
