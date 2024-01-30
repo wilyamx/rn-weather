@@ -98,12 +98,7 @@ React Native Training Assessment Project
 
 ## References
 
-1. React Native MVVM
-
-	* [React Native MVVM Concept](https://tech.groww.in/apply-mvvm-in-react-native-app-ad77fa0f851b)
-	* [React Native MVVM Demo](https://github.com/kushal98/rn-mvvm-demo/tree/master/src) - MVVM architecture design pattern sample
-	
-1. [Mockup](https://drive.google.com/file/d/1nqEok0x72d8Ola5aDA9VBigrCqwJesd0/view?usp=sharing)
+1. [Mockup](https://drive.google.com/file/d/1nqEok0x72d8Ola5aDA9VBigrCqwJesd0/view?usp=sharing) - UI design in wireframes
 
 ## Tutorials
 
@@ -115,3 +110,8 @@ React Native Training Assessment Project
 1. [Dynamic Switching of Themes](https://medium.com/@SeishinBG/dynamic-switching-of-themes-in-react-native-app-the-funky-way-with-hooks-48b57ab62a79)	
 
 1. [How to persist the shopping cart state to local storage](https://www.youtube.com/watch?v=shLz_kmA68Q)
+
+1. React Native MVVM
+
+	* [React Native MVVM Concept](https://tech.groww.in/apply-mvvm-in-react-native-app-ad77fa0f851b)
+	* [React Native MVVM Demo](https://github.com/kushal98/rn-mvvm-demo/tree/master/src) - MVVM architecture design pattern sample
