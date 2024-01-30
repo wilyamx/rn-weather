@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Alert, View, StyleSheet } from 'react-native';
+import { Alert, Image, View, StyleSheet } from 'react-native';
 import { Snackbar, Text, useTheme } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNetInfo } from '@react-native-community/netinfo';
 import moment from "moment/moment";
 import RBSheet from "react-native-raw-bottom-sheet";
 import * as Network from 'expo-network';
-import { useNetInfo } from '@react-native-community/netinfo';
 
 import constants from '../config/constants';
 import forecastApi from '../api/forecast';
@@ -18,6 +18,7 @@ import {
 } from '../redux/weather/weatherActions';
 import { setCurrentLocation } from '../redux/location/locationActions';
 
+import { getWeatherImage } from '../config/WeatherImages';
 import AppActivityIndicator from '../components/AppActivityIndicator';
 import AppAlert from '../components/AppAlert';
 import CircularIcon from '../components/CircularIcon';
@@ -184,6 +185,13 @@ function HomeScreen({ route, navigation }) {
         }
         return datasource.list[0].weather[0].description;
     }
+    const weatherImage = () => {
+        var datasource = constants.defaultForecast
+        if (weatherDetails && weatherDetails.list) {
+            datasource = weatherDetails;
+        }
+        return datasource.list[0].weather[0].main;
+    };
     const forecastDate = () => {
         var datasource = constants.defaultForecast
         if (weatherDetails && weatherDetails.list) {
@@ -195,7 +203,7 @@ function HomeScreen({ route, navigation }) {
         }
         const momentDate = moment(datasource.list[0].dt * 1000);
         const forecastDate = momentDate.format('DD MMMM YYYY | hh:mm a');
-        return forecastDate
+        return forecastDate;
     };
     const temperatureUnit = () => {
         var datasource = constants.defaultForecast
@@ -251,7 +259,7 @@ function HomeScreen({ route, navigation }) {
         LOG.info("[HomeScreen]", "searchLocationsHandler");
         navigation.navigate("Locations");
     };
-
+    
     // hooks
 
     // this will trigger once only when reload
@@ -301,10 +309,7 @@ function HomeScreen({ route, navigation }) {
     }, [isInternetReachable]);
 
     useEffect(() => {
-        LOG.info("#3.0 [HomeScreen]/useEffect/weatherDetailData", weatherDetailData);
-        //
-        //setWeatherDetails(weatherDetailData);
-        //setUseCurrentLocation(true);
+        LOG.info("#3.0 [HomeScreen]/useEffect/weatherDetailData");
         //
         // Update the home display status from locations tab
         let data = weatherDetailData;
@@ -535,6 +540,12 @@ function HomeScreen({ route, navigation }) {
                     </View>
                 </View>
 
+                <Image
+                    source={getWeatherImage(weatherImage())}
+                    style={styles.weatherImage}
+                    resizeMode="contain"
+                />
+
                 <View style={styles.weatherContainer}>
                     { useCurrentLocation && <YourLocation style={styles.yourLocation} marginBottom={20} /> }
                     <Text style={styles.location}>{cityName()}</Text>
@@ -647,6 +658,12 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         height: "82%"
+    },
+    weatherImage: {
+        width: 300,
+        height: 450,
+        position: "absolute",
+        bottom: -100,
     },
     yourLocation: {
         marginBottom: 20,
