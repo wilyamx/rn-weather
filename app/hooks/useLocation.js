@@ -28,6 +28,6 @@ export default useLocation = () => {
         getLocation();
     }, []);
 
-    LOG.info("[useLocation]/Device-Location", location);
+    LOG.debug("[useLocation]/Device-Location", location);
     return { location, getLocation };
 };

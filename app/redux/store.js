@@ -3,6 +3,7 @@ import { persistCombineReducers, persistStore } from "redux-persist";
 import { logger } from 'redux-logger';
 import storage from "@react-native-async-storage/async-storage";
 
+import constants from "../config/constants";
 import locationReducer from "./location/locationReducer";
 import themeReducer from "./theme/themeReducer";
 import weatherReducer from "./weather/weatherReducer";
@@ -22,7 +23,11 @@ const persistCombinedReducers = persistCombineReducers(
 // https://github.com/rt2zz/redux-persist
 
 export default () => {
-    let store = createStore(persistCombinedReducers, applyMiddleware(logger));
+    var store = createStore(persistCombinedReducers);
+    if (constants.enableStoreLogger) {
+        store = createStore(persistCombinedReducers, applyMiddleware(logger));
+    }
+    
     let persistor = persistStore(store);
     return {
         store, persistor
