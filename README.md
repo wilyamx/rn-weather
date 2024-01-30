@@ -42,10 +42,10 @@ React Native Training Assessment Project
 
 ## More Features
 
-1. Your Location indicator - [HomeScreen] [Locations] 
-1. Displayed from home indicator - [Locations]
-1. API Activity Indicator - [HomeScreen] [Locations]
-1. Filtered locations - [Locations] 
+1. Your Location indicator - `HomeScreen`, `LocationsScreen` 
+1. Displayed from home indicator - `LocationsScreen`
+1. API Activity Indicator - `HomeScreen`, `LocationsScreen`
+1. Filtered locations - `LocationsScreen` 
 
 ## Expo App Initialization
 
