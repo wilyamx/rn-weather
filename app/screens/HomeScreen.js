@@ -306,6 +306,7 @@ function HomeScreen({ route, navigation }) {
 
     useEffect(() => {
         LOG.info("#2.0 [HomeScreen]/isInternetReachable", isInternetReachable);
+        setSnackbarVisible(!isInternetReachable);
     }, [isInternetReachable]);
 
     useEffect(() => {
@@ -354,7 +355,6 @@ function HomeScreen({ route, navigation }) {
     // this will update every time change in internet connection status
     // user turn off/on the device wifi
     useEffect(() => {
-
         (async () => {
             let network = await Network.getNetworkStateAsync();
             if (network.isConnected) {

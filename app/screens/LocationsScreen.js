@@ -248,7 +248,6 @@ function LocationsScreen({ navigation }) {
                 }
                 refreshing={refreshing}
                 onRefresh={handlePullToRefresh}
-                
             />
         </Screen>
         </>
