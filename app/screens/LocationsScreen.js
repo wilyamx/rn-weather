@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import LOG from '../utility/logger';
 import { useState } from 'react';
-import { Alert, FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import { Searchbar, Text } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Network from 'expo-network';
@@ -15,23 +15,12 @@ import {
     updateFromForecasts,
     displayedToHome,
 } from '../redux/weather/weatherActions';
+import { showAlert } from '../utility/views';
 
 import AppActivityIndicator from '../components/AppActivityIndicator';
 import ListItemDeleteAction from '../components/lists/ListItemDeleteAction';
 import LocationListItem from '../components/lists/LocationListItem';
 import Screen from '../components/Screen';
-
-const showAlert = (title, message) => {
-    Alert.alert(
-        title,
-        message,
-        [
-            { 
-                text: "OK",
-            },
-        ]
-    );
-};
 
 function LocationsScreen({ navigation }) {
     // redux
@@ -204,7 +193,10 @@ function LocationsScreen({ navigation }) {
             if (!savedLocationNames.includes(cityDetails.name)) {
                 LOG.info("[LocationScreen]/Added-Location", cityDetails.name);
                 dispatch(addToForecasts(weatherDetails));
-                showAlert("New place added", `(${cityDetails.name}) has been added to the list!`);
+                showAlert(
+                    "New place added",
+                    `(${cityDetails.name}) has been added to the list!`
+                );
             }
             else {
                 LOG.info("[LocationScreen]/Existing-Location", cityDetails.name);

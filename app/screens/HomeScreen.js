@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Alert, Image, View, StyleSheet } from 'react-native';
+import { Image, View, StyleSheet } from 'react-native';
 import { Snackbar, Text, useTheme } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,6 +17,7 @@ import {
     displayedToHome,
 } from '../redux/weather/weatherActions';
 import { setCurrentLocation } from '../redux/location/locationActions';
+import { showAlert } from '../utility/views';
 
 import { getWeatherImage } from '../config/WeatherImages';
 import AppActivityIndicator from '../components/AppActivityIndicator';
@@ -97,16 +98,6 @@ const getTemperatureDisplay = (
             result = fahrenheitToCelsius(reading);
         }
     return withDecimal ? result.toFixed(2) : Math.round(result);
-};
-
-const showAlert = (title, message) => {
-    Alert.alert(
-        title,
-        message,
-        [
-            { text: "OK" },
-        ]
-    );
 };
 
 function HomeScreen({ route, navigation }) {
@@ -241,8 +232,6 @@ function HomeScreen({ route, navigation }) {
     const detectDeviceLocationHandler = () => {
         LOG.info("[HomeScreen]", "detectDeviceLocationHandler", hasInterNetConnection());
 
-        //showAlert("hasInternetConnection?", hasInterNetConnection() ? 'YES' : 'NO');
-        
         if (hasInterNetConnection()) {
             setUseCurrentLocation(true);
             //
