@@ -216,13 +216,19 @@ function HomeScreen({ route, navigation }) {
     // actions
 
     const refreshHandler = () => {
-        LOG.info("[HomeScreen]", "refreshHandler");
-        if (location) {
-            // request forecast using device location
-            weatherRequestByCoordinate(
-                location.latitude,
-                location.longitude
+        LOG.info("[HomeScreen]/refreshHandler");
+
+        if (!isInternetReachable) {
+            showAlert(
+                "You are Offline",
+                "Please check your internet connection."
             );
+            return;
+        }
+
+        if (weatherDetails.uuid && weatherDetails.city.name) {
+            LOG.info("[HomeScreen]/refreshHandler/weatherDetails", weatherDetails.city.name);
+            weatherRequestByLocationName(weatherDetails.city.name);
         }
     };
     const detectDeviceLocationHandler = () => {
@@ -236,7 +242,10 @@ function HomeScreen({ route, navigation }) {
             getDeviceLocation();
         }
         else {
-            showAlert("You are Offline", "Please check your internet connection.");
+            showAlert(
+                "You are Offline",
+                "Please check your internet connection."
+            );
         }
     };
     const searchLocationsHandler = () => {
