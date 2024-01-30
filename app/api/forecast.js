@@ -3,6 +3,7 @@ import constants from '../config/constants';
 import uuid from 'react-native-uuid';
 
 import { APP_ID } from '@env';
+import { getDateComponents } from '../utility/forecast';
 
 var endpoint = '/forecast';
 
@@ -75,12 +76,6 @@ const getForecastByLocationName = async (
     });
 
     return await client.get(endpoint, params);
-};
-
-const getDateComponents = (dt_txt) => {
-    // 2024-01-20 03:00:0
-    let dateComponents = dt_txt.split(" ");
-    return dateComponents
 };
 
 const getForecastByCoordinate = async (

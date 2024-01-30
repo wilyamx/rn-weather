@@ -11,12 +11,6 @@ import { getWeatherImage } from "../../config/WeatherImages";
 // to show the actual temperature unit saved locally
 const DEBUG = constants.debug;
 
-const getDateComponents = (dt_txt) => {
-    // 2024-01-20 03:00:0
-    let dateComponents = dt_txt.split(" ");
-    return dateComponents
-};
-
 const getTemperatureUnitSign = (
     forecastUnit,
     unitTemperature,
