@@ -6,6 +6,7 @@ import {
 //     latitude: location.latitude,
 //     longitude: location.longitude,
 //     place: weatherDetails.city.name,
+//     uuid: weatherDetails.uuid,
 // }
 export const setCurrentLocation = (info = {}) => {
     return {

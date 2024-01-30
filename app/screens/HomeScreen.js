@@ -30,6 +30,7 @@ import LOG from '../utility/logger';
 
 // to show the actual temperature unit saved locally
 const DEBUG = constants.debug;
+const OFFLINE = constants.offlineMode;
 
 const getTemperatureUnitSign = (
     forecastUnit,
@@ -123,13 +124,6 @@ function HomeScreen({ route, navigation }) {
 
     const netInfo = useNetInfo();
     const [isInternetReachable, setIsInternetReachable] = useState(false);
-
-    // (async () => {
-    //     let networkState = await Network.getNetworkStateAsync();
-    //     setIsInternetReachable(networkState.isInternetReachable);
-    //     //
-    //     //LOG.info("[HomeScreen]/networkState", isInternetReachable);
-    // })();
 
     // api
 
@@ -252,13 +246,6 @@ function HomeScreen({ route, navigation }) {
 
     // hooks
 
-    const getNetworkStatus = async () => {
-        LOG.info("#1.1 [HomeScreen]/getNetworkStatus");
-        let network = await Network.getNetworkStateAsync();
-        
-        return network
-    };
-
     // this will trigger once only when reload
     useEffect(() => {
         LOG.info("#1.0 [HomeScreen]/initialize");
@@ -267,14 +254,36 @@ function HomeScreen({ route, navigation }) {
         setDetectLocation(false);
 
         (async () => {
-            let network = await Network.getNetworkStateAsync();
+            var network = await Network.getNetworkStateAsync();
+            if (OFFLINE) {
+                network = {
+                    isInternetReachable: false,
+                    type: "None",
+                    isConnected: false
+                }
+            }
             if (network.isConnected) {
                 LOG.info("#1.2 [HomeScreen]/internetConnect", network);
-                setIsInternetReachable(true);
+                if (OFFLINE) {
+                    setIsInternetReachable(false);
+                }
+                else {
+                    setIsInternetReachable(true);
+                }
+                LOG.info("#1.2 [HomeScreen]/isInternetReachable", isInternetReachable);
             }
             else {
                 setIsInternetReachable(false);
                 LOG.info("#1.3 [HomeScreen]/internetNotConnected");
+                LOG.info("#1.3 [HomeScreen]/homeDisplayedForecast", homeDisplayedForecast.city.name);
+                LOG.info("#1.3 [HomeScreen]/currentLocation", currentLocation.place);
+
+                // your location indicator
+                const selectedForecast = getForecastByIdentifier(currentLocation.uuid);
+                setUseCurrentLocation(selectedForecast.city.name == homeDisplayedForecast.city.name);
+
+                // show home displayed forecast
+                setWeatherDetails(homeDisplayedForecast)
             }
         })();
     }, []);
@@ -284,19 +293,20 @@ function HomeScreen({ route, navigation }) {
     }, [isInternetReachable]);
 
     useEffect(() => {
-        LOG.info("#3.0 [HomeScreen]/useEffect/weatherDetailData", weatherDetailData.city);
+        LOG.info("#3.0 [HomeScreen]/useEffect/weatherDetailData", weatherDetailData);
         //
         //setWeatherDetails(weatherDetailData);
         //setUseCurrentLocation(true);
         //
         // Update the home display status from locations tab
         let data = weatherDetailData;
-        data.homeDisplayed = true;
-
+        
         if (!data) return;
         if (!data.list) return;
         if (data.list.length == 0) return;
         if (!data.city) return;
+
+        data.homeDisplayed = true;
 
         LOG.info("#3.1 [HomeScreen]/useEffect/weatherDetailData/validated");
 
@@ -331,10 +341,16 @@ function HomeScreen({ route, navigation }) {
     // this will update every time change in internet connection status
     // user turn off/on the device wifi
     useEffect(() => {
+
         (async () => {
             let network = await Network.getNetworkStateAsync();
             if (network.isConnected) {
-                setIsInternetReachable(true);
+                if (OFFLINE) {
+                    setIsInternetReachable(false);
+                }
+                else {
+                    setIsInternetReachable(true);
+                }
             }
             else {
                 setIsInternetReachable(false);
@@ -406,6 +422,7 @@ function HomeScreen({ route, navigation }) {
                 latitude: location.latitude,
                 longitude: location.longitude,
                 place: weatherDetails.city.name,
+                uuid: weatherDetails.uuid,
             }))
         }
     

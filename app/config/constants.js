@@ -1,4 +1,5 @@
 export default {
+    offlineMode: false,
     debug: false,
     temperatureUnit: {
         celsiusUnit: "metric",
