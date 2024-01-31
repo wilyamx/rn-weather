@@ -107,6 +107,8 @@ function LocationsScreen({ navigation }) {
         filterSavedLocationBySearchKey(searchQuery);
     };
 
+    // setters
+    
     const filterSavedLocationBySearchKey = (text) => {
         LOG.info("[LocationsScreen]/filterSavedLocationBySearchKey", text);
         //
