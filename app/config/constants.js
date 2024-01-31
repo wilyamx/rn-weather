@@ -1,9 +1,9 @@
 export default {
-    // logs for redux
+    // logs for redux (default: false)
     enableStoreLogger: false,
-    // disable detection of network status
+    // disable detection of network status (default: false)
     offlineMode: false,
-    // allow to see actual temperature from the store
+    // allow to see actual temperature from the store (default: false)
     debug: false,
     temperatureUnit: {
         celsiusUnit: "metric",
