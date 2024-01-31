@@ -53,17 +53,17 @@ function LocationsScreen({ navigation }) {
 
     const handleDelete = async (location) => {
         LOG.info("[LocationScreen]/Remove-Selected-Forecast", location.city.name);
-        if (homeDisplayedForecast.uuid == location.uuid) {
+        if (homeDisplayedForecast.city.name == location.city.name) {
             showAlert(
                 "Deleting Selected Location",
-                "You cannot delete this because currently displayed from home."
+                `You cannot delete this (${location.city.name}) because currently displayed from home.`
             );
             return;
         }
         dispatch(removeFromForecasts(location.city.name));
 
         let list = savedLocationsFiltered.slice().filter((forecast) => {
-            return forecast.uuid != location.uuid
+            return forecast.city.name != location.city.name
         });
         setSavedLocationsFiltered(list);
     };
