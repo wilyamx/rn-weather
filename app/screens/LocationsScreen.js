@@ -196,10 +196,8 @@ function LocationsScreen({ navigation }) {
         LOG.info("[LocationScreen]/Saved-Locations", savedLocationNames);
 
         if (!weatherDetails) return;
-
         if (!weatherDetails.list) return;
         if (weatherDetails.list.length == 0) return;
-
         if (!weatherDetails.city) return;
 
         let cityDetails = weatherDetails.city;
@@ -233,6 +231,13 @@ function LocationsScreen({ navigation }) {
         setSearchQuery("");
 
     }, [weatherDetails]);
+
+    useFocusEffect(
+        useCallback(() => {
+            LOG.info("[LocationScreen]/useFocusEffect");
+            //handlePullToRefresh();
+        }, [])
+    );
 
     return (
         <>

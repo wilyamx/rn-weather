@@ -239,7 +239,7 @@ function HomeScreen({ route, navigation }) {
             if (network.isConnected) {
                 LOG.info("#1.2 [HomeScreen]/internetConnect", network);
                 setIsInternetReachable(true);
-                
+
                 LOG.info("#1.2 [HomeScreen]/isInternetReachable", isInternetReachable);
 
                 // your location indicator
@@ -483,11 +483,23 @@ function HomeScreen({ route, navigation }) {
                 else {
                     LOG.info("[HomeScreen]/useFocusEffect/no.route.params");
 
-                    // home displayed
-                    const selectedForecast = getForecastByCityName(homeDisplayedForecast.city.name);
-                    if (!selectedForecast) return;
+                    if (!hasCurrentLocation() && !hasHomeDisplayedForecast()) {
+                        LOG.info("[HomeScreen]/noData");
+                        setUseCurrentLocation(false);
+                        return;
+                    }
 
-                    setUseCurrentLocation(selectedForecast.city.name == currentLocation.place);
+                    var selectedForecast = null;
+
+                    // home displayed
+                    if (hasHomeDisplayedForecast()) {
+                        selectedForecast = getForecastByCityName(homeDisplayedForecast.city.name);
+                        if (!selectedForecast) return;  
+                    }
+                    
+                    if (selectedForecast && selectedForecast.city) {
+                        setUseCurrentLocation(selectedForecast.city.name == currentLocation.place);
+                    }
 
                     if (hasInterNetConnection()) {
                         LOG.info("[HomeScreen]/useFocusEffect/online");
