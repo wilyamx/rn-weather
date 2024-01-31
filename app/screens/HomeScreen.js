@@ -83,9 +83,9 @@ function HomeScreen({ route, navigation }) {
     // your location indicator
     // use the current location button
     const [useCurrentLocation, setUseCurrentLocation] = useState(false);
-    // re-detect device location button display
+    // re-detect device location button display (top-left)
     const [detectLocation, setDetectLocation] = useState(false);
-    // search button display
+    // search button display (top-right)
     const [searchButton, setSearchButton] = useState(true);
     // snackbar visibility (no internet connection)
     const [snackbarVisible, setSnackbarVisible] = useState(false);
