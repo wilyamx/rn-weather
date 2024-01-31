@@ -109,6 +109,7 @@ function LocationsScreen({ navigation }) {
 
     const filterSavedLocationBySearchKey = (text) => {
         LOG.info("[LocationsScreen]/filterSavedLocationBySearchKey", text);
+        //
         var data = [];
         if (text) {
             let keyFormatted = text.toLowerCase();
@@ -131,10 +132,16 @@ function LocationsScreen({ navigation }) {
     // hooks
 
     useEffect(() => {
-        setSavedLocationsFiltered(savedLocations);
+        LOG.info("[LocationScreen]/initialize");
+
+        // initialize the listing display
+        let newList = savedLocations.slice()
+        setSavedLocationsFiltered(newList);
+        LOG.info("[LocationScreen]/savedLocations", newList.length);
 
         (async () => {
             var network = await Network.getNetworkStateAsync();
+            // for testin only
             if (OFFLINE) {
                 network = {
                     isInternetReachable: false,
@@ -142,14 +149,15 @@ function LocationsScreen({ navigation }) {
                     isConnected: false
                 }
             }
-            if (network.isConnected) {
-                setIsInternetReachable(true);
-            }
-            else {
-                setIsInternetReachable(false);
-            }
+            setIsInternetReachable(network.isConnected);
         })();
     }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            LOG.info("[LocationScreen]/useFocusEffect");
+        }, [])
+    );
 
     useEffect(() => {
         LOG.info("[LocationScreen]/searchQuery", searchQuery);
@@ -168,12 +176,7 @@ function LocationsScreen({ navigation }) {
                     isConnected: false
                 }
             }
-            if (network.isConnected) {
-                setIsInternetReachable(true);
-            }
-            else {
-                setIsInternetReachable(false);
-            }
+            setIsInternetReachable(network.isConnected);
         })();
     }), [netInfo.isInternetReachable];
 
@@ -192,6 +195,8 @@ function LocationsScreen({ navigation }) {
     }, [responseStatus]);
 
     useEffect(() => {
+        LOG.info("[LocationScreen]/useEffect/weatherDetails");
+        //
         let savedLocationNames = savedLocations.map((forecast) => forecast.city.name);
         LOG.info("[LocationScreen]/Saved-Locations", savedLocationNames);
 
@@ -200,8 +205,8 @@ function LocationsScreen({ navigation }) {
         if (weatherDetails.list.length == 0) return;
         if (!weatherDetails.city) return;
 
+        LOG.info("[LocationScreen]/useEffect/weatherDetails/validated");
         let cityDetails = weatherDetails.city;
-        let forecasts = weatherDetails.list;
 
         if (savedLocations.length == 0) {
             dispatch(addToForecasts(weatherDetails));
@@ -225,19 +230,12 @@ function LocationsScreen({ navigation }) {
                 dispatch(updateFromForecasts(weatherDetails));
             }
             dispatch(displayedToHome(weatherDetails));
-            LOG.info("[LocationsScreen]/homeDisplayedForecast/1");
         }
 
+        // clear the searchbar
         setSearchQuery("");
 
     }, [weatherDetails]);
-
-    useFocusEffect(
-        useCallback(() => {
-            LOG.info("[LocationScreen]/useFocusEffect");
-            //handlePullToRefresh();
-        }, [])
-    );
 
     return (
         <>

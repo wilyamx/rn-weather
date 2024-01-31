@@ -46,7 +46,8 @@ React Native Training Assessment Project
 1. Displayed from home indicator - `LocationsScreen`
 1. API Activity Indicator - `HomeScreen`, `LocationsScreen`
 1. Filtered locations using search key - `LocationsScreen`
-1. Pull to refresh = `LocationScreen` 
+1. Pull to refresh - `LocationScreen`
+1. Location list sorting - `LocationsScreen` 
 
 ## Expo App Initialization
 
