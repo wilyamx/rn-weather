@@ -8,6 +8,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import * as Network from 'expo-network';
 import { useNetInfo } from '@react-native-community/netinfo';
 
+import constants from '../config/constants';
 import forecastApi from '../api/forecast';
 import useApi from '../hooks/useApi';
 import {
@@ -22,6 +23,8 @@ import AppActivityIndicator from '../components/AppActivityIndicator';
 import ListItemDeleteAction from '../components/lists/ListItemDeleteAction';
 import LocationListItem from '../components/lists/LocationListItem';
 import Screen from '../components/Screen';
+
+const OFFLINE = constants.offlineMode;
 
 function LocationsScreen({ navigation }) {
     // redux
@@ -131,7 +134,14 @@ function LocationsScreen({ navigation }) {
         setSavedLocationsFiltered(savedLocations);
 
         (async () => {
-            let network = await Network.getNetworkStateAsync();
+            var network = await Network.getNetworkStateAsync();
+            if (OFFLINE) {
+                network = {
+                    isInternetReachable: false,
+                    type: "None",
+                    isConnected: false
+                }
+            }
             if (network.isConnected) {
                 setIsInternetReachable(true);
             }
@@ -150,7 +160,14 @@ function LocationsScreen({ navigation }) {
     // user turn off/on the device wifi
     useEffect(() => {
         (async () => {
-            let network = await Network.getNetworkStateAsync();
+            var network = await Network.getNetworkStateAsync();
+            if (OFFLINE) {
+                network = {
+                    isInternetReachable: false,
+                    type: "None",
+                    isConnected: false
+                }
+            }
             if (network.isConnected) {
                 setIsInternetReachable(true);
             }

@@ -238,12 +238,8 @@ function HomeScreen({ route, navigation }) {
             }
             if (network.isConnected) {
                 LOG.info("#1.2 [HomeScreen]/internetConnect", network);
-                if (OFFLINE) {
-                    setIsInternetReachable(false);
-                }
-                else {
-                    setIsInternetReachable(true);
-                }
+                setIsInternetReachable(true);
+                
                 LOG.info("#1.2 [HomeScreen]/isInternetReachable", isInternetReachable);
 
                 // your location indicator
@@ -354,13 +350,15 @@ function HomeScreen({ route, navigation }) {
     useEffect(() => {
         (async () => {
             let network = await Network.getNetworkStateAsync();
+            if (OFFLINE) {
+                network = {
+                    isInternetReachable: false,
+                    type: "None",
+                    isConnected: false
+                }
+            }
             if (network.isConnected) {
-                if (OFFLINE) {
-                    setIsInternetReachable(false);
-                }
-                else {
-                    setIsInternetReachable(true);
-                }
+                setIsInternetReachable(true);
             }
             else {
                 setIsInternetReachable(false);
