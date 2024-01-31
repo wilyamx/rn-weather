@@ -45,7 +45,8 @@ React Native Training Assessment Project
 1. Your Location indicator - `HomeScreen`, `LocationsScreen` 
 1. Displayed from home indicator - `LocationsScreen`
 1. API Activity Indicator - `HomeScreen`, `LocationsScreen`
-1. Filtered locations - `LocationsScreen` 
+1. Filtered locations using search key - `LocationsScreen`
+1. Pull to refresh = `LocationScreen` 
 
 ## Expo App Initialization
 
@@ -61,8 +62,11 @@ React Native Training Assessment Project
 
 	$ cd rn-weather
 	
+	$ npm install
 	$ npx expo start
 	Starting Metro Bunder
+	
+NOTE: **Exclude** to commit these folders `node_modules`, `ios`, `android`
 
 ## NPM Library Installation
 
@@ -111,7 +115,7 @@ React Native Training Assessment Project
 
 1. [How to persist the shopping cart state to local storage](https://www.youtube.com/watch?v=shLz_kmA68Q)
 
-1. React Native MVVM
+1. React Native MVVM **(future implementations)**
 
 	* [React Native MVVM Concept](https://tech.groww.in/apply-mvvm-in-react-native-app-ad77fa0f851b)
 	* [React Native MVVM Demo](https://github.com/kushal98/rn-mvvm-demo/tree/master/src) - MVVM architecture design pattern sample
