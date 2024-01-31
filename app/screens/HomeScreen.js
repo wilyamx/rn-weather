@@ -249,7 +249,7 @@ function HomeScreen({ route, navigation }) {
                 // your location indicator
                 if (hasCurrentLocation()) {
                     LOG.info("#1.2 [HomeScreen]/currentLocation", currentLocation.place);
-                    const forecast = getForecastByIdentifier(currentLocation.uuid);
+                    const forecast = getForecastByCityName(currentLocation.place);
 
                     if (hasHomeDisplayedForecast()) {
                         setUseCurrentLocation(forecast.city.name == homeDisplayedForecast.city.name);
@@ -277,7 +277,7 @@ function HomeScreen({ route, navigation }) {
                 LOG.info("#1.3 [HomeScreen]/currentLocation", currentLocation.place);
 
                 // your location indicator
-                const selectedForecast = getForecastByIdentifier(currentLocation.uuid);
+                const selectedForecast = getForecastByCityName(currentLocation.place);
                 setUseCurrentLocation(selectedForecast.city.name == homeDisplayedForecast.city.name);
 
                 // show home displayed forecast
@@ -339,7 +339,7 @@ function HomeScreen({ route, navigation }) {
             }
             else {
                 LOG.info("[HomeScreen]/useEffect/loadLocationHomeDisplay");
-                let forecastHomeDisplayed = getForecastByIdentifier(homeDisplayedForecast.uuid)
+                let forecastHomeDisplayed = getForecastByCityName(homeDisplayedForecast.city.name)
                 setWeatherDetails(forecastHomeDisplayed);
             }
         }
@@ -485,12 +485,8 @@ function HomeScreen({ route, navigation }) {
                 else {
                     LOG.info("[HomeScreen]/useFocusEffect/no.route.params");
 
-                    if (hasCurrentLocation() && !hasHomeDisplayedForecast()) {
-                        //return;
-                    }
-
                     // home displayed
-                    const selectedForecast = getForecastByIdentifier(homeDisplayedForecast.uuid);
+                    const selectedForecast = getForecastByCityName(homeDisplayedForecast.city.name);
                     if (!selectedForecast) return;
 
                     setUseCurrentLocation(selectedForecast.city.name == currentLocation.place);
