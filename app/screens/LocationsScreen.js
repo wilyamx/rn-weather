@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import LOG from '../utility/logger';
 import { useState } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { Searchbar, Text } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native';
 import * as Network from 'expo-network';
 import { useNetInfo } from '@react-native-community/netinfo';
 
@@ -61,7 +62,7 @@ function LocationsScreen({ navigation }) {
         }
         dispatch(removeFromForecasts(location.city.name));
 
-        let list = savedLocationsFiltered.filter((forecast) => {
+        let list = savedLocationsFiltered.slice().filter((forecast) => {
             return forecast.uuid != location.uuid
         });
         setSavedLocationsFiltered(list);
@@ -108,7 +109,7 @@ function LocationsScreen({ navigation }) {
         var data = [];
         if (text) {
             let keyFormatted = text.toLowerCase();
-            let filteredData = savedLocations.filter((forecast) => {
+            let filteredData = savedLocations.slice().filter((forecast) => {
                 let cityName = forecast.city.name.toLowerCase();
                 return cityName.includes(keyFormatted);
             });

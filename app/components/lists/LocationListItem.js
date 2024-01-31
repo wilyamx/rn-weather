@@ -65,7 +65,7 @@ function LocationListItem({
     };
     const homeDisplayed = () => {
         //console.log("LocationListItem/homeDisplayed", homeDisplayedForecast);
-        return homeDisplayedForecast.uuid === location.uuid;
+        return homeDisplayedForecast.city.name === location.city.name;
     };
 
     return (

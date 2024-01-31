@@ -77,11 +77,12 @@ function HomeScreen({ route, navigation }) {
 
     const theme = useTheme();
     const refRBSheet = useRef();
-    // detect device location
+
+    // detect device location (long, lat)
     const { location, getLocation: getDeviceLocation } = useLocation();
     // your location indicator
     // use the current location button
-    const [useCurrentLocation, setUseCurrentLocation] = useState(true);
+    const [useCurrentLocation, setUseCurrentLocation] = useState(false);
     // re-detect device location button display
     const [detectLocation, setDetectLocation] = useState(false);
     // search button display
@@ -89,6 +90,10 @@ function HomeScreen({ route, navigation }) {
     // snackbar visibility (no internet connection)
     const [snackbarVisible, setSnackbarVisible] = useState(false);
 
+    // calculated
+
+    const [triggerFromLocationButton, setTriggerFromLocationButton] = useState(false);
+    
     const hasInterNetConnection = () => {
         return isInternetReachable
     };
@@ -147,7 +152,21 @@ function HomeScreen({ route, navigation }) {
         //LOG.info("[HomeScreen]/getForecastByIdentifier", uuid, savedLocations.length, validForecasts.length);
         return validForecasts[0];
     };
-    
+    const getForecastByCityName = (name) => {
+        const validForecasts = savedLocations.filter((forecast) => {
+            return forecast.city.name == name;
+        });
+        //LOG.info("[HomeScreen]/getForecastByIdentifier", uuid, savedLocations.length, validForecasts.length);
+        return validForecasts[0];
+    };
+    const savedLocationsEnums = () => {
+        let maps = savedLocations.map((forecast) => ({
+            uuid: forecast.uuid,
+            cityName: forecast.city.name
+        }));
+        return maps;
+    };
+
     // actions
 
     const refreshHandler = () => {
@@ -168,6 +187,7 @@ function HomeScreen({ route, navigation }) {
     };
     const detectDeviceLocationHandler = () => {
         LOG.info("[HomeScreen]", "detectDeviceLocationHandler", hasInterNetConnection());
+        setTriggerFromLocationButton(true);
 
         if (hasInterNetConnection()) {
             setUseCurrentLocation(true);
@@ -186,9 +206,21 @@ function HomeScreen({ route, navigation }) {
         navigation.navigate("Locations");
     };
     
+    // convenience methods
+
+    const hasCurrentLocation = () => {
+        return (currentLocation && currentLocation.place);
+    };
+    const hasHomeDisplayedForecast = () => {
+        return (homeDisplayedForecast &&
+            homeDisplayedForecast.uuid &&
+            homeDisplayedForecast.city)
+    };
+
     // hooks
 
-    // this will trigger once only when reload
+    // trigger when reload
+    // this will trigger once only
     useEffect(() => {
         LOG.info("#1.0 [HomeScreen]/initialize");
         LOG.info("#1.1 [HomeScreen]/useEffect/initialize/weatherDetailData", weatherDetailData);
@@ -213,6 +245,30 @@ function HomeScreen({ route, navigation }) {
                     setIsInternetReachable(true);
                 }
                 LOG.info("#1.2 [HomeScreen]/isInternetReachable", isInternetReachable);
+
+                // your location indicator
+                if (hasCurrentLocation()) {
+                    LOG.info("#1.2 [HomeScreen]/currentLocation", currentLocation.place);
+                    const forecast = getForecastByIdentifier(currentLocation.uuid);
+
+                    if (hasHomeDisplayedForecast()) {
+                        setUseCurrentLocation(forecast.city.name == homeDisplayedForecast.city.name);
+                    }
+                    else {
+                        setUseCurrentLocation(false);
+                    }
+                }
+                
+                if (hasHomeDisplayedForecast()) {
+                    LOG.info("#1.2 [HomeScreen]/homeDisplayedForecast", homeDisplayedForecast.city.name);
+                    // show home displayed forecast
+                    setWeatherDetails(homeDisplayedForecast)
+                }
+
+                if (!hasCurrentLocation() && !hasHomeDisplayedForecast()) {
+                    LOG.info("#1.2 [HomeScreen]/noData");
+                    setUseCurrentLocation(false);
+                }
             }
             else {
                 setIsInternetReachable(false);
@@ -254,15 +310,27 @@ function HomeScreen({ route, navigation }) {
 
         dispatch(updateFromForecasts(weatherDetailData));
         // indicator that this location displayed from home tab
-        dispatch(displayedToHome(weatherDetailData));
+        if (weatherDetailData.city.name) {
+            dispatch(displayedToHome(weatherDetailData));
+        }
     }, [weatherDetailData]);
 
     useEffect(() => {
-        LOG.info("[HomeScreen]/useEffect/Device-Location", location);
-        //
+        if (!location) return;
+
+        LOG.info("[HomeScreen]/useEffect/Device-Location", location, triggerFromLocationButton);
+
+        setDetectLocation(location != null);
+
+        // we will show the home displayed forecast if available
+        if (!triggerFromLocationButton && hasHomeDisplayedForecast()) {
+            setWeatherDetails(homeDisplayedForecast);
+            return;
+        };
+
         if (location) {
             if (hasInterNetConnection()) {
-                LOG.info("[HomeScreen]/useEffect/weatherRequestByCooridnate");
+                LOG.info("[HomeScreen]/useEffect/weatherRequestByCoordinate");
                 // request forecast using device location
                 weatherRequestByCoordinate(
                     location.latitude,
@@ -275,7 +343,10 @@ function HomeScreen({ route, navigation }) {
                 setWeatherDetails(forecastHomeDisplayed);
             }
         }
+        setUseCurrentLocation(location != null)
         setDetectLocation(location != null);
+        //
+        setTriggerFromLocationButton(false);
     }, [location]);
 
     // this will update every time change in internet connection status
@@ -299,8 +370,7 @@ function HomeScreen({ route, navigation }) {
 
     useEffect(() => {
         if (!weatherDetailData2.city) return;
-
-        LOG.info("[HomeScreen]/useEffect/weatherDetailData2", weatherDetailData2.city.name);
+        LOG.info("[HomeScreen]/useEffect/weatherDetailData2/city", weatherDetailData2.city.name);
         //
         // Update the home display status from locations tab
         let data = weatherDetailData2;
@@ -308,14 +378,16 @@ function HomeScreen({ route, navigation }) {
         //
         setWeatherDetails(data);
         // indicator that this location displayed from home tab
-        dispatch(displayedToHome(data));
+        if (data.city.name) {
+            dispatch(displayedToHome(data));
+        }
         //
         if (!data) return;
         if (!data.list) return;
         if (data.list.length == 0) return;
         if (!data.city) return;
 
-        LOG.info("[HomeScreen]/useEffect/weatherDetailData2", data);
+        LOG.info("[HomeScreen]/useEffect/weatherDetailData2/data", data);
         dispatch(updateFromForecasts(data));
     }, [weatherDetailData2]);
 
@@ -327,16 +399,18 @@ function HomeScreen({ route, navigation }) {
 
         if (!hasInterNetConnection()) {
             //setWeatherDetails(homeDisplayedForecast);
-            dispatch(displayedToHome(weatherDetails));
+            if (weatherDetails.city.name) {
+                dispatch(displayedToHome(weatherDetails));
+            }
             return;
         }
         
         if (!weatherDetails) return;
-
         if (!weatherDetails.list) return;
         if (weatherDetails.list.length == 0) return;
-
         if (!weatherDetails.city) return;
+
+        LOG.info("[HomeScreen]/useEffect/weatherDetails/validated");
 
         let uuid = weatherDetails.uuid;
         let cityDetails = weatherDetails.city;
@@ -354,6 +428,10 @@ function HomeScreen({ route, navigation }) {
                 LOG.info("[HomeScreen]/useEffect/Existing-Location", cityDetails.name);
                 dispatch(updateFromForecasts(weatherDetails));
             }
+        }
+
+        if (!hasCurrentLocation()) {
+            setUseCurrentLocation(false);
         }
 
         if (location && useCurrentLocation) {
@@ -381,10 +459,15 @@ function HomeScreen({ route, navigation }) {
                     route.params.cityId &&
                     route.params.name) {
                     
-                    const selectedForecast = getForecastByIdentifier(route.params.locationId);
-                    setUseCurrentLocation(route.params.isCurrentLocation);
+                    const selectedForecast = getForecastByCityName(route.params.name);
+                    if (!selectedForecast) {
+                        LOG.info("[HomeScreen]/useFocusEffect/selectedForecast/none");
+                        return;
+                    }
 
-                    //showAlert("hasInternetConnection?" + selectedForecast.city.name, hasInterNetConnection() ? 'YES' : 'NO');
+                    LOG.info("[HomeScreen]/useFocusEffect/selectedForecast", selectedForecast.city.name);
+                    dispatch(displayedToHome(selectedForecast));
+                    setUseCurrentLocation(route.params.isCurrentLocation);
 
                     if (hasInterNetConnection()) {
                         LOG.info("[HomeScreen]/useFocusEffect/online");
@@ -400,10 +483,18 @@ function HomeScreen({ route, navigation }) {
                 }
                 // user just switch from location tab to home tab only
                 else {
+                    LOG.info("[HomeScreen]/useFocusEffect/no.route.params");
+
+                    if (hasCurrentLocation() && !hasHomeDisplayedForecast()) {
+                        //return;
+                    }
+
                     // home displayed
                     const selectedForecast = getForecastByIdentifier(homeDisplayedForecast.uuid);
+                    if (!selectedForecast) return;
+
                     setUseCurrentLocation(selectedForecast.city.name == currentLocation.place);
-                
+
                     if (hasInterNetConnection()) {
                         LOG.info("[HomeScreen]/useFocusEffect/online");
                         LOG.info("[HomeScreen]/useFocusEffect/weatherRequest", selectedForecast.city.name);
