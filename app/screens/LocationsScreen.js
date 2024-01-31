@@ -79,15 +79,16 @@ function LocationsScreen({ navigation }) {
     };
     const handleSelectedForecast = (forecast) => {
         const isCurrentLocation = savedCurrentLocation.place == forecast.city.name
-        const homeDisplayed = forecast.homeDisplayed; 
-        LOG.info("[LocationScreen]/Selected-Location", forecast.uuid, forecast.city.name, isCurrentLocation, homeDisplayed);
         
-        navigation.navigate("Home", {
+        let params = {
             locationId: forecast.uuid,
             cityId: forecast.city.id,
             name: forecast.city.name,
             isCurrentLocation: isCurrentLocation,
-        });
+        }
+        
+        LOG.info("[LocationScreen]/Selected-Location", params);
+        navigation.navigate("Home", params);
     };
     const handlePullToRefresh = () => {
         LOG.info("[LocationScreen]/handlePullToRefresh");
@@ -188,6 +189,11 @@ function LocationsScreen({ navigation }) {
 
         if (savedLocations.length == 0) {
             dispatch(addToForecasts(weatherDetails));
+            dispatch(displayedToHome(weatherDetails));
+            showAlert(
+                "New place added",
+                `(${cityDetails.name}) has been added to the list!`
+            );
         }
         else {
             if (!savedLocationNames.includes(cityDetails.name)) {
