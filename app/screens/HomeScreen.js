@@ -236,10 +236,9 @@ function HomeScreen({ route, navigation }) {
                     isConnected: false
                 }
             }
+            setIsInternetReachable(network.isConnected);
             if (network.isConnected) {
                 LOG.info("#1.2 [HomeScreen]/internetConnect", network);
-                setIsInternetReachable(true);
-
                 LOG.info("#1.2 [HomeScreen]/isInternetReachable", isInternetReachable);
 
                 // your location indicator
@@ -267,7 +266,6 @@ function HomeScreen({ route, navigation }) {
                 }
             }
             else {
-                setIsInternetReachable(false);
                 LOG.info("#1.3 [HomeScreen]/internetNotConnected");
                 LOG.info("#1.3 [HomeScreen]/homeDisplayedForecast", homeDisplayedForecast.city.name);
                 LOG.info("#1.3 [HomeScreen]/currentLocation", currentLocation.place);
@@ -357,12 +355,7 @@ function HomeScreen({ route, navigation }) {
                     isConnected: false
                 }
             }
-            if (network.isConnected) {
-                setIsInternetReachable(true);
-            }
-            else {
-                setIsInternetReachable(false);
-            }
+            setIsInternetReachable(network.isConnected);
         })();
     }), [netInfo.isInternetReachable];
 
@@ -416,6 +409,7 @@ function HomeScreen({ route, navigation }) {
         
         if (savedLocations.length == 0 && uuid.length > 0) {
             dispatch(addToForecasts(weatherDetails));
+            LOG.info("[HomeScreen]/useEffect/Added-First-Location", cityDetails.name);
         }
         else {
             if (!savedLocationNames.includes(cityDetails.name) && uuid.length > 0) {
@@ -433,14 +427,16 @@ function HomeScreen({ route, navigation }) {
         }
 
         if (location && useCurrentLocation) {
+            setUseCurrentLocation(true);
             dispatch(setCurrentLocation({
                 latitude: location.latitude,
                 longitude: location.longitude,
                 place: weatherDetails.city.name,
                 uuid: weatherDetails.uuid,
-            }))
+            }));
+            LOG.info("[HomeScreen]/useEffect/weatherDetails/Updated-User-Location");
         }
-    
+        
     }, [weatherDetails]);
 
     // works every time the page is navigated even with same route params
