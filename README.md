@@ -129,4 +129,4 @@ NOTE: **Exclude** to commit these folders `node_modules`, `ios`, `android`
 1. React Native MVVM **(future implementations)**
 
 	* [React Native MVVM Concept](https://tech.groww.in/apply-mvvm-in-react-native-app-ad77fa0f851b)
-	* [React Native MVVM Demo](https://github.com/kushal98/rn-mvvm-demo/tree/master/src) - MVVM architecture design pattern sample
+	* [React Native MVVM Demo (Github)](https://github.com/kushal98/rn-mvvm-demo/tree/master/src) - MVVM architecture design pattern sample
