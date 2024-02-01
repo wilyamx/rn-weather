@@ -31,7 +31,7 @@ React Native Training Assessment Project
 	<img src="screenshots/settings-light-mode.png" alt="settings-light-mode" height="400">
 </p>
 
-## Features
+## Functionality
 
 1. Get weather forecast to any location
 1. Get weather location of current location
@@ -40,7 +40,7 @@ React Native Training Assessment Project
 1. Delete persisted data
 1. Dark and Light theme mode
 
-## More Features
+## Extras
 
 ### HomeScreen
 
