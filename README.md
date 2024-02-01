@@ -101,7 +101,7 @@ NOTE: **Exclude** to commit these folders `node_modules`, `ios`, `android`
 1.  [React Native Paper](https://callstack.github.io/react-native-paper/) - Cross-platform Material Design for React Native
 	* [Guides](https://callstack.github.io/react-native-paper/docs/guides/getting-started) 
 	* [Components](https://callstack.github.io/react-native-paper/docs/components/ActivityIndicator)
-
+1. [React Native Vector Icons Directory](https://static.enapter.com/rn/icons/material-community.html) - ready to use icons
 1. Redux + [Redux-Persist](https://github.com/rt2zz/redux-persist) - predictable state container
 1. [Apisauce](https://github.com/infinitered/apisauce) - api integration
 1. [Moment](https://momentjs.com/) - display dates and time
