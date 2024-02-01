@@ -107,7 +107,9 @@ NOTE: **Exclude** to commit these folders `node_modules`, `ios`, `android`
 1. [Moment](https://momentjs.com/) - display dates and time
 1. [React Native Dot Env](https://github.com/goatandsheep/react-native-dotenv) - environment variables
 1. [React Navigation](https://reactnavigation.org/docs/getting-started/) - routing and navigation for Expo and React Native apps
-1. [Open Weather Map API](https://openweathermap.org/forecast5) - 5 day forecast is available at any location on the globe
+1. [Open Weather Map API](https://openweathermap.org/api)
+	* [5 day Weather Forecast API](https://openweathermap.org/forecast5) - 5 day forecast is available at any location on the globe
+	* [Weather Conditions](https://openweathermap.org/weather-conditions)
 
 ## References
 
