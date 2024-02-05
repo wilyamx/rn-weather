@@ -28,8 +28,9 @@ import Screen from '../components/Screen';
 const OFFLINE = constants.offlineMode;
 
 function LocationsScreen({ navigation }) {
+
     // localizations
-    // const { t, i18n } = useTranslation();
+    const { t, i18n } = useTranslation(['locations']);
 
     // redux
     const temperatureUnit = useSelector(state => state.theme.temperatureUnit);
@@ -247,12 +248,12 @@ function LocationsScreen({ navigation }) {
         <>
         <AppActivityIndicator visible={loading} />
         <Screen style={styles.container}>
-            <Text style={styles.title} variant='titleLarge'>Pick Locations</Text>
+            <Text style={styles.title} variant='titleLarge'>{i18n.t('pickLocations', { ns: 'locations' })}</Text>
             <Text style={styles.subtitle} variant='titleSmall'>
-                Find the city that you want to know{'\n'} the detailed weather into at this time.
+                {i18n.t('instructions', { ns: 'locations' })}
             </Text>
             <Searchbar
-                placeholder="Search for a place"
+                placeholder={i18n.t('searchForAPlace', { ns: 'locations' })}
                 autoCorrect={false}
                 value={searchQuery}
                 style={styles.searchBar}

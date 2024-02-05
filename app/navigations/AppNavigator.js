@@ -4,15 +4,20 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 
-import SettingsScreen from '../screens/SettingsScreen';
-import LocationsScreen from '../screens/LocationsScreen';
 import HomeScreen from '../screens/HomeScreen';
+import LocationsScreen from '../screens/LocationsScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 import LOG from '../utility/logger';
 
 const Tab = createBottomTabNavigator();
 
 function AppNavigator(props) {
+
+    // localizations
+    const { t, i18n } = useTranslation('common');
+
     const theme = useTheme();
 
     return (
@@ -30,7 +35,7 @@ function AppNavigator(props) {
                 }}
             >
                 <Tab.Screen
-                    name="Home"
+                    name={i18n.t('homeTab', { ns: 'common'})}
                     component={HomeScreen}
                     options={{ 
                         headerShown: false,
@@ -46,7 +51,7 @@ function AppNavigator(props) {
                     }
                 />
                 <Tab.Screen
-                    name="Locations"
+                    name={i18n.t('locationsTab', { ns: 'common'})}
                     component={LocationsScreen}
                     options={{ 
                         headerShown: false,
@@ -54,7 +59,7 @@ function AppNavigator(props) {
                     }}
                 />
                 <Tab.Screen
-                    name="Settings"
+                    name={i18n.t('settingsTab', { ns: 'common'})}
                     component={SettingsScreen}
                     options={{ 
                         headerShown: false,

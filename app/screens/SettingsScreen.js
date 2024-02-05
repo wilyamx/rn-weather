@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { AppContext } from '../auth/AppContextProvider';
 import { FlatList, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppContext } from '../auth/AppContextProvider';
+import { useTranslation } from 'react-i18next';
 
 import {
     switchToDarkMode,
@@ -17,6 +18,12 @@ import Screen from '../components/Screen';
 import { DarkTheme, LightTheme } from '../config/Themes';
 
 function SettingsScreen(props) {
+
+    // localizations
+    const { t, i18n } = useTranslation('settings');
+    const config1 = i18n.t('temperatureUnitInFahrenheit', { ns: 'settings'});
+    const config2 = i18n.t('darkModeAppearance', { ns: 'settings'});
+
     // redux
     const temperatureUnit = useSelector(state => state.theme.temperatureUnit);
     const colorScheme = useSelector(state => state.theme.colorScheme);
@@ -33,13 +40,13 @@ function SettingsScreen(props) {
     // https://static.enapter.com/rn/icons/material-community.html
     const configItems = [
         {
-            title: "Temperature Unit\nin Fahrenheit",
+            title: config1,
             icon: "coolant-temperature",
             getState: isSwitchOn1,
             setState: setIsSwitchOn1
         },
         {
-            title: "Dark Mode\nAppearance",
+            title: config2,
             icon: "format-color-fill",
             getState: isSwitchOn2,
             setState: setIsSwitchOn2
@@ -70,7 +77,7 @@ function SettingsScreen(props) {
 
     return (
         <Screen style={styles.container}>
-            <Text style={styles.title} variant='titleLarge'>Configurations</Text>
+            <Text style={styles.title} variant='titleLarge'>{i18n.t('configurations', { ns: 'settings' })}</Text>
             <FlatList
                 data={configItems}
                 keyExtractor={item => item.title}
