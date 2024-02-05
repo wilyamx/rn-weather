@@ -16,7 +16,7 @@ const Tab = createBottomTabNavigator();
 function AppNavigator(props) {
 
     // localizations
-    const { t, i18n } = useTranslation('common');
+    const { t, i18n } = useTranslation();
 
     const theme = useTheme();
 

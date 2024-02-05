@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 
 import i18next from '../../i18next';
-
 import { DarkTheme, LightTheme } from '../config/Themes';
 
 export const AppContext = createContext(null);
