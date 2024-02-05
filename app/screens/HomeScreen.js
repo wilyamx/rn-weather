@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Image, View, StyleSheet } from 'react-native';
+import { Localization } from 'expo';
 import { Snackbar, Text, useTheme } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,6 +8,9 @@ import { useNetInfo } from '@react-native-community/netinfo';
 import moment from "moment/moment";
 import RBSheet from "react-native-raw-bottom-sheet";
 import * as Network from 'expo-network';
+
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 import constants from '../config/constants';
 import forecastApi from '../api/forecast';
@@ -39,6 +43,14 @@ const OFFLINE = constants.offlineMode;
 
 function HomeScreen({ route, navigation }) {
     LOG.info("[HomeScreen]/Function-Component");
+
+    // localizations
+
+    const {t, i18n} = useTranslation();
+
+    const changeLanguage = (language) => {
+        i18n.changeLanguage(language);
+    };
 
     // redux
 
@@ -225,6 +237,7 @@ function HomeScreen({ route, navigation }) {
         LOG.info("#1.0 [HomeScreen]/initialize");
         LOG.info("#1.1 [HomeScreen]/useEffect/initialize/weatherDetailData", weatherDetailData);
 
+        changeLanguage('fr');
         setDetectLocation(false);
 
         (async () => {
@@ -542,7 +555,7 @@ function HomeScreen({ route, navigation }) {
                     </View>
 
                     <View style={styles.headerCenterContainer}>
-                        <Text style={styles.title} variant='titleLarge'>Forecast Report</Text>
+                        <Text style={styles.title} variant='titleLarge'>{i18next.t('forecastReport', { ns: 'home'})}</Text>
                         <Text style={[styles.date, { color: theme.colors.tertiary }]} variant='titleSmall'>
                             {forecastDate()}
                         </Text>

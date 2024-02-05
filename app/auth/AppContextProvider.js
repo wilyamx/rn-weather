@@ -1,6 +1,9 @@
 import React, { createContext, useState } from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { useSelector } from 'react-redux';
+import { I18nextProvider } from 'react-i18next';
+
+import i18next from '../../i18next';
 
 import { DarkTheme, LightTheme } from '../config/Themes';
 
@@ -18,7 +21,9 @@ export default ({ children }) => {
     return (
         <AppContext.Provider value={{theme: theme, changeTheme}}>
             <PaperProvider theme={theme}>
-                {children}
+                <I18nextProvider i18n={i18next} defaultNS={'translation'}>
+                    {children}
+                </I18nextProvider>
             </PaperProvider>
         </AppContext.Provider>
     )

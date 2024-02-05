@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import * as Network from 'expo-network';
 import { useNetInfo } from '@react-native-community/netinfo';
+import { useTranslation } from 'react-i18next';
 
 import constants from '../config/constants';
 import forecastApi from '../api/forecast';
@@ -27,6 +28,9 @@ import Screen from '../components/Screen';
 const OFFLINE = constants.offlineMode;
 
 function LocationsScreen({ navigation }) {
+    // localizations
+    // const { t, i18n } = useTranslation();
+
     // redux
     const temperatureUnit = useSelector(state => state.theme.temperatureUnit);
     const savedLocations = useSelector(state => state.weather.forecasts);

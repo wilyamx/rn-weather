@@ -1,11 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { StyleSheet, useColorScheme } from 'react-native';
 import { Provider, useSelector } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react'
 
 import AppContextProvider from './app/auth/AppContextProvider';
 import AppNavigator from './app/navigations/AppNavigator';
-import OfflineNotice from './app/components/OfflineNotice';
 import reduxStore from "./app/redux/store";
 import { DarkTheme, LightTheme } from './app/config/Themes';
 
@@ -19,7 +18,6 @@ export default function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-          {/* <OfflineNotice /> */}
           <AppContextProvider>
               <AppNavigator />
           </AppContextProvider>

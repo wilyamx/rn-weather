@@ -75,8 +75,12 @@ React Native Training Assessment Project
 	$ npx expo start
 	Starting Metro Bunder
 	
-NOTE: **Exclude** to commit these folders `node_modules`, `ios`, `android`
+NOTE: **IGNORE** these folders `node_modules`, `ios`, `android` to the versioning files
 
+## Expo Library Installation
+
+	$ npx expo install expo-localization
+	
 ## NPM Library Installation
 
 	$ npm list
@@ -91,13 +95,16 @@ NOTE: **Exclude** to commit these folders `node_modules`, `ios`, `android`
 
 1. [Expo SDK](https://docs.expo.dev/versions/latest/) - provides access to device and system functionality such as contacts, camera, gyroscope, GPS location, and so on, in the form of packages
 	* [Expo Location](https://docs.expo.dev/versions/latest/sdk/location/) - provides access to reading geolocation information, polling current location from the device
-	* [Expo Network](https://docs.expo.dev/versions/latest/sdk/network/) - provides access to the device's network
-	* [Expo Network Sample](https://stackoverflow.com/questions/56669908/how-to-check-for-an-internet-connection-in-an-expo-react-native-app)
+	* [Expo Network](https://docs.expo.dev/versions/latest/sdk/network/) - provides access to the device's network [sample link](https://stackoverflow.com/questions/56669908/how-to-check-for-an-internet-connection-in-an-expo-react-native-app)
+	* [Expo Localization](https://docs.expo.dev/versions/v49.0.0/sdk/localization/) - provides an interface for native user localization information
 1. NPM Javascripts
 	* [Bottom Sheet](https://www.npmjs.com/package/react-native-raw-bottom-sheet)
 	* [NetInfo](https://www.npmjs.com/package/@react-native-community/netinfo)
 	* [React Native Logs](https://www.npmjs.com/package/react-native-logs)
 	* [React Native UUID](https://www.npmjs.com/package/react-native-uuid)
+	* [React i18Next](https://dev.to/adrai/how-to-properly-internationalize-a-react-application-using-i18next-3hdb) - internationalize a react application.
+		* [Documentation](https://www.i18next.com/)
+		* [Video Tutorial](https://www.youtube.com/watch?v=3BPM_M4gGso)
 1.  [React Native Paper](https://callstack.github.io/react-native-paper/) - Cross-platform Material Design for React Native
 	* [Guides](https://callstack.github.io/react-native-paper/docs/guides/getting-started) 
 	* [Components](https://callstack.github.io/react-native-paper/docs/components/ActivityIndicator)
