@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Image, View, StyleSheet } from 'react-native';
-import { Localization } from 'expo';
 import { Snackbar, Text, useTheme } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import moment from "moment/moment";
 import RBSheet from "react-native-raw-bottom-sheet";
 import * as Network from 'expo-network';
+import * as Localization from 'expo-localization';
 
 import constants from '../config/constants';
 import forecastApi from '../api/forecast';
@@ -44,12 +44,13 @@ function HomeScreen({ route, navigation }) {
 
     // localizations
 
+    const [locale, setLocale] = useState(Localization.locale);
     const {t, i18n} = useTranslation('home');
-    
     const changeLanguage = (language) => {
+        LOG.info("[HomeScreen]/changeLanguage", language);
         i18n.changeLanguage(language);
     };
-
+    
     // redux
 
     const temperatureUnitSaved = useSelector(state => state.theme.temperatureUnit);
@@ -226,16 +227,24 @@ function HomeScreen({ route, navigation }) {
             homeDisplayedForecast.uuid &&
             homeDisplayedForecast.city)
     };
+    const getLanguage = () => {
+        var languageUse = constants.defaultLanguage;
+        if (constants.defaultLanguage === "auto") {
+            languageUse = Localization.locale;
+        }
+        return languageUse;
+    };
 
     // hooks
 
     // trigger when reload
     // this will trigger once only
     useEffect(() => {
-        LOG.info("#1.0 [HomeScreen]/initialize");
+        LOG.info("#1.0 [HomeScreen]/useEffect/initialize");
+        LOG.info("#1.1 [HomeScreen]/useEffect/initialize/locale", getLanguage());
         LOG.info("#1.1 [HomeScreen]/useEffect/initialize/weatherDetailData", weatherDetailData);
 
-        changeLanguage('fr');
+        changeLanguage(getLanguage());
         setDetectLocation(false);
 
         (async () => {

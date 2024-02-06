@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Switch, Text, useTheme, } from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
+import { Button, Text, useTheme, } from 'react-native-paper';
 
 import CircularIcon from '../CircularIcon';
 
-function ConfigListItem({ icon, title, getState, setState }) {
+function LanguageConfigListItem({ icon, title, onPress }) {
     const theme = useTheme();
 
     return (
@@ -17,7 +17,9 @@ function ConfigListItem({ icon, title, getState, setState }) {
                 />
                 <Text style={styles.title}>{title}</Text>
             </View>
-            <Switch style={styles.switch} value={getState} onValueChange={setState} />
+            <View style={styles.language}>
+                <Button mode="contained" onPress={onPress}>EN</Button>
+            </View>
         </View>
     );
 }
@@ -28,6 +30,9 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         paddingHorizontal: 0,
         paddingVertical: 10,
+    },
+    language: {
+        
     },
     title: {
         marginLeft: 15,
@@ -42,4 +47,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ConfigListItem;
+export default LanguageConfigListItem;

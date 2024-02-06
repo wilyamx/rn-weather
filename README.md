@@ -97,6 +97,7 @@ NOTE: **IGNORE** these folders `node_modules`, `ios`, `android` to the versionin
 	* [Expo Location](https://docs.expo.dev/versions/latest/sdk/location/) - provides access to reading geolocation information, polling current location from the device
 	* [Expo Network](https://docs.expo.dev/versions/latest/sdk/network/) - provides access to the device's network [sample link](https://stackoverflow.com/questions/56669908/how-to-check-for-an-internet-connection-in-an-expo-react-native-app)
 	* [Expo Localization](https://docs.expo.dev/versions/v49.0.0/sdk/localization/) - provides an interface for native user localization information
+
 1. NPM Javascripts
 	* [Bottom Sheet](https://www.npmjs.com/package/react-native-raw-bottom-sheet)
 	* [NetInfo](https://www.npmjs.com/package/@react-native-community/netinfo)
@@ -105,15 +106,20 @@ NOTE: **IGNORE** these folders `node_modules`, `ios`, `android` to the versionin
 	* [React i18Next](https://dev.to/adrai/how-to-properly-internationalize-a-react-application-using-i18next-3hdb) - internationalize a react application.
 		* [Documentation](https://www.i18next.com/)
 		* [Video Tutorial](https://www.youtube.com/watch?v=3BPM_M4gGso)
+		* [RNLanguageDetector](https://www.npmjs.com/package/@os-team/i18next-react-native-language-detector) - detect user's language
+		* [React Native Project (Github)](https://github.com/i18next/react-i18next/blob/master/example/ReactNativeProject/i18n.js)
+
 1.  [React Native Paper](https://callstack.github.io/react-native-paper/) - Cross-platform Material Design for React Native
 	* [Guides](https://callstack.github.io/react-native-paper/docs/guides/getting-started) 
 	* [Components](https://callstack.github.io/react-native-paper/docs/components/ActivityIndicator)
+
 1. [React Native Vector Icons Directory](https://static.enapter.com/rn/icons/material-community.html) - ready to use icons
 1. Redux + [Redux-Persist](https://github.com/rt2zz/redux-persist) - predictable state container
 1. [Apisauce](https://github.com/infinitered/apisauce) - api integration
 1. [Moment](https://momentjs.com/) - display dates and time
 1. [React Native Dot Env](https://github.com/goatandsheep/react-native-dotenv) - environment variables
 1. [React Navigation](https://reactnavigation.org/docs/getting-started/) - routing and navigation for Expo and React Native apps
+
 1. [Open Weather Map API](https://openweathermap.org/api)
 	* [5 day Weather Forecast API](https://openweathermap.org/forecast5) - 5 day forecast is available at any location on the globe
 	* [Weather Conditions](https://openweathermap.org/weather-conditions)

@@ -22,6 +22,7 @@ export const fr = {
     settings: {
         configurations: 'Configurations',
         temperatureUnitInFahrenheit: 'Unité de température\nen Fahrenheit',
-        darkModeAppearance: 'Apparence en mode sombre'
+        darkModeAppearance: 'Apparence en mode sombre',
+        language: 'Idioma'
     }
 };
