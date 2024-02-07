@@ -42,20 +42,23 @@ React Native Training Assessment Project
 
 ## Extras
 
-### HomeScreen
+### Home Screen
 
 * Your Location indicator
-* API Activity Indicator
 
-### LocationsScreen
+### Locations Screen
 
 * Your Location indicator
 * Displayed from home indicator
-* API Activity Indicator
 * Filtered locations using search key
 * Pull to refresh
 * Location list sorting 
 
+### Common
+
+* API Activity Indicator
+* String Localization
+* Environment variables
 
 ## Expo App Initialization
 
