@@ -6,7 +6,7 @@ export default {
     // allow to see actual temperature from the store (default: false)
     debug: false,
     // default language (default: auto)
-    defaultLanguage: 'fr',
+    defaultLanguage: 'en',
     temperatureUnit: {
         celsiusUnit: "metric",
         fahrenheitUnit: "imperial",
