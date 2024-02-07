@@ -11,7 +11,7 @@ i18next
     .use(RNLanguageDetector)
     .use(initReactI18next) // bind react-i18next to the instance
     .init({
-        debug: true,
+        debug: false,
         fallbackLng: 'en',
         supportedLngs: ['en', 'fr'],
         compatibilityJSON: "v3",

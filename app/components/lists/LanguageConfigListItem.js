@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, Text, useTheme, } from 'react-native-paper';
 
 import CircularIcon from '../CircularIcon';
 
-function LanguageConfigListItem({ icon, title, onPress }) {
+function LanguageConfigListItem({ icon, title, getLocaleState, onPress }) {
     const theme = useTheme();
-
+    const [language, setLanguage] = useState('en');
+    
     return (
         <View style={styles.container}>
             <View style={styles.subContainer}>
@@ -17,9 +18,9 @@ function LanguageConfigListItem({ icon, title, onPress }) {
                 />
                 <Text style={styles.title}>{title}</Text>
             </View>
-            <View style={styles.language}>
-                <Button mode="contained" onPress={onPress}>EN</Button>
-            </View>
+            <Button mode="contained" onPress={onPress}>
+                {getLocaleState}
+            </Button>
         </View>
     );
 }
@@ -30,9 +31,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         paddingHorizontal: 0,
         paddingVertical: 10,
-    },
-    language: {
-        
     },
     title: {
         marginLeft: 15,

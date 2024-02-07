@@ -1,9 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { AppContext } from '../auth/AppContextProvider';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { AppContext, AppLanguageContext } from '../auth/AppContextProvider';
 import { FlatList, StyleSheet } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { Text } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { View } from 'react-native';
 
 import {
     switchToDarkMode,
@@ -11,12 +13,12 @@ import {
     temperatureInCelsius,
     temperatureInFahrenheit,
 } from '../redux/theme/themeActions';
+import { DarkTheme, LightTheme } from '../config/Themes';
 
 import ConfigListItem from '../components/lists/ConfigListItem';
 import LanguageConfigListItem from '../components/lists/LanguageConfigListItem';
 import ListItemSeparator from '../components/lists/ListItemSeparator';
 import Screen from '../components/Screen';
-import { DarkTheme, LightTheme } from '../config/Themes';
 
 function SettingsScreen(props) {
 
@@ -31,16 +33,21 @@ function SettingsScreen(props) {
     const colorScheme = useSelector(state => state.theme.colorScheme);
     const dispatch = useDispatch();
 
+    // context
+    const { theme, changeTheme } = useContext(AppContext);
+    const { locale, changeLocale } = useContext(AppLanguageContext);
+
+    // UI
     // temperature unit
     const [isSwitchOn1, setIsSwitchOn1] = useState(temperatureUnit === 'celsius' ? true : false);
     // dark mode appearance
     const [isSwitchOn2, setIsSwitchOn2] = useState(colorScheme === 'dark' ? true : false);
-    // language
+    // language (unused)
     const [isSwitchOn3, setIsSwitchOn3] = useState('en');
 
-    // context
-    const { theme, changeTheme } = useContext(AppContext);
-
+    const pickerRef = useRef();
+    const [pickerShow, setPickerShow] = useState(false);
+    
     // https://static.enapter.com/rn/icons/material-community.html
     const configItems = [
         {
@@ -60,11 +67,17 @@ function SettingsScreen(props) {
         {
             title: config3,
             icon: "account-voice",
-            getState: isSwitchOn2,
-            setState: setIsSwitchOn2,
+            getState: isSwitchOn3,
+            setState: setIsSwitchOn3,
             listItemType: 'LanguageConfigListItem'
         }
     ];
+
+    // actions
+    const toogleLanguageHandler = () => {
+        console.log("[SettingsScreen]/toogleLanguageHandler");
+        setPickerShow(!pickerShow);
+    }
 
     // temperature unit
     useEffect(() => {
@@ -89,6 +102,7 @@ function SettingsScreen(props) {
     }, [isSwitchOn2]);
 
     return (
+        <>
         <Screen style={styles.container}>
             <Text style={styles.title} variant='titleLarge'>
                 {i18n.t('configurations', { ns: 'settings' })}
@@ -108,12 +122,29 @@ function SettingsScreen(props) {
                         <LanguageConfigListItem style={styles.language}
                             icon={item.icon}
                             title={item.title}
-                            onPress={() => console.log("change language!")}
+                            getLocaleState={locale}
+                            onPress={toogleLanguageHandler}
                         />
                 }
                 ItemSeparatorComponent={ListItemSeparator}
             />
         </Screen>
+
+        { pickerShow &&
+            <View >
+            <Picker
+                ref={pickerRef}
+                selectedValue={locale}
+                onValueChange={(itemValue, itemIndex) =>
+                    changeLocale(itemValue)
+                }>
+                <Picker.Item label="English" value="en" />
+                <Picker.Item label="French" value="fr" />
+                <Picker.Item label="Arabic" value="ar" />
+            </Picker>
+            </View>
+        }
+        </>
     );
 }           
 

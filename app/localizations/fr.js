@@ -12,7 +12,8 @@ export const fr = {
         yourLocation: 'Votre emplacement'
     },
     home: {
-        forecastReport: 'Rapport de prévision'
+        forecastReport: 'Rapport de prévision',
+        dayForecasts: 'Prévisions journalières'
     },
     locations: {
         pickLocations: 'Pick Locations de',

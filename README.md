@@ -79,6 +79,7 @@ NOTE: **IGNORE** these folders `node_modules`, `ios`, `android` to the versionin
 
 ## Expo Library Installation
 
+	$ npx pod-install
 	$ npx expo install expo-localization
 	
 ## NPM Library Installation

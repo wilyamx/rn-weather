@@ -12,7 +12,8 @@ export const en = {
         yourLocation: 'Your Location'
     },
     home: {
-        forecastReport: 'Forecast Report'
+        forecastReport: 'Forecast Report',
+        dayForecasts: 'Day Forecasts'
     },
     locations: {
         pickLocations: 'Pick Locations',
