@@ -66,7 +66,6 @@ function HomeScreen({ route, navigation }) {
         error,
         loading,
         request: weatherRequestByCoordinate,
-        responseStatus: responseRequestByCoordinate
     } = useApi(forecastApi.getForecastByCoordinate);
 
     const {
@@ -74,7 +73,6 @@ function HomeScreen({ route, navigation }) {
         error: error2,
         loading: loading2,
         request: weatherRequestByLocationName,
-        responseStatus: responseRequestByLocationName
     } = useApi(forecastApi.getForecastByLocationName);
 
     // ui
