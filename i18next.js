@@ -5,6 +5,7 @@ import { initReactI18next } from 'react-i18next';
 
 import { en } from './app/localizations/en';
 import { fr } from './app/localizations/fr';
+import { ar } from './app/localizations/ar';
 
 i18next
     //.use(Backend)
@@ -13,11 +14,12 @@ i18next
     .init({
         debug: false,
         fallbackLng: 'en',
-        supportedLngs: ['en', 'fr'],
+        supportedLngs: ['en', 'fr', 'ar'],
         compatibilityJSON: "v3",
         resources: {
             en: en,
-            fr: fr
+            fr: fr,
+            ar: ar
         }
     });
 

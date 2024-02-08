@@ -1,29 +1,29 @@
-export const en = {
+export const ar = {
     translation: {
         description: {
-            part1: 'Edit <1>src/App.js</1> and save to reload.',
-            part2: 'Learn React'
+            part1: 'قم بتحرير <1>src/App.js</1> واحفظه لإعادة التحميل.',
+            part2: 'تعلم رد الفعل'
         }
     },
     common: {
-        homeTab: 'Home',
-        locationsTab: 'Locations',
-        settingsTab: 'Settings',
-        yourLocation: 'Your Location'
+        homeTab: 'بيت',
+        locationsTab: 'المواقع',
+        settingsTab: 'إعدادات',
+        yourLocation: 'موقعك'
     },
     home: {
-        forecastReport: 'Forecast Report',
-        dayForecasts: 'Day Forecasts'
+        forecastReport: 'تقرير التوقعات',
+        dayForecasts: 'توقعات اليوم'
     },
     locations: {
-        pickLocations: 'Pick Locations',
-        instructions: 'Find the city that you want to know the detailed weather into at this time.',
-        searchForAPlace: 'Search for a place'
+        pickLocations: 'اختر المواقع',
+        instructions: 'ابحث عن المدينة التي تريد معرفة الطقس التفصيلي فيها في هذا الوقت.',
+        searchForAPlace: 'ابحث عن مكان'
     },
     settings: {
-        configurations: 'Configurations',
-        temperatureUnitInFahrenheit: 'Temperature Unit in Fahrenheit',
-        darkModeAppearance: 'Dark Mode Appearance',
-        language: 'Language'
+        configurations: 'التكوينات',
+        temperatureUnitInFahrenheit: 'وحدة درجة الحرارة بالفهرنهايت',
+        darkModeAppearance: 'مظهر الوضع الداكن',
+        language: 'لغة'
     }
 };
