@@ -1,26 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Image, View, StyleSheet } from 'react-native';
 import { Snackbar, Text, useTheme } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNetInfo } from '@react-native-community/netinfo';
-import { useTranslation } from 'react-i18next';
-import moment from "moment/moment";
 import RBSheet from "react-native-raw-bottom-sheet";
 import * as Network from 'expo-network';
 
-import constants from '../config/constants';
-import forecastApi from '../api/forecast';
-import useLocation from '../hooks/useLocation';
-import {
-    addToForecasts,
-    updateFromForecasts,
-    displayedToHome,
-} from '../redux/weather/weatherActions';
-import { setCurrentLocation } from '../redux/location/locationActions';
-import { showAlert } from '../utility/views';
-
-import { getWeatherImage } from '../config/WeatherImages';
 import AppActivityIndicator from '../components/AppActivityIndicator';
 import AppAlert from '../components/AppAlert';
 import CircularIcon from '../components/CircularIcon';
@@ -28,11 +12,16 @@ import Screen from '../components/Screen';
 import TemperatureUnit from '../components/TemperatureUnit';
 import YourLocation from '../components/YourLocation';
 import WeatherForecast from '../components/WeatherForecast';
-import LOG from '../utility/logger';
+
+import constants from '../config/constants';
+import { getWeatherImage } from '../config/WeatherImages';
 import {
     getTemperatureUnitSign,
     getTemperatureDisplay
 } from '../utility/forecast';
+import LOG from '../utility/logger';
+
+import useHomeViewController from '../view_controllers/useHomeViewController';
 
 // to show the actual temperature unit saved locally
 const DEBUG = constants.debug;
@@ -41,184 +30,57 @@ const OFFLINE = constants.offlineMode;
 function HomeScreen({ route, navigation }) {
     LOG.info("[HomeScreen]/Function-Component");
 
-    // localizations
-    const {t, i18n} = useTranslation('home');
-
-    // redux
-
-    const temperatureUnitSaved = useSelector(state => state.theme.temperatureUnit);
-    const savedLocations = useSelector(state => state.weather.forecasts);
-    const homeDisplayedForecast = useSelector(state => state.weather.homeDisplayForecast);
-    const currentLocation = useSelector(state => state.location.currentLocation);
-    const dispatch = useDispatch();
-
-    // hardware status
-
-    const netInfo = useNetInfo();
-    const [isInternetReachable, setIsInternetReachable] = useState(false);
-
-    // api
-
-    const [weatherDetails, setWeatherDetails] = useState(constants.defaultForecast);
-    
     const {
-        data: weatherDetailData,
+        addToForecastsVm,
+        cityName,
+        currentLocation,
+        detectDeviceLocationHandler,
+        detectLocation,
+        displayedToHomeVm,
         error,
+        error2,
+        forecastDate,
+        getForecastByCityName,
+        hasHomeDisplayedForecast,
+        hasCurrentLocation,
+        hasInterNetConnection,
+        homeDisplayedForecast,
+        i18n,
+        isInternetReachable,
+        location,
         loading,
-        request: weatherRequestByCoordinate,
-    } = useApi(forecastApi.getForecastByCoordinate);
-
-    const {
-        data: weatherDetailData2,
-        error: error2,
-        loading: loading2,
-        request: weatherRequestByLocationName,
-    } = useApi(forecastApi.getForecastByLocationName);
-
-    // ui
+        loading2,
+        netInfo,
+        refreshHandler,
+        savedLocations,
+        searchButton,
+        searchLocationsHandler,
+        setCurrentLocationVm,
+        setIsInternetReachable,
+        setDetectLocation,
+        setSnackbarVisible,
+        setTriggerFromLocationButton,
+        setUseCurrentLocation,
+        setWeatherDetails,
+        snackbarVisible,
+        temperature,
+        temperatureUnit,
+        temperatureUnitSaved,
+        triggerFromLocationButton,
+        updateFromForecastsVm,
+        useCurrentLocation,
+        weather,
+        weatherDetailData,
+        weatherDetailData2,
+        weatherDetails,
+        weatherImage,
+        weatherRequestByCoordinate,
+        weatherRequestByLocationName,
+    } = useHomeViewController();
 
     const theme = useTheme();
     const refRBSheet = useRef();
 
-    // detect device location (long, lat)
-    const { location, getLocation: getDeviceLocation } = useLocation();
-    // your location indicator
-    // use the current location button
-    const [useCurrentLocation, setUseCurrentLocation] = useState(false);
-    // re-detect device location button display (top-left)
-    const [detectLocation, setDetectLocation] = useState(false);
-    // search button display (top-right)
-    const [searchButton, setSearchButton] = useState(true);
-    // snackbar visibility (no internet connection)
-    const [snackbarVisible, setSnackbarVisible] = useState(false);
-
-    // calculated
-
-    const [triggerFromLocationButton, setTriggerFromLocationButton] = useState(false);
-    
-    const hasInterNetConnection = () => {
-        return isInternetReachable
-    };
-    const cityName = () => {
-        var datasource = constants.defaultForecast;
-        if(weatherDetails && weatherDetails.city) {
-            datasource = weatherDetails;
-        }
-        return datasource.city.name;
-    };
-    const temperature = () => {
-        var datasource = constants.defaultForecast
-        if (weatherDetails && weatherDetails.list) {
-            datasource = weatherDetails;
-        }
-        return Math.round(datasource.list[0].main.temp);
-    };
-    const weather = () => {
-        var datasource = constants.defaultForecast
-        if (weatherDetails && weatherDetails.list) {
-            datasource = weatherDetails;
-        }
-        return datasource.list[0].weather[0].description;
-    }
-    const weatherImage = () => {
-        var datasource = constants.defaultForecast
-        if (weatherDetails && weatherDetails.list) {
-            datasource = weatherDetails;
-        }
-        return datasource.list[0].weather[0].main;
-    };
-    const forecastDate = () => {
-        var datasource = constants.defaultForecast
-        if (weatherDetails && weatherDetails.list) {
-            datasource = weatherDetails;
-        }
-        // default forecast data
-        if (datasource.list[0].dt == 0) {
-            return "Unknown";
-        }
-        const momentDate = moment(datasource.list[0].dt * 1000);
-        const forecastDate = momentDate.format('DD MMMM YYYY | hh:mm a');
-        return forecastDate;
-    };
-    const temperatureUnit = () => {
-        var datasource = constants.defaultForecast
-        if (weatherDetails && weatherDetails.list) {
-            datasource = weatherDetails;
-        }
-        return datasource.temperatureUnit;
-    };
-    const getForecastByIdentifier = (uuid) => {
-        const validForecasts = savedLocations.filter((forecast) => {
-            return forecast.uuid == uuid;
-        });
-        //LOG.info("[HomeScreen]/getForecastByIdentifier", uuid, savedLocations.length, validForecasts.length);
-        return validForecasts[0];
-    };
-    const getForecastByCityName = (name) => {
-        const validForecasts = savedLocations.filter((forecast) => {
-            return forecast.city.name == name;
-        });
-        //LOG.info("[HomeScreen]/getForecastByIdentifier", uuid, savedLocations.length, validForecasts.length);
-        return validForecasts[0];
-    };
-    const savedLocationsEnums = () => {
-        let maps = savedLocations.map((forecast) => ({
-            uuid: forecast.uuid,
-            cityName: forecast.city.name
-        }));
-        return maps;
-    };
-
-    // actions
-
-    const refreshHandler = () => {
-        LOG.info("[HomeScreen]/refreshHandler");
-
-        if (!isInternetReachable) {
-            showAlert(
-                "You are Offline",
-                "Please check your internet connection."
-            );
-            return;
-        }
-
-        if (weatherDetails.uuid && weatherDetails.city.name) {
-            LOG.info("[HomeScreen]/refreshHandler/weatherDetails", weatherDetails.city.name);
-            weatherRequestByLocationName(weatherDetails.city.name);
-        }
-    };
-    const detectDeviceLocationHandler = () => {
-        LOG.info("[HomeScreen]", "detectDeviceLocationHandler", hasInterNetConnection());
-        setTriggerFromLocationButton(true);
-
-        if (hasInterNetConnection()) {
-            setUseCurrentLocation(true);
-            //
-            getDeviceLocation();
-        }
-        else {
-            showAlert(
-                "You are Offline",
-                "Please check your internet connection."
-            );
-        }
-    };
-    const searchLocationsHandler = () => {
-        LOG.info("[HomeScreen]", "searchLocationsHandler");
-        navigation.navigate("Locations");
-    };
-    
-    // convenience methods
-
-    const hasCurrentLocation = () => {
-        return (currentLocation && currentLocation.place);
-    };
-    const hasHomeDisplayedForecast = () => {
-        return (homeDisplayedForecast &&
-            homeDisplayedForecast.uuid &&
-            homeDisplayedForecast.city)
-    };
-    
     // hooks
 
     // trigger when reload
@@ -304,10 +166,10 @@ function HomeScreen({ route, navigation }) {
 
         setWeatherDetails(weatherDetailData);
 
-        dispatch(updateFromForecasts(weatherDetailData));
+        updateFromForecastsVm(weatherDetailData);
         // indicator that this location displayed from home tab
         if (weatherDetailData.city.name) {
-            dispatch(displayedToHome(weatherDetailData));
+            displayedToHomeVm(weatherDetailData);
         }
     }, [weatherDetailData]);
 
@@ -372,7 +234,7 @@ function HomeScreen({ route, navigation }) {
         setWeatherDetails(data);
         // indicator that this location displayed from home tab
         if (data.city.name) {
-            dispatch(displayedToHome(data));
+            displayedToHomeVm(data);
         }
         //
         if (!data) return;
@@ -381,7 +243,7 @@ function HomeScreen({ route, navigation }) {
         if (!data.city) return;
 
         LOG.info("[HomeScreen]/useEffect/weatherDetailData2/data", data);
-        dispatch(updateFromForecasts(data));
+        updateFromForecastsVm(data);
     }, [weatherDetailData2]);
 
     useEffect(() => {
@@ -393,7 +255,7 @@ function HomeScreen({ route, navigation }) {
         if (!hasInterNetConnection()) {
             //setWeatherDetails(homeDisplayedForecast);
             if (weatherDetails.city.name) {
-                dispatch(displayedToHome(weatherDetails));
+                displayedToHomeVm(weatherDetails);
             }
             return;
         }
@@ -410,17 +272,17 @@ function HomeScreen({ route, navigation }) {
         let forecasts = weatherDetails.list;
         
         if (savedLocations.length == 0 && uuid.length > 0) {
-            dispatch(addToForecasts(weatherDetails));
+            addToForecastsVm(weatherDetails);
             LOG.info("[HomeScreen]/useEffect/Added-First-Location", cityDetails.name);
         }
         else {
             if (!savedLocationNames.includes(cityDetails.name) && uuid.length > 0) {
                 LOG.info("[HomeScreen]/useEffect/Added-Location", cityDetails.name);
-                dispatch(addToForecasts(weatherDetails));
+                addToForecastsVm(weatherDetails)
             }
             else {
                 LOG.info("[HomeScreen]/useEffect/Existing-Location", cityDetails.name);
-                dispatch(updateFromForecasts(weatherDetails));
+                updateFromForecastsVm(weatherDetails);
             }
         }
 
@@ -430,12 +292,12 @@ function HomeScreen({ route, navigation }) {
 
         if (location && useCurrentLocation) {
             setUseCurrentLocation(true);
-            dispatch(setCurrentLocation({
+            setCurrentLocationVm({
                 latitude: location.latitude,
                 longitude: location.longitude,
                 place: weatherDetails.city.name,
                 uuid: weatherDetails.uuid,
-            }));
+            })
             LOG.info("[HomeScreen]/useEffect/weatherDetails/Updated-User-Location");
         }
         
@@ -462,7 +324,7 @@ function HomeScreen({ route, navigation }) {
                     }
 
                     LOG.info("[HomeScreen]/useFocusEffect/selectedForecast", selectedForecast.city.name);
-                    dispatch(displayedToHome(selectedForecast));
+                    displayedToHomeVm(selectedForecast)
                     setUseCurrentLocation(route.params.isCurrentLocation);
 
                     if (hasInterNetConnection()) {
