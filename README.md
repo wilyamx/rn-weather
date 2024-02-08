@@ -129,6 +129,11 @@ NOTE: **IGNORE** these folders `node_modules`, `ios`, `android` to the versionin
 	* [5 day Weather Forecast API](https://openweathermap.org/forecast5) - 5 day forecast is available at any location on the globe
 	* [Weather Conditions](https://openweathermap.org/weather-conditions)
 
+1. MVVM Architecture Design Pattern
+
+	* [React Native MVVM Concept](https://tech.groww.in/apply-mvvm-in-react-native-app-ad77fa0f851b)
+	* [React Native MVVM Demo (Github)](https://github.com/kushal98/rn-mvvm-demo/tree/master/src) - MVVM architecture design pattern sample
+	
 ## References
 
 1. [Mockup](https://drive.google.com/file/d/1nqEok0x72d8Ola5aDA9VBigrCqwJesd0/view?usp=sharing) - UI design in wireframes
@@ -143,8 +148,3 @@ NOTE: **IGNORE** these folders `node_modules`, `ios`, `android` to the versionin
 1. [Dynamic Switching of Themes](https://medium.com/@SeishinBG/dynamic-switching-of-themes-in-react-native-app-the-funky-way-with-hooks-48b57ab62a79)	
 
 1. [How to persist the shopping cart state to local storage](https://www.youtube.com/watch?v=shLz_kmA68Q)
-
-1. React Native MVVM **(future implementations)**
-
-	* [React Native MVVM Concept](https://tech.groww.in/apply-mvvm-in-react-native-app-ad77fa0f851b)
-	* [React Native MVVM Demo (Github)](https://github.com/kushal98/rn-mvvm-demo/tree/master/src) - MVVM architecture design pattern sample
