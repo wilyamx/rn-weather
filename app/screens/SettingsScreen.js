@@ -1,103 +1,51 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { AppContext, AppLanguageContext } from '../auth/AppContextProvider';
+import React, { useEffect } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Text } from 'react-native-paper';
-import { useDispatch, useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
-
-import {
-    switchToDarkMode,
-    switchToLightMode,
-    temperatureInCelsius,
-    temperatureInFahrenheit,
-} from '../redux/theme/themeActions';
-import { DarkTheme, LightTheme } from '../config/Themes';
 
 import ConfigListItem from '../components/lists/ConfigListItem';
 import LanguageConfigListItem from '../components/lists/LanguageConfigListItem';
 import ListItemSeparator from '../components/lists/ListItemSeparator';
 import Screen from '../components/Screen';
 
+import useSettingsViewController from '../view_controllers/useSettingsViewController';
+
 function SettingsScreen(props) {
-
-    // localizations
-    const { t, i18n } = useTranslation('settings');
-    const config1 = i18n.t('temperatureUnitInFahrenheit', { ns: 'settings'});
-    const config2 = i18n.t('darkModeAppearance', { ns: 'settings'});
-    const config3 = i18n.t('language', { ns: 'settings'});
-
-    // redux
-    const temperatureUnit = useSelector(state => state.theme.temperatureUnit);
-    const colorScheme = useSelector(state => state.theme.colorScheme);
-    const dispatch = useDispatch();
-
-    // context
-    const { theme, changeTheme } = useContext(AppContext);
-    const { locale, changeLocale } = useContext(AppLanguageContext);
-
-    // UI
-    // temperature unit
-    const [isSwitchOn1, setIsSwitchOn1] = useState(temperatureUnit === 'celsius' ? true : false);
-    // dark mode appearance
-    const [isSwitchOn2, setIsSwitchOn2] = useState(colorScheme === 'dark' ? true : false);
-    // language (unused)
-    const [isSwitchOn3, setIsSwitchOn3] = useState('en');
-
-    const pickerRef = useRef();
-    const [pickerShow, setPickerShow] = useState(false);
-    
-    // https://static.enapter.com/rn/icons/material-community.html
-    const configItems = [
-        {
-            title: config1,
-            icon: "coolant-temperature",
-            getState: isSwitchOn1,
-            setState: setIsSwitchOn1,
-            listItemType: 'ConfigListItem'
-        },
-        {
-            title: config2,
-            icon: "format-color-fill",
-            getState: isSwitchOn2,
-            setState: setIsSwitchOn2,
-            listItemType: 'ConfigListItem'
-        },
-        {
-            title: config3,
-            icon: "account-voice",
-            getState: isSwitchOn3,
-            setState: setIsSwitchOn3,
-            listItemType: 'LanguageConfigListItem'
-        }
-    ];
-
-    // actions
-    const toogleLanguageHandler = () => {
-        console.log("[SettingsScreen]/toogleLanguageHandler");
-        setPickerShow(!pickerShow);
-    }
+    // view controller
+    const {
+        configItems,
+        changeLocale,
+        changeToDarkMode,
+        changeToLightMode,
+        i18n,
+        isSwitchOn1,
+        isSwitchOn2,
+        locale,
+        onClickLanguageHandler,
+        pickerRef,
+        pickerShow,
+        temperatureInCelsius,
+        temperatureInFahrenheit,
+    } = useSettingsViewController();
 
     // temperature unit
     useEffect(() => {
         if (isSwitchOn1) {
-            dispatch(temperatureInFahrenheit());
+            temperatureInFahrenheit();
         }
         else {
-            dispatch(temperatureInCelsius())
+            temperatureInCelsius();
         }
     }, [isSwitchOn1]);
 
     // dark mode
     useEffect(() => {
         if (isSwitchOn2) {
-            changeTheme(DarkTheme);
-            dispatch(switchToDarkMode());
+            changeToDarkMode();
         }
         else {
-            changeTheme(LightTheme);
-            dispatch(switchToLightMode());
+            changeToLightMode();
         }
     }, [isSwitchOn2]);
 
@@ -123,7 +71,7 @@ function SettingsScreen(props) {
                             icon={item.icon}
                             title={item.title}
                             getLocaleState={locale}
-                            onPress={toogleLanguageHandler}
+                            onPress={onClickLanguageHandler}
                         />
                 }
                 ItemSeparatorComponent={ListItemSeparator}
