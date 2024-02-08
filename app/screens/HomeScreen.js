@@ -22,6 +22,7 @@ import {
 import LOG from '../utility/logger';
 
 import useHomeViewController from '../view_controllers/useHomeViewController';
+import { SaveLocationModel } from '../models/SaveLocationModel';
 
 // to show the actual temperature unit saved locally
 const DEBUG = constants.debug;
@@ -292,12 +293,14 @@ function HomeScreen({ route, navigation }) {
 
         if (location && useCurrentLocation) {
             setUseCurrentLocation(true);
-            setCurrentLocationVm({
-                latitude: location.latitude,
-                longitude: location.longitude,
-                place: weatherDetails.city.name,
-                uuid: weatherDetails.uuid,
-            })
+
+            let details = new SaveLocationModel(
+                location.latitude,
+                location.longitude,
+                weatherDetails.city.name,
+                weatherDetails.uuid);
+            setCurrentLocationVm(details);
+            
             LOG.info("[HomeScreen]/useEffect/weatherDetails/Updated-User-Location");
         }
         

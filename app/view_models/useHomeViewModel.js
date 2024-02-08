@@ -29,12 +29,7 @@ const useHomeViewModel = () => {
         dispatch(updateFromForecasts(weatherDetails));
     };
 
-    // {
-    //     latitude: location.latitude,
-    //     longitude: location.longitude,
-    //     place: weatherDetails.city.name,
-    //     uuid: weatherDetails.uuid,
-    // }
+    //locationDetails: SaveLocationModel
     const setCurrentLocationVm = (locationDetails) => dispatch(setCurrentLocation(locationDetails));
 
     return {
