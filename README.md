@@ -29,6 +29,7 @@ React Native Training Assessment Project
 <p float="left">
 	<img src="screenshots/settings-dark-mode.png" alt="settings-dark-mode" height="400">
 	<img src="screenshots/settings-light-mode.png" alt="settings-light-mode" height="400">
+	<img src="screenshots/settings-localization.png" alt="settings-localization" height="400">
 </p>
 
 ## Functionality
