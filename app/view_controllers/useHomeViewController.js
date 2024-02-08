@@ -124,14 +124,14 @@ const useHomeViewController = () => {
         const validForecasts = savedLocations.filter((forecast) => {
             return forecast.uuid == uuid;
         });
-        //LOG.info("[HomeScreen]/getForecastByIdentifier", uuid, savedLocations.length, validForecasts.length);
+        //LOG.info("[useHomeViewController]/getForecastByIdentifier", uuid, savedLocations.length, validForecasts.length);
         return validForecasts[0];
     };
     const getForecastByCityName = (name) => {
         const validForecasts = savedLocations.filter((forecast) => {
             return forecast.city.name == name;
         });
-        //LOG.info("[HomeScreen]/getForecastByIdentifier", uuid, savedLocations.length, validForecasts.length);
+        //LOG.info("[useHomeViewController]/getForecastByIdentifier", uuid, savedLocations.length, validForecasts.length);
         return validForecasts[0];
     };
     const savedLocationsEnums = () => {
@@ -147,7 +147,7 @@ const useHomeViewController = () => {
 
     // actions
     const refreshHandler = () => {
-        LOG.info("[HomeScreen]/refreshHandler");
+        LOG.info("[useHomeViewController]/refreshHandler");
 
         if (!isInternetReachable) {
             showAlert(
@@ -158,12 +158,12 @@ const useHomeViewController = () => {
         }
 
         if (weatherDetails.uuid && weatherDetails.city.name) {
-            LOG.info("[HomeScreen]/refreshHandler/weatherDetails", weatherDetails.city.name);
+            LOG.info("[useHomeViewController]/refreshHandler/weatherDetails", weatherDetails.city.name);
             weatherRequestByLocationName(weatherDetails.city.name);
         }
     };
     const detectDeviceLocationHandler = () => {
-        LOG.info("[HomeScreen]", "detectDeviceLocationHandler", hasInterNetConnection());
+        LOG.info("[useHomeViewController]", "detectDeviceLocationHandler", hasInterNetConnection());
         setTriggerFromLocationButton(true);
 
         if (hasInterNetConnection()) {
@@ -179,7 +179,7 @@ const useHomeViewController = () => {
         }
     };
     const searchLocationsHandler = () => {
-        LOG.info("[HomeScreen]", "searchLocationsHandler");
+        LOG.info("[useHomeViewController]", "searchLocationsHandler");
         navigation.navigate("Locations");
     };
 

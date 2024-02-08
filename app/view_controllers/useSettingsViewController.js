@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { DarkTheme, LightTheme } from '../config/Themes';
+import LOG from '../utility/logger';
 
 import useSettingsViewModel from '../view_models/useSettingsViewModel';
 
@@ -70,7 +71,7 @@ const useSettingsViewController = () => {
 
     // actions
     const onClickLanguageHandler = () => {
-        console.log("[useSettingsViewController]/onClickLanguageHandler");
+        LOG.info("[useSettingsViewController]/onClickLanguageHandler");
         setPickerShow(!pickerShow);
     };
 
