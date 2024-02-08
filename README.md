@@ -32,7 +32,7 @@ React Native Training Assessment Project
 	<img src="screenshots/settings-localization.png" alt="settings-localization" height="400">
 </p>
 
-## Functionality
+## Key Features
 
 1. Get weather forecast to any location
 1. Get weather location of current location
@@ -41,7 +41,7 @@ React Native Training Assessment Project
 1. Delete persisted data
 1. Dark and Light theme mode
 
-## Extras
+## Enhancements
 
 ### Home Screen
 
