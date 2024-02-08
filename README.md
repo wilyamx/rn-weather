@@ -59,6 +59,7 @@ React Native Training Assessment Project
 * API Activity Indicator
 * String Localization
 * Environment variables
+* Apply MVVM Architecture Design Pattern
 
 ## Expo App Initialization
 

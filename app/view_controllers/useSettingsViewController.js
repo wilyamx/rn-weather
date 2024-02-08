@@ -28,7 +28,7 @@ const useSettingsViewController = () => {
     const { theme, changeTheme } = useContext(AppContext);
     const { locale, changeLocale } = useContext(AppLanguageContext);
 
-    // navigations
+    // navigation
     const navigation = useNavigation();
 
     // ui
