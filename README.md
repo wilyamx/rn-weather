@@ -82,6 +82,13 @@ React Native Training Assessment Project
 	
 NOTE: **IGNORE** these folders `node_modules`, `ios`, `android` to the versioning files
 
+## Project Setup
+
+### Extensions
+
+* React Native Tools
+	* Debug Expo App
+
 ## Expo Library Installation
 
 	$ npx pod-install

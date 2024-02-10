@@ -196,8 +196,8 @@ const useHomeViewController = () => {
     const navigateWithRouteParamsHandler = (route) => {
         if (route.params) {
             // from locations
-            LOG.info("[HomeScreen]/useFocusEffect/route.params", route.params);
-            LOG.info("[HomeScreen]/useFocusEffect/homeDisplayedForecast", homeDisplayedForecast.city);
+            LOG.info("[useHomeViewController]/useFocusEffect/route.params", route.params);
+            LOG.info("[useHomeViewController]/useFocusEffect/homeDisplayedForecast", homeDisplayedForecast.city);
             
             // user selected a location from locations tab and navigate to home tab
             if (route.params.locationId &&
@@ -206,32 +206,32 @@ const useHomeViewController = () => {
                 
                 const selectedForecast = getForecastByCityName(route.params.name);
                 if (!selectedForecast) {
-                    LOG.info("[HomeScreen]/useFocusEffect/selectedForecast/none");
+                    LOG.info("[useHomeViewController]/useFocusEffect/selectedForecast/none");
                     return;
                 }
 
-                LOG.info("[HomeScreen]/useFocusEffect/selectedForecast", selectedForecast.city.name);
+                LOG.info("[useHomeViewController]/useFocusEffect/selectedForecast", selectedForecast.city.name);
                 displayedToHomeVm(selectedForecast)
                 setUseCurrentLocation(route.params.isCurrentLocation);
 
                 if (hasInterNetConnection()) {
-                    LOG.info("[HomeScreen]/useFocusEffect/online");
-                    LOG.info("[HomeScreen]/useFocusEffect/weatherRequest", selectedForecast.city.name);
+                    LOG.info("[useHomeViewController]/useFocusEffect/online");
+                    LOG.info("[useHomeViewController]/useFocusEffect/weatherRequest", selectedForecast.city.name);
                     // request for updated weather forecast
                     weatherRequestByLocationName(selectedForecast.city.name)
                 }
                 else {
                     // just display the saved data
-                    LOG.info("[HomeScreen]/useFocusEffect/offline");
+                    LOG.info("[useHomeViewController]/useFocusEffect/offline");
                     setWeatherDetails(selectedForecast);
                 }
             }
             // user just switch from location tab to home tab only
             else {
-                LOG.info("[HomeScreen]/useFocusEffect/no.route.params");
+                LOG.info("[useHomeViewController]/useFocusEffect/no.route.params");
 
                 if (!hasCurrentLocation() && !hasHomeDisplayedForecast()) {
-                    LOG.info("[HomeScreen]/noData");
+                    LOG.info("[useHomeViewController]/noData");
                     setUseCurrentLocation(false);
                     return;
                 }
@@ -249,8 +249,8 @@ const useHomeViewController = () => {
                 }
 
                 if (hasInterNetConnection()) {
-                    LOG.info("[HomeScreen]/useFocusEffect/online");
-                    LOG.info("[HomeScreen]/useFocusEffect/weatherRequest", selectedForecast.city.name);
+                    LOG.info("[useHomeViewController]/useFocusEffect/online");
+                    LOG.info("[useHomeViewController]/useFocusEffect/weatherRequest", selectedForecast.city.name);
                     // request for updated weather forecast
                     // only if current displayed is not the home displayed location
                     if (weatherDetails.uuid != selectedForecast.uuid) {
@@ -259,7 +259,7 @@ const useHomeViewController = () => {
                 }
                 else {
                     // just display the saved data
-                    LOG.info("[HomeScreen]/useFocusEffect/offline");
+                    LOG.info("[useHomeViewController]/useFocusEffect/offline");
                     setWeatherDetails(selectedForecast);
                 }
             }
@@ -282,8 +282,8 @@ const useHomeViewController = () => {
     // trigger when reload
     // this will trigger once only
     useEffect(() => {
-        LOG.info("#1.0 [HomeScreen]/useEffect/initialize");
-        LOG.info("#1.1 [HomeScreen]/useEffect/initialize/weatherDetailData", weatherDetailData);
+        LOG.info("#1.0 [useHomeViewController]/useEffect/initialize");
+        LOG.info("#1.1 [useHomeViewController]/useEffect/initialize/weatherDetailData", weatherDetailData);
 
         (async () => {
             var network = await Network.getNetworkStateAsync();
@@ -296,12 +296,12 @@ const useHomeViewController = () => {
             }
             setIsInternetReachable(network.isConnected);
             if (network.isConnected) {
-                LOG.info("#1.2 [HomeScreen]/internetConnect", network);
-                LOG.info("#1.2 [HomeScreen]/isInternetReachable", isInternetReachable);
+                LOG.info("#1.2 [useHomeViewController]/internetConnect", network);
+                LOG.info("#1.2 [useHomeViewController]/isInternetReachable", isInternetReachable);
 
                 // your location indicator
                 if (hasCurrentLocation()) {
-                    LOG.info("#1.2 [HomeScreen]/currentLocation", currentLocation.place);
+                    LOG.info("#1.2 [useHomeViewController]/currentLocation", currentLocation.place);
                     const forecast = getForecastByCityName(currentLocation.place);
 
                     if (hasHomeDisplayedForecast()) {
@@ -313,20 +313,20 @@ const useHomeViewController = () => {
                 }
                 
                 if (hasHomeDisplayedForecast()) {
-                    LOG.info("#1.2 [HomeScreen]/homeDisplayedForecast", homeDisplayedForecast.city.name);
+                    LOG.info("#1.2 [useHomeViewController]/homeDisplayedForecast", homeDisplayedForecast.city.name);
                     // show home displayed forecast
                     setWeatherDetails(homeDisplayedForecast)
                 }
 
                 if (!hasCurrentLocation() && !hasHomeDisplayedForecast()) {
-                    LOG.info("#1.2 [HomeScreen]/noData");
+                    LOG.info("#1.2 [useHomeViewController]/noData");
                     setUseCurrentLocation(false);
                 }
             }
             else {
-                LOG.info("#1.3 [HomeScreen]/internetNotConnected");
-                LOG.info("#1.3 [HomeScreen]/homeDisplayedForecast", homeDisplayedForecast.city.name);
-                LOG.info("#1.3 [HomeScreen]/currentLocation", currentLocation.place);
+                LOG.info("#1.3 [useHomeViewController]/internetNotConnected");
+                LOG.info("#1.3 [useHomeViewController]/homeDisplayedForecast", homeDisplayedForecast.city.name);
+                LOG.info("#1.3 [useHomeViewController]/currentLocation", currentLocation.place);
 
                 // your location indicator
                 const selectedForecast = getForecastByCityName(currentLocation.place);
@@ -339,12 +339,12 @@ const useHomeViewController = () => {
     }, []);
 
     useEffect(() => {
-        LOG.info("#2.0 [HomeScreen]/isInternetReachable", isInternetReachable);
+        LOG.info("#2.0 [useHomeViewController]/isInternetReachable", isInternetReachable);
         setSnackbarVisible(!isInternetReachable);
     }, [isInternetReachable]);
 
     useEffect(() => {
-        LOG.info("#3.0 [HomeScreen]/useEffect/weatherDetailData");
+        LOG.info("#3.0 [useHomeViewController]/useEffect/weatherDetailData");
         //
         // Update the home display status from locations tab
         let data = weatherDetailData;
@@ -356,7 +356,7 @@ const useHomeViewController = () => {
 
         data.homeDisplayed = true;
 
-        LOG.info("#3.1 [HomeScreen]/useEffect/weatherDetailData/validated");
+        LOG.info("#3.1 [useHomeViewController]/useEffect/weatherDetailData/validated");
 
         setWeatherDetails(weatherDetailData);
 
@@ -368,14 +368,14 @@ const useHomeViewController = () => {
     }, [weatherDetailData]);
 
     useEffect(() => {
-        LOG.info("[HomeScreen]/useEffect/location");
+        LOG.info("[useHomeViewController]/useEffect/location");
 
         if (!location) {
             //Linking.openSettings();
             return;
         }
 
-        LOG.info("[HomeScreen]/useEffect/location/coordinate", location, triggerFromLocationButton);
+        LOG.info("[useHomeViewController]/useEffect/location/coordinate", location, triggerFromLocationButton);
 
         // we will show the home displayed forecast if available
         if (!triggerFromLocationButton && hasHomeDisplayedForecast()) {
@@ -385,7 +385,7 @@ const useHomeViewController = () => {
 
         if (location) {
             if (hasInterNetConnection()) {
-                LOG.info("[HomeScreen]/useEffect/weatherRequestByCoordinate");
+                LOG.info("[useHomeViewController]/useEffect/weatherRequestByCoordinate");
                 // request forecast using device location
                 weatherRequestByCoordinate(
                     location.latitude,
@@ -393,7 +393,7 @@ const useHomeViewController = () => {
                 );
             }
             else {
-                LOG.info("[HomeScreen]/useEffect/loadLocationHomeDisplay");
+                LOG.info("[useHomeViewController]/useEffect/loadLocationHomeDisplay");
                 let forecastHomeDisplayed = getForecastByCityName(homeDisplayedForecast.city.name)
                 setWeatherDetails(forecastHomeDisplayed);
             }
@@ -421,7 +421,7 @@ const useHomeViewController = () => {
 
     useEffect(() => {
         if (!weatherDetailData2.city) return;
-        LOG.info("[HomeScreen]/useEffect/weatherDetailData2/city", weatherDetailData2.city.name);
+        LOG.info("[useHomeViewController]/useEffect/weatherDetailData2/city", weatherDetailData2.city.name);
         //
         // Update the home display status from locations tab
         let data = weatherDetailData2;
@@ -438,15 +438,15 @@ const useHomeViewController = () => {
         if (data.list.length == 0) return;
         if (!data.city) return;
 
-        LOG.info("[HomeScreen]/useEffect/weatherDetailData2/data", data);
+        LOG.info("[useHomeViewController]/useEffect/weatherDetailData2/data", data);
         updateFromForecastsVm(data);
     }, [weatherDetailData2]);
 
     useEffect(() => {
-        LOG.info("[HomeScreen]/useEffect/weatherDetails");
+        LOG.info("[useHomeViewController]/useEffect/weatherDetails");
         //
         let savedLocationNames = savedLocations.map((forecast) => forecast.city.name);
-        //LOG.info("[HomeScreen]/Saved-Locations", savedLocationNames);
+        //LOG.info("[useHomeViewController]/Saved-Locations", savedLocationNames);
 
         if (!hasInterNetConnection()) {
             //setWeatherDetails(homeDisplayedForecast);
@@ -461,7 +461,7 @@ const useHomeViewController = () => {
         if (weatherDetails.list.length == 0) return;
         if (!weatherDetails.city) return;
 
-        LOG.info("[HomeScreen]/useEffect/weatherDetails/validated");
+        LOG.info("[useHomeViewController]/useEffect/weatherDetails/validated");
 
         let uuid = weatherDetails.uuid;
         let cityDetails = weatherDetails.city;
@@ -469,15 +469,15 @@ const useHomeViewController = () => {
         
         if (savedLocations.length == 0 && uuid.length > 0) {
             addToForecastsVm(weatherDetails);
-            LOG.info("[HomeScreen]/useEffect/Added-First-Location", cityDetails.name);
+            LOG.info("[useHomeViewController]/useEffect/Added-First-Location", cityDetails.name);
         }
         else {
             if (!savedLocationNames.includes(cityDetails.name) && uuid.length > 0) {
-                LOG.info("[HomeScreen]/useEffect/Added-Location", cityDetails.name);
+                LOG.info("[useHomeViewController]/useEffect/Added-Location", cityDetails.name);
                 addToForecastsVm(weatherDetails)
             }
             else {
-                LOG.info("[HomeScreen]/useEffect/Existing-Location", cityDetails.name);
+                LOG.info("[useHomeViewController]/useEffect/Existing-Location", cityDetails.name);
                 updateFromForecastsVm(weatherDetails);
             }
         }
@@ -496,7 +496,7 @@ const useHomeViewController = () => {
                 weatherDetails.uuid);
             setCurrentLocationVm(details);
             
-            LOG.info("[HomeScreen]/useEffect/weatherDetails/Updated-User-Location");
+            LOG.info("[useHomeViewController]/useEffect/weatherDetails/Updated-User-Location");
         }
         
     }, [weatherDetails]);
