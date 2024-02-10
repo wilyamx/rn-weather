@@ -109,18 +109,12 @@ const useSettingsViewController = () => {
 
     return {
         changeLocale,
-        changeToDarkMode,
-        changeToLightMode,
         configItems,
         i18n,
-        isSwitchOn1,
-        isSwitchOn2,
         locale,
         onClickLanguageHandler,
         pickerRef,
         pickerShow,
-        temperatureInCelsius,
-        temperatureInFahrenheit,
     }
 };
 
