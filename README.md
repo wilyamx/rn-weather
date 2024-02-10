@@ -86,6 +86,10 @@ NOTE: **IGNORE** these folders `node_modules`, `ios`, `android` to the versionin
 
 ### Extensions
 
+* React-Native/React/Redux snippets for es6/es7
+* Prettier-Code formatter
+* Material Icon Theme
+* Expo Tools
 * React Native Tools
 	* Debug Expo App
 
