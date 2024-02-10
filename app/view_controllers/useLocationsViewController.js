@@ -1,13 +1,19 @@
 import { useNavigation } from '@react-navigation/native';
 import { useNetInfo } from '@react-native-community/netinfo';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import * as Network from 'expo-network';
 
 import LOG from '../utility/logger';
+import constants from '../config/constants';
 import forecastApi from '../api/forecast';
 import useApi from '../hooks/useApi';
+import { showAlert } from '../utility/views';
 
 import useLocationsViewModel from "../view_models/useLocationsViewModel";
+
+const OFFLINE = constants.offlineMode;
 
 const useLocationsViewController = () => {
     // view model
@@ -122,6 +128,114 @@ const useLocationsViewController = () => {
         let sortedData = data.sort((a, b) => a.city.name.localeCompare(b.city.name))
         setSavedLocationsFiltered(sortedData);
     };
+
+    // hooks
+
+    useEffect(() => {
+        LOG.info("[LocationScreen]/initialize");
+
+        // initialize the listing display
+        let newList = savedLocations.slice()
+        setSavedLocationsFiltered(newList);
+        LOG.info("[LocationScreen]/savedLocations", newList.length);
+
+        (async () => {
+            var network = await Network.getNetworkStateAsync();
+            // for testin only
+            if (OFFLINE) {
+                network = {
+                    isInternetReachable: false,
+                    type: "None",
+                    isConnected: false
+                }
+            }
+            setIsInternetReachable(network.isConnected);
+        })();
+    }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            LOG.info("[LocationScreen]/useFocusEffect");
+        }, [])
+    );
+
+    useEffect(() => {
+        LOG.info("[LocationScreen]/searchQuery", searchQuery);
+        filterSavedLocationBySearchKey(searchQuery);
+    }, [searchQuery]);
+
+    // this will update every time change in internet connection status
+    // user turn off/on the device wifi
+    useEffect(() => {
+        (async () => {
+            var network = await Network.getNetworkStateAsync();
+            if (OFFLINE) {
+                network = {
+                    isInternetReachable: false,
+                    type: "None",
+                    isConnected: false
+                }
+            }
+            setIsInternetReachable(network.isConnected);
+        })();
+    }), [netInfo.isInternetReachable];
+
+    useEffect(() => {
+        LOG.info("[LocationScreen]/error", error);
+    }, [error]);
+
+    useEffect(() => {
+        LOG.info("[LocationScreen]/responseStatus", responseStatus);
+        if (responseStatus == 404) {
+            showAlert(
+                "Location not found!",
+                `Please use different name.\nUnable to find (${searchQuery}) from the places.`
+            );
+        }
+    }, [responseStatus]);
+
+    useEffect(() => {
+        LOG.info("[LocationScreen]/useEffect/weatherDetails");
+        //
+        let savedLocationNames = savedLocations.map((forecast) => forecast.city.name);
+        LOG.info("[LocationScreen]/Saved-Locations", savedLocationNames);
+
+        if (!weatherDetails) return;
+        if (!weatherDetails.list) return;
+        if (weatherDetails.list.length == 0) return;
+        if (!weatherDetails.city) return;
+
+        LOG.info("[LocationScreen]/useEffect/weatherDetails/validated");
+        let cityDetails = weatherDetails.city;
+
+        if (savedLocations.length == 0) {
+            addToForecastsVm(weatherDetails);
+            displayedToHomeVm(weatherDetails);
+            showAlert(
+                "New place added",
+                `(${cityDetails.name}) has been added to the list!`
+            );
+        }
+        else {
+            if (!savedLocationNames.includes(cityDetails.name)) {
+                LOG.info("[LocationScreen]/Added-Location", cityDetails.name);
+                addToForecastsVm(weatherDetails);
+                showAlert(
+                    "New place added",
+                    `(${cityDetails.name}) has been added to the list!`
+                );
+            }
+            else {
+                LOG.info("[LocationScreen]/Existing-Location", cityDetails.name);
+                updateFromForecastsVm(weatherDetails);
+            }
+            displayedToHomeVm(weatherDetails);
+        }
+
+        // clear the searchbar
+        setSearchQuery("");
+
+    }, [weatherDetails]);
 
     return {
         addToForecastsVm,
