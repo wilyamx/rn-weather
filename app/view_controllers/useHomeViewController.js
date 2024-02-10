@@ -62,8 +62,6 @@ const useHomeViewController = () => {
     // your location indicator
     // use the current location button
     const [useCurrentLocation, setUseCurrentLocation] = useState(false);
-    // re-detect device location button display (top-left)
-    const [detectLocation, setDetectLocation] = useState(false);
     // search button display (top-right)
     const [searchButton, setSearchButton] = useState(true);
     // snackbar visibility (no internet connection)
@@ -163,13 +161,18 @@ const useHomeViewController = () => {
         }
     };
     const detectDeviceLocationHandler = () => {
-        LOG.info("[useHomeViewController]", "detectDeviceLocationHandler", hasInterNetConnection());
+        LOG.info("[useHomeViewController]/detectDeviceLocationHandler", hasInterNetConnection().toString());
         setTriggerFromLocationButton(true);
 
         if (hasInterNetConnection()) {
-            setUseCurrentLocation(true);
+            if (hasCurrentLocation(), currentLocation.place == weatherDetails.city.name) {
+                setUseCurrentLocation(true);
+            }
+            else {
+                setUseCurrentLocation(false);
+            }
             //
-            getDeviceLocation();
+            getDeviceLocation(true);
         }
         else {
             showAlert(
@@ -198,7 +201,6 @@ const useHomeViewController = () => {
         cityName,
         currentLocation,
         detectDeviceLocationHandler,
-        detectLocation,
         displayedToHomeVm,
         error,
         error2,
@@ -221,7 +223,6 @@ const useHomeViewController = () => {
         searchButton,
         searchLocationsHandler,
         setCurrentLocationVm,
-        setDetectLocation,
         setIsInternetReachable,
         setSnackbarVisible,
         setTriggerFromLocationButton,

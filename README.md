@@ -141,6 +141,7 @@ NOTE: **IGNORE** these folders `node_modules`, `ios`, `android` to the versionin
 
 ## Tutorials
 
+1. [React Hooks](https://youtube.com/playlist?list=PLC3y8-rFHvwisvxhZ135pogtX7_Oe3Q3A&si=RE_UiVBapUpVyfC0) - allow you to use 
 1. **Redux** - state management library
 
 	* [React Redux Tutorials by Codevolution](https://www.youtube.com/playlist?list=PLC3y8-rFHvwheJHvseC3I0HuYI2f46oAK)

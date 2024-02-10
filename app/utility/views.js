@@ -5,9 +5,7 @@ export const showAlert = (title, message) => {
         title,
         message,
         [
-            { 
-                text: "OK",
-            },
+            { text: "OK" },
         ]
     );
 };

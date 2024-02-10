@@ -36,7 +36,6 @@ function HomeScreen({ route, navigation }) {
         cityName,
         currentLocation,
         detectDeviceLocationHandler,
-        detectLocation,
         displayedToHomeVm,
         error,
         error2,
@@ -58,7 +57,6 @@ function HomeScreen({ route, navigation }) {
         searchLocationsHandler,
         setCurrentLocationVm,
         setIsInternetReachable,
-        setDetectLocation,
         setSnackbarVisible,
         setTriggerFromLocationButton,
         setUseCurrentLocation,
@@ -89,8 +87,6 @@ function HomeScreen({ route, navigation }) {
     useEffect(() => {
         LOG.info("#1.0 [HomeScreen]/useEffect/initialize");
         LOG.info("#1.1 [HomeScreen]/useEffect/initialize/weatherDetailData", weatherDetailData);
-
-        setDetectLocation(false);
 
         (async () => {
             var network = await Network.getNetworkStateAsync();
@@ -175,11 +171,14 @@ function HomeScreen({ route, navigation }) {
     }, [weatherDetailData]);
 
     useEffect(() => {
-        if (!location) return;
+        LOG.info("[HomeScreen]/useEffect/location");
 
-        LOG.info("[HomeScreen]/useEffect/Device-Location", location, triggerFromLocationButton);
+        if (!location) {
+            //Linking.openSettings();
+            return;
+        }
 
-        setDetectLocation(location != null);
+        LOG.info("[HomeScreen]/useEffect/location/coordinate", location, triggerFromLocationButton);
 
         // we will show the home displayed forecast if available
         if (!triggerFromLocationButton && hasHomeDisplayedForecast()) {
@@ -203,7 +202,6 @@ function HomeScreen({ route, navigation }) {
             }
         }
         setUseCurrentLocation(location != null)
-        setDetectLocation(location != null);
         //
         setTriggerFromLocationButton(false);
     }, [location]);
@@ -399,13 +397,11 @@ function HomeScreen({ route, navigation }) {
             <View style={styles.container}>
                 <View style={styles.headerContainer}>
                     <View style={styles.headerSideButtonContainer}>
-                        { detectLocation &&
-                            <CircularIcon
-                                image={"map-marker"}
-                                backgroundColor={theme.colors.primary}
-                                onPress={detectDeviceLocationHandler}
-                            />
-                        }
+                        <CircularIcon
+                            image={"map-marker"}
+                            backgroundColor={theme.colors.primary}
+                            onPress={detectDeviceLocationHandler}
+                        />
                     </View>
 
                     <View style={styles.headerCenterContainer}>
