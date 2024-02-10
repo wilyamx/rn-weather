@@ -1,5 +1,5 @@
 import { AppContext, AppLanguageContext } from '../auth/AppContextProvider';
-import { useContext, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
@@ -84,6 +84,28 @@ const useSettingsViewController = () => {
         changeTheme(LightTheme);
         switchToLightMode();
     };
+
+    // hooks
+    
+    // temperature unit
+    useEffect(() => {
+        if (isSwitchOn1) {
+            temperatureInFahrenheit();
+        }
+        else {
+            temperatureInCelsius();
+        }
+    }, [isSwitchOn1]);
+
+    // dark mode
+    useEffect(() => {
+        if (isSwitchOn2) {
+            changeToDarkMode();
+        }
+        else {
+            changeToLightMode();
+        }
+    }, [isSwitchOn2]);
 
     return {
         changeLocale,

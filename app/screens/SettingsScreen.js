@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Text } from 'react-native-paper';
@@ -16,38 +16,12 @@ function SettingsScreen(props) {
     const {
         configItems,
         changeLocale,
-        changeToDarkMode,
-        changeToLightMode,
         i18n,
-        isSwitchOn1,
-        isSwitchOn2,
         locale,
         onClickLanguageHandler,
         pickerRef,
         pickerShow,
-        temperatureInCelsius,
-        temperatureInFahrenheit,
     } = useSettingsViewController();
-
-    // temperature unit
-    useEffect(() => {
-        if (isSwitchOn1) {
-            temperatureInFahrenheit();
-        }
-        else {
-            temperatureInCelsius();
-        }
-    }, [isSwitchOn1]);
-
-    // dark mode
-    useEffect(() => {
-        if (isSwitchOn2) {
-            changeToDarkMode();
-        }
-        else {
-            changeToLightMode();
-        }
-    }, [isSwitchOn2]);
 
     return (
         <>
