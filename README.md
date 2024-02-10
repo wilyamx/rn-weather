@@ -100,6 +100,10 @@ NOTE: **IGNORE** these folders `node_modules`, `ios`, `android` to the versionin
 ## Libraries and APIs
 
 1. [Expo SDK](https://docs.expo.dev/versions/latest/) - provides access to device and system functionality such as contacts, camera, gyroscope, GPS location, and so on, in the form of packages
+	* [Vector Icons](https://docs.expo.dev/guides/icons/#expovector-icons) - ready to use icons
+		* [Directories](https://icons.expo.fyi/Index)
+		* [React Native Vector Icons Directory 1](https://github.com/oblador/react-native-vector-icons) 
+		* [React Native Vector Icons Directory 2](https://static.enapter.com/rn/icons/material-community.html)
 	* [Expo Location](https://docs.expo.dev/versions/latest/sdk/location/) - provides access to reading geolocation information, polling current location from the device
 	* [Expo Network](https://docs.expo.dev/versions/latest/sdk/network/) - provides access to the device's network [sample link](https://stackoverflow.com/questions/56669908/how-to-check-for-an-internet-connection-in-an-expo-react-native-app)
 	* [Expo Localization](https://docs.expo.dev/versions/v49.0.0/sdk/localization/) - provides an interface for native user localization information
@@ -119,7 +123,6 @@ NOTE: **IGNORE** these folders `node_modules`, `ios`, `android` to the versionin
 	* [Guides](https://callstack.github.io/react-native-paper/docs/guides/getting-started) 
 	* [Components](https://callstack.github.io/react-native-paper/docs/components/ActivityIndicator)
 
-1. [React Native Vector Icons Directory](https://static.enapter.com/rn/icons/material-community.html) - ready to use icons
 1. Redux + [Redux-Persist](https://github.com/rt2zz/redux-persist) - predictable state container
 1. [Apisauce](https://github.com/infinitered/apisauce) - api integration
 1. [Moment](https://momentjs.com/) - display dates and time
@@ -141,7 +144,7 @@ NOTE: **IGNORE** these folders `node_modules`, `ios`, `android` to the versionin
 
 ## Tutorials
 
-1. [React Hooks](https://youtube.com/playlist?list=PLC3y8-rFHvwisvxhZ135pogtX7_Oe3Q3A&si=RE_UiVBapUpVyfC0) - allow you to use 
+1. [React Hooks](https://youtube.com/playlist?list=PLC3y8-rFHvwisvxhZ135pogtX7_Oe3Q3A&si=RE_UiVBapUpVyfC0) - allow you to use React features without having to write a class
 1. **Redux** - state management library
 
 	* [React Redux Tutorials by Codevolution](https://www.youtube.com/playlist?list=PLC3y8-rFHvwheJHvseC3I0HuYI2f46oAK)
@@ -150,3 +153,4 @@ NOTE: **IGNORE** these folders `node_modules`, `ios`, `android` to the versionin
 1. [Dynamic Switching of Themes](https://medium.com/@SeishinBG/dynamic-switching-of-themes-in-react-native-app-the-funky-way-with-hooks-48b57ab62a79)	
 
 1. [How to persist the shopping cart state to local storage](https://www.youtube.com/watch?v=shLz_kmA68Q)
+1. [The Complete React Native Course: from Zero to Hero](https://www.youtube.com/watch?v=ANdSdIlgsEw&t=10943s)
