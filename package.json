@@ -49,6 +49,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "babel-plugin-transform-remove-console": "^6.9.4",
     "react-native-dotenv": "^3.4.9"
   },
   "private": true

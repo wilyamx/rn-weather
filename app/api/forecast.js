@@ -2,10 +2,13 @@ import client from './client';
 import constants from '../config/constants';
 import uuid from 'react-native-uuid';
 
-import { APP_ID } from '@env';
 import { getDateComponents } from '../utility/forecast';
+import LOG from '../utility/logger';
 
 var endpoint = '/forecast';
+
+const APP_ID = process.env.APP_ID;
+LOG.debug("[forecast]/APP_ID", APP_ID);
 
 const getForecastByLocationName = async (
     searchKey,

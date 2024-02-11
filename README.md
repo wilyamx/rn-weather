@@ -78,6 +78,11 @@ React Native Training Assessment Project
 	
 	$ npm install
 	$ npx expo start
+	$ npx expo start --clear
+	$ NODE_ENV=development npx expo start --clear
+	$ NODE_ENV=test npx expo start --clear
+	$ EXPO_NO_DOTENV=1 EXPO_NO_CLIENT_ENV_VARS=1 NODE_ENV=test npx expo start --clear
+	$ NODE_ENV=production npx expo start --clear
 	Starting Metro Bunder
 	
 NOTE: **IGNORE** these folders `node_modules`, `ios`, `android` to the versioning files
@@ -123,12 +128,18 @@ NOTE: **IGNORE** these folders `node_modules`, `ios`, `android` to the versionin
 	* [Bottom Sheet](https://www.npmjs.com/package/react-native-raw-bottom-sheet)
 	* [NetInfo](https://www.npmjs.com/package/@react-native-community/netinfo)
 	* [React Native Logs](https://www.npmjs.com/package/react-native-logs)
+	* [Babel Remove Console Logs](https://www.npmjs.com/package/babel-plugin-transform-remove-console) - plugin removes all console.* calls.
+		* [Babel Plug-in Transform Remove Console](https://babeljs.io/docs/babel-plugin-transform-remove-console#installation)
 	* [React Native UUID](https://www.npmjs.com/package/react-native-uuid)
 	* [React i18Next](https://dev.to/adrai/how-to-properly-internationalize-a-react-application-using-i18next-3hdb) - internationalize a react application.
 		* [Documentation](https://www.i18next.com/)
 		* [Video Tutorial](https://www.youtube.com/watch?v=3BPM_M4gGso)
 		* [RNLanguageDetector](https://www.npmjs.com/package/@os-team/i18next-react-native-language-detector) - detect user's language
 		* [React Native Project (Github)](https://github.com/i18next/react-i18next/blob/master/example/ReactNativeProject/i18n.js)
+	* Environment Variables
+		* [React Native Dot Env](https://github.com/goatandsheep/react-native-dotenv) - environment variables
+		* [DotEnv ReadMe](https://github.com/bkeepers/dotenv/blob/c6e583a/README.md#what-other-env-files-can-i-use)
+		* [Understanding env variables](https://blog.logrocket.com/understanding-react-native-env-variables/#what-process-env)
 
 1.  [React Native Paper](https://callstack.github.io/react-native-paper/) - Cross-platform Material Design for React Native
 	* [Guides](https://callstack.github.io/react-native-paper/docs/guides/getting-started) 
@@ -137,7 +148,6 @@ NOTE: **IGNORE** these folders `node_modules`, `ios`, `android` to the versionin
 1. Redux + [Redux-Persist](https://github.com/rt2zz/redux-persist) - predictable state container
 1. [Apisauce](https://github.com/infinitered/apisauce) - api integration
 1. [Moment](https://momentjs.com/) - display dates and time
-1. [React Native Dot Env](https://github.com/goatandsheep/react-native-dotenv) - environment variables
 1. [React Navigation](https://reactnavigation.org/docs/getting-started/) - routing and navigation for Expo and React Native apps
 
 1. [Open Weather Map API](https://openweathermap.org/api)

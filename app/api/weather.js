@@ -1,8 +1,11 @@
 import client from './client';
 
-import { APP_ID } from '@env';
+import LOG from '../utility/logger';
 
 const endpoint = '/weather'
+
+const APP_ID = process.env.APP_ID;
+LOG.debug("[weather]/APP_ID", APP_ID);
 
 const getWeather = (
     searchKey,

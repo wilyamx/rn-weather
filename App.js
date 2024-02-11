@@ -7,14 +7,18 @@ import * as SplashScreen from 'expo-splash-screen';
 import AppContextProvider from './app/auth/AppContextProvider';
 import AppNavigator from './app/navigations/AppNavigator';
 import reduxStore from "./app/redux/store";
+import LOG from './app/utility/logger';
 
 export default function App() {
+
+  const environment = process.env.NODE_ENV;
+
   const [isReady, setIsReady] = useState(false);
   const { store, persistor } = reduxStore();
 
   const prepare = async () => {
     try {
-      console.log("[App]/useEffect/prepare");
+      LOG.debug("[App]/useEffect/prepare");
       // delay simulation
       //await new Promise(resolve => setTimeout(resolve, 5000));
       await SplashScreen.hideAsync();
@@ -28,6 +32,7 @@ export default function App() {
   SplashScreen.preventAutoHideAsync();
 
   useEffect(() => {
+    LOG.debug("[App]/useEffect/environment", environment);
     prepare();
   }, []);
 
