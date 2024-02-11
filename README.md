@@ -81,8 +81,6 @@ React Native Training Assessment Project
 	$ npx expo start --clear
 	$ NODE_ENV=development npx expo start --clear
 	$ NODE_ENV=test npx expo start --clear
-	$ EXPO_NO_DOTENV=1 EXPO_NO_CLIENT_ENV_VARS=1 NODE_ENV=test npx expo start --clear
-	$ NODE_ENV=production npx expo start --clear
 	Starting Metro Bunder
 	
 NOTE: **IGNORE** these folders `node_modules`, `ios`, `android` to the versioning files
