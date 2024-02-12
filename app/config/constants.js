@@ -1,6 +1,4 @@
 export default {
-    // logs for redux (default: false)
-    enableStoreLogger: false,
     // disable detection of network status (default: false)
     offlineMode: false,
     // allow to see actual temperature from the store (default: false)

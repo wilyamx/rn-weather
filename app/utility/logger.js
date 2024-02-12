@@ -20,7 +20,7 @@ const defaultConfig = {
     dateFormat: "time",
     printLevel: true,
     printDate: true,
-    enabled: (process.env.NODE_ENV == 'development') ? true : false,
+    enabled: (process.env.NODE_ENV === 'development') ? true : false,
   };
 
 const LOG = logger.createLogger(defaultConfig);
